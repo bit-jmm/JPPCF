@@ -1,4 +1,2 @@
 JPPCF
-=====
-
-JPPCF
+code for research
