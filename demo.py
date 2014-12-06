@@ -39,13 +39,13 @@ Rall = util.generate_matrice_between_time(R, user_num,
 
 print Rall.shape, type(Rall)
 
-result_dir = './result/recall_by_cross_validate_fold_' + str(fold_num) + '_3models_lambda_0.5'
-if not os.path.isdir(result_dir):
-	os.mkdir(result_dir)
 
 for k in [100]:
 
 	for lambd in [0.5]:
+		result_dir = './result/recall_by_cross_validate_fold_' + str(fold_num) + '_3models_k_' + str(k) + '_lambda_' + str(lambd)
+		if not os.path.isdir(result_dir):
+			os.mkdir(result_dir)
 		MR = []
 		MRbaseline = []
 
@@ -80,8 +80,8 @@ for k in [100]:
 				trecall_dict = {}
 				frecall_dict = {}
 				jrecall_dict = {}
-				#for fold_id in range(fold_num):
-				for fold_id in [0]:
+				for fold_id in range(fold_num):
+				#for fold_id in [0]:
 					train_data_path = data_path + 'time_step_' + str(current_time_step) + '/data_' + str(fold_id) + '/train.dat.txt'
 					Rt = util.generate_matrice_for_file(train_data_path, user_num, doc_num)
 					print 'non zero cell num: ', len(np.nonzero(Rt)[0])
