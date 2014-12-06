@@ -4,6 +4,7 @@ import math
 import numpy as np
 import scipy.sparse as sp
 from sys import float_info
+import logging
 
 
 class NMF(object):
@@ -100,11 +101,11 @@ class NMF(object):
             delta = abs(pre_obj-obj)
 
             if verbose:
-                print 'Iter: ', i, '\t Loss: ', obj, '\t Delta: ', delta, '\n'
+                logging.info('Iter: ' + str(i) + '\t Loss: ' + str(obj) + '\t Delta: ' + str(delta) + '\n')
         self.H = H
         self.W = W
 
-        print 'end'
+        logging.info('end')
 
     # W,Hから最大になった因数を取る
     def clusters(self):

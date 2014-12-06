@@ -3,7 +3,7 @@ import math
 import numpy as np
 import scipy.sparse as sp
 from sys import float_info
-
+import logging
 
 def tr(A, B):
     return (A * B).sum()
@@ -36,7 +36,7 @@ def JPPCF(R, Po, k, lambd, alpha, epsilon, maxiter, verbose):
 
     # constants
     trRR = tr(R, R)
-	
+
     obj = 1000000
     eps = 0.001
     prev_obj = 2 * obj
@@ -55,9 +55,9 @@ def JPPCF(R, Po, k, lambd, alpha, epsilon, maxiter, verbose):
         obj = computeLoss(R,P,Q,S,Po,C,alpha,lambd, trRR, I)
         delta = abs(prev_obj-obj)
         if verbose:
-            print 'Iter: ', i, '\t Loss: ', obj, '\t Delta: ', delta, '\n'
+            logging.info('Iter: ' + str(i) + '\t Loss: ' + str(obj) + '\t Delta: ' + str(delta) + '\n')
 
 
-    print 'end\n'
+    logging.info('end\n')
 
     return (P, Q, S)
