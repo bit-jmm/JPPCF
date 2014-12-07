@@ -89,16 +89,17 @@ class NMF(object):
                 break
             # update W
             # W=W.*(A*H')./(W*(H*H')+eps);
-			HT = H.T
-			HHT = np.dot(H, HT)
+
+            HT = H.T
+            HHT = np.dot(H, HT)
             W = W * ((np.dot(A, HT)) / np.maximum(np.dot(W, HHT) + lambd, eps))
             
-			WT = W.T
-			WTW = np.dot(WT, W)
+            WT = W.T
+            WTW = np.dot(WT, W)
             WTA = np.dot(WT, A)
             # update H
             # H=H.*(W'*A)./(W'*W*H+eps)
-            H = H * ((WTA) / np.maximum(WTW.dot(H)+lambd, eps))
+            H = H * ((WTA) / np.maximum(np.dot(WTW, H)+lambd, eps))
 
             pre_obj = obj
             obj = self.__computeLoss(A, W, H, lambd, trAA)

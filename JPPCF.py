@@ -46,35 +46,35 @@ def JPPCF(R, Po, k, lambd, alpha, epsilon, maxiter, verbose):
 
         if delta < epsilon and i > 10:
             break
-		QT = Q.T
-		QQT = np.dot(Q, QT)
-		
+        QT = Q.T
+        QQT = np.dot(Q, QT)
+        
         P =  P * ( (np.dot((2*R -2*C), QT)) / \
-			np.maximum(2*np.dot(P, QQT + alpha),eps) )
+            np.maximum(2*np.dot(P, QQT + alpha),eps) )
 
-		PT = P.T
-		PoTST = np.dot(Po.T, S.T)
-		PQ = np.dot(P, Q)
-		SPo = np.dot(S, Po)
-		SPoQ = np.dot(SPo, Q)
-		
+        PT = P.T
+        PoTST = np.dot(Po.T, S.T)
+        PQ = np.dot(P, Q)
+        SPo = np.dot(S, Po)
+        SPoQ = np.dot(SPo, Q)
+        
         Q = Q * ((np.dot((PT + PoTST), R)) / \
-			np.maximum(np.dot(PT, C + PQ) + np.dot(PoTST, \
-			C+SPoQ) + alpha*Q,eps))
+            np.maximum(np.dot(PT, C + PQ) + np.dot(PoTST, \
+            C+SPoQ) + alpha*Q,eps))
 
-		QTPoT = np.dot(Q.T, Po.T)
-		SPoQ = np.dot(SPo, Q)
+        QTPoT = np.dot(Q.T, Po.T)
+        SPoQ = np.dot(SPo, Q)
 
         S = S * ( ((np.dot(R, QTPoT)) + (lambd*I)) / \
-			np.maximum( (np.dot((SPoQ+C), QTPoT)) \
-			+ ((lambd + alpha)*S),eps) )
+            np.maximum( (np.dot((SPoQ+C), QTPoT)) \
+            + ((lambd + alpha)*S),eps) )
 
         prev_obj = obj
         obj = computeLoss(R,P,Q,S,Po,C,alpha,lambd, trRR, I)
         delta = abs(prev_obj-obj)
         if verbose:
             logging.info('Iter: ' + str(i) + '\t Loss: ' + str(obj) + '\t Delta: ' \
-				+ str(delta) + '\n')
+                + str(delta) + '\n')
 
     logging.info('JPPCF OK\n')
 

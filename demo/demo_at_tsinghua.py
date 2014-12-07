@@ -38,9 +38,9 @@ Rall = util.generate_matrice_between_time(R, user_num, doc_num, 1, time_step_num
 print Rall.shape
 
 # We fix the num of latent feature
-k = 200
+k = 100
 
-lambd = 0.2
+lambd = 0.3
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(filename)s[line:%(lineno)d]\
