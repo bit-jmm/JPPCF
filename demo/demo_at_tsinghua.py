@@ -1,4 +1,6 @@
 # encoding: utf-8
+import sys
+sys.path.append('/home/zjd/jmm/JPPCF/')
 
 import os
 import numpy as np
@@ -7,8 +9,7 @@ from JPPCF import *
 
 import logging
 
-
-data_path = '../data/preprocessed_data/filtered_by_user_doc_like_list_len_5/'
+data_path = './data/preprocessed_data/filtered_by_user_doc_like_list_len_5/'
 R = np.loadtxt(data_path + 'rating_file.dat.txt', int)
 user_num = R[:, 0].max()
 doc_num = R[:, 1].max()
@@ -39,13 +40,13 @@ print Rall.shape
 # We fix the num of latent feature
 k = 200
 
-lambd = 5
+lambd = 0.2
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(filename)s[line:%(lineno)d]\
                             %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='../log/tsinghua_server_2/k_' + str(k) + '_lambda_' + \
+                    filename='./log/tsinghua_server/k_' + str(k) + '_lambda_' + \
                             str(lambd) + '_alpha_' + str(regl1jpp) + '.log',
                     filemode='w')
 
@@ -63,7 +64,7 @@ logging.getLogger('').addHandler(console)
 #logging.warning('This is warning message')
 
 
-result_dir = '../result/tsinghua_server_2/cross_validate_fold_' + str(fold_num) + \
+result_dir = './result/tsinghua_server/cross_validate_fold_' + str(fold_num) + \
         '_3models_k_' + str(k) + '_lambda_' + str(lambd) + '_alpha_' + str(regl1jpp)
 if not os.path.isdir(result_dir):
     os.mkdir(result_dir)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import math
 import numpy as np
-import scipy.sparse as sp
+# import scipy.sparse as sp
 from sys import float_info
 import logging
 
@@ -10,9 +10,9 @@ def tr(A, B):
 
 
 def computeLoss(R, P, Q, S, Po, C, alpha, lambd, trRR, I):
-    SPo = S.dot(Po)
-    PQC = P.dot(Q) + C
-    SPoQC = SPo.dot(Q) + C
+    SPo = np.dot(S, Po)
+    PQC = np.dot(P, Q) + C
+    SPoQC = np.dot(SPo, Q) + C
     tr1 = trRR - 2*tr(R,PQC) + tr(PQC,PQC)
     tr2 = trRR - 2*tr(R,SPoQC) + tr(SPoQC,SPoQC)
     tr3 = lambd*(tr(S,S) - 2*(S.sum())+ I.sum())
@@ -46,18 +46,36 @@ def JPPCF(R, Po, k, lambd, alpha, epsilon, maxiter, verbose):
 
         if delta < epsilon and i > 10:
             break
+		QT = Q.T
+		QQT = np.dot(Q, QT)
+		
+        P =  P * ( (np.dot((2*R -2*C), QT)) / \
+			np.maximum(2*np.dot(P, QQT + alpha),eps) )
 
-        P =  P * ( ((2*R -2*C).dot(Q.T)) / np.maximum(2*P.dot(Q.dot(Q.T) + alpha),eps) )
-        Q = Q * (((P.T + Po.T.dot(S.T)).dot(R)) / np.maximum(P.T.dot(C+P.dot(Q)) + Po.T.dot(S.T).dot(C+S.dot(Po).dot(Q)) + alpha*Q,eps))
-        S = S * ( ((R.dot(Q.T).dot(Po.T)) + (lambd*I)) / np.maximum( ((S.dot(Po).dot(Q)+C).dot(Q.T).dot(Po.T)) + ((lambd + alpha)*S),eps) )
+		PT = P.T
+		PoTST = np.dot(Po.T, S.T)
+		PQ = np.dot(P, Q)
+		SPo = np.dot(S, Po)
+		SPoQ = np.dot(SPo, Q)
+		
+        Q = Q * ((np.dot((PT + PoTST), R)) / \
+			np.maximum(np.dot(PT, C + PQ) + np.dot(PoTST, \
+			C+SPoQ) + alpha*Q,eps))
+
+		QTPoT = np.dot(Q.T, Po.T)
+		SPoQ = np.dot(SPo, Q)
+
+        S = S * ( ((np.dot(R, QTPoT)) + (lambd*I)) / \
+			np.maximum( (np.dot((SPoQ+C), QTPoT)) \
+			+ ((lambd + alpha)*S),eps) )
 
         prev_obj = obj
         obj = computeLoss(R,P,Q,S,Po,C,alpha,lambd, trRR, I)
         delta = abs(prev_obj-obj)
         if verbose:
-            logging.info('Iter: ' + str(i) + '\t Loss: ' + str(obj) + '\t Delta: ' + str(delta) + '\n')
+            logging.info('Iter: ' + str(i) + '\t Loss: ' + str(obj) + '\t Delta: ' \
+				+ str(delta) + '\n')
 
-
-    logging.info('end\n')
+    logging.info('JPPCF OK\n')
 
     return (P, Q, S)

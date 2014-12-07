@@ -1,5 +1,6 @@
 # encoding: utf-8
-
+import sys
+sys.path.append('/home/zjd/jmm/JPPCF/')
 import os
 import numpy as np
 import util
