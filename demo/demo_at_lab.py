@@ -106,14 +106,14 @@ for current_time_step in range(start+1, finT + 1):
 
         logging.info('computing JPP decomposition...')
         P, Q, S = JPPCF(Rt, Po, Po.shape[1], lambd, regl1jpp,  epsilon, maxiter, True)
-        PredictR = P.dot(Q)
+        PredictR = np.dot(P, Q)
         NormPR = PredictR / PredictR.max()
 
 
         logging.info('[ok]\ncomputing t-model NMF decomposition...')
         Pbaseline, Qbaseline = util.nmf(Rt, k, maxiter, regl1nmf, epsilon)
 
-        PredictRbaseline = Pbaseline.dot(Qbaseline)
+        PredictRbaseline = np.dot(Pbaseline, Qbaseline)
         NormPRbaseline = PredictRbaseline / PredictRbaseline.max()
 
         logging.info('[ok]\ncomputing fix_model NMF decomposition...')
@@ -127,7 +127,7 @@ for current_time_step in range(start+1, finT + 1):
         logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
         Pbaseline2, Qbaseline2 = util.nmf(Rt, k, maxiter, regl1nmf, epsilon)
 
-        PredictRbaseline2 = Pbaseline2.dot(Qbaseline2)
+        PredictRbaseline2 = np.dot(Pbaseline2, Qbaseline2)
         NormPRbaseline2 = PredictRbaseline2 / PredictRbaseline2.max()
 
         logging.info('[ok]\n')

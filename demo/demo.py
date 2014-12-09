@@ -91,7 +91,7 @@ for k in [100]:
 
 					print 'computing JPP decomposition...'
 					P, Q, S = JPPCF(Rt, Po, Po.shape[1], lambd, regl1jpp,  epsilon, maxiter, True)
-					PredictR = P.dot(Q)
+					PredictR = np.dot(P, Q)
 					NormPR = PredictR / PredictR.max()
 					#NormPR = util.norm_by_threshold(NormPR, 0.5)
 
@@ -99,7 +99,7 @@ for k in [100]:
 					print '[ok]\ncomputing t-model NMF decomposition...'
 					Pbaseline, Qbaseline = util.nmf(Rt, k, maxiter, regl1nmf, epsilon)
 
-					PredictRbaseline = Pbaseline.dot(Qbaseline)
+					PredictRbaseline = np.dot(Pbaseline, Qbaseline)
 					NormPRbaseline = PredictRbaseline / PredictRbaseline.max()
 
 					print '[ok]\ncomputing fix_model NMF decomposition...'
@@ -112,7 +112,7 @@ for k in [100]:
 					print 'non zero cell num: ', len(np.nonzero(Rt)[0])
 					Pbaseline2, Qbaseline2 = util.nmf(Rt, k, maxiter, regl1nmf, epsilon)
 
-					PredictRbaseline2 = Pbaseline2.dot(Qbaseline2)
+					PredictRbaseline2 = np.dot(Pbaseline2, Qbaseline2)
 					NormPRbaseline2 = PredictRbaseline2 / PredictRbaseline2.max()
 
 					print '[ok]\n'
