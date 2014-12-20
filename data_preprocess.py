@@ -55,7 +55,7 @@ def filter_unactive_users_docs():
 	rating_file = open(data_path + 'total_data/rating_data_file.dat.txt', 'r')
 	user_like_list = open(data_path + 'total_data/user_like_list.dat.txt', 'r')
 	doc_liked_list = open(data_path + 'total_data/doc_liked_list.dat.txt', 'r')
-	threshold = 5
+	threshold = 10
 
 	print 'start filter ratings whose users and docs like list\'s len less than ', threshold 
 	
@@ -79,7 +79,7 @@ def filter_unactive_users_docs():
 			break
 		filtered_doc_ids.append(int(splits[0]))
 	
-	filter_rating_file = open(result_path + '/rating_file2.dat.txt', 'w+')
+	filter_rating_file = open(result_path + '/rating_file.dat.txt', 'w+')
 
 	user_dict = {}
 	doc_dict = {}
@@ -229,7 +229,7 @@ def cross_validate_on_dict(doc_liked_list, fold_num, time_result_path):
 
 def generate_cross_validate_data(fold_num = 5):
 	data_path = './data/preprocessed_data/'
-	result_path = data_path + 'filtered_by_user_doc_like_list_len_5'
+	result_path = data_path + 'filtered_by_user_doc_like_list_len_10'
 	rating_data = np.loadtxt(result_path + '/rating_file.dat.txt', dtype=int)
 	start_time = rating_data[0][2]
 	end_time = rating_data[-1][2]
@@ -267,8 +267,8 @@ if __name__ == '__main__':
 	print '\n'
 
 	#get_user_like_and_doc_liked_list()	
-	#filter_unactive_users_docs()
-	generate_cross_validate_data(5)
+	filter_unactive_users_docs()
+	generate_cross_validate_data(3)
 
 	import time   
 	end = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))

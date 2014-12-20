@@ -32,13 +32,13 @@ print 'doc num: ', doc_num, '\n'
 print 'time step num: ', time_step_num, '\n'
 
 
-regl1nmf = 0.0005
+regl1nmf = 0.005
 
-regl1jpp = 0.005
+regl1jpp = 0.05
 
-epsilon = 0.1
+epsilon = 1
 
-maxiter = 100
+maxiter = 70
 
 #recall_num = 100
 
