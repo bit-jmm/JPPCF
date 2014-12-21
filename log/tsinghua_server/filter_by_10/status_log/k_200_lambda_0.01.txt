@@ -1,0 +1,477 @@
+root        : INFO     user num: 3431
+
+root        : INFO     doc num: 7710
+
+root        : INFO     time step num: 20
+
+root        : INFO     non zero cell num: 1338
+root        : INFO     start nmf:
+
+root        : INFO     Iter: 1	 Loss: 1341.75911175	 Delta: 998658.240888
+
+root        : INFO     Iter: 2	 Loss: 1242.56706575	 Delta: 99.1920460028
+
+root        : INFO     Iter: 3	 Loss: 1106.79039617	 Delta: 135.776669574
+
+root        : INFO     Iter: 4	 Loss: 904.959348512	 Delta: 201.831047659
+
+root        : INFO     Iter: 5	 Loss: 719.821103247	 Delta: 185.138245265
+
+root        : INFO     Iter: 6	 Loss: 568.705152448	 Delta: 151.115950799
+
+root        : INFO     Iter: 7	 Loss: 448.6486169	 Delta: 120.056535548
+
+root        : INFO     Iter: 8	 Loss: 364.297635693	 Delta: 84.3509812071
+
+root        : INFO     Iter: 9	 Loss: 312.128963226	 Delta: 52.1686724668
+
+root        : INFO     Iter: 10	 Loss: 276.64995092	 Delta: 35.4790123056
+
+root        : INFO     Iter: 11	 Loss: 248.941949508	 Delta: 27.7080014122
+
+root        : INFO     Iter: 12	 Loss: 227.057464811	 Delta: 21.884484697
+
+root        : INFO     Iter: 13	 Loss: 211.596808026	 Delta: 15.4606567853
+
+root        : INFO     Iter: 14	 Loss: 199.516720299	 Delta: 12.0800877271
+
+root        : INFO     Iter: 15	 Loss: 188.578334977	 Delta: 10.9383853218
+
+root        : INFO     Iter: 16	 Loss: 179.271470379	 Delta: 9.30686459787
+
+root        : INFO     Iter: 17	 Loss: 171.726224262	 Delta: 7.54524611673
+
+root        : INFO     Iter: 18	 Loss: 164.011872589	 Delta: 7.71435167368
+
+root        : INFO     Iter: 19	 Loss: 153.279664	 Delta: 10.7322085883
+
+root        : INFO     Iter: 20	 Loss: 144.835124736	 Delta: 8.44453926449
+
+root        : INFO     Iter: 21	 Loss: 140.262572411	 Delta: 4.57255232502
+
+root        : INFO     Iter: 22	 Loss: 136.876812912	 Delta: 3.38575949847
+
+root        : INFO     Iter: 23	 Loss: 134.526485738	 Delta: 2.3503271745
+
+root        : INFO     Iter: 24	 Loss: 132.048770362	 Delta: 2.47771537525
+
+root        : INFO     Iter: 25	 Loss: 129.843503232	 Delta: 2.2052671306
+
+root        : INFO     Iter: 26	 Loss: 127.782945683	 Delta: 2.06055754897
+
+root        : INFO     Iter: 27	 Loss: 125.80814218	 Delta: 1.97480350327
+
+root        : INFO     Iter: 28	 Loss: 123.950863932	 Delta: 1.85727824739
+
+root        : INFO     Iter: 29	 Loss: 121.997229708	 Delta: 1.95363422385
+
+root        : INFO     Iter: 30	 Loss: 119.558279701	 Delta: 2.43895000764
+
+root        : INFO     Iter: 31	 Loss: 117.348307868	 Delta: 2.20997183236
+
+root        : INFO     Iter: 32	 Loss: 115.687205407	 Delta: 1.66110246103
+
+root        : INFO     Iter: 33	 Loss: 114.383894872	 Delta: 1.30331053515
+
+root        : INFO     Iter: 34	 Loss: 112.494190138	 Delta: 1.88970473417
+
+root        : INFO     Iter: 35	 Loss: 110.339843477	 Delta: 2.1543466615
+
+root        : INFO     Iter: 36	 Loss: 108.696053231	 Delta: 1.64379024509
+
+root        : INFO     Iter: 37	 Loss: 106.602691037	 Delta: 2.09336219484
+
+root        : INFO     Iter: 38	 Loss: 103.617234391	 Delta: 2.98545664561
+
+root        : INFO     Iter: 39	 Loss: 102.269412356	 Delta: 1.34782203466
+
+root        : INFO     Iter: 40	 Loss: 101.260126706	 Delta: 1.00928565045
+
+root        : INFO     Iter: 41	 Loss: 100.323359074	 Delta: 0.936767632297
+
+root        : INFO     NMF OK
+root        : INFO     
+=========================
+
+root        : INFO     time_step number %i:	2
+root        : INFO     ----------------
+
+root        : INFO     non zero cell num: 1665
+root        : INFO     computing JPP decomposition...
+root        : INFO     Iter: 1	 Loss: 3383.26452903	 Delta: 996616.735471
+
+root        : INFO     Iter: 2	 Loss: 3375.23774288	 Delta: 8.02678614174
+
+root        : INFO     Iter: 3	 Loss: 3111.31276546	 Delta: 263.924977422
+
+root        : INFO     Iter: 4	 Loss: 2837.36909851	 Delta: 273.943666951
+
+root        : INFO     Iter: 5	 Loss: 2351.29837356	 Delta: 486.070724954
+
+root        : INFO     Iter: 6	 Loss: 1979.38776713	 Delta: 371.910606428
+
+root        : INFO     Iter: 7	 Loss: 1770.85778937	 Delta: 208.529977755
+
+root        : INFO     Iter: 8	 Loss: 1620.55219395	 Delta: 150.305595426
+
+root        : INFO     Iter: 9	 Loss: 1501.90306916	 Delta: 118.649124792
+
+root        : INFO     Iter: 10	 Loss: 1423.19091884	 Delta: 78.7121503151
+
+root        : INFO     Iter: 11	 Loss: 1354.95447065	 Delta: 68.2364481904
+
+root        : INFO     Iter: 12	 Loss: 1285.89996853	 Delta: 69.0545021253
+
+root        : INFO     Iter: 13	 Loss: 1226.21811964	 Delta: 59.6818488876
+
+root        : INFO     Iter: 14	 Loss: 1177.15307781	 Delta: 49.0650418337
+
+root        : INFO     Iter: 15	 Loss: 1142.07677187	 Delta: 35.0763059344
+
+root        : INFO     Iter: 16	 Loss: 1110.04865726	 Delta: 32.0281146081
+
+root        : INFO     Iter: 17	 Loss: 1081.68668825	 Delta: 28.3619690113
+
+root        : INFO     Iter: 18	 Loss: 1057.91176226	 Delta: 23.7749259911
+
+root        : INFO     Iter: 19	 Loss: 1039.67841412	 Delta: 18.2333481396
+
+root        : INFO     Iter: 20	 Loss: 1024.88270536	 Delta: 14.7957087591
+
+root        : INFO     Iter: 21	 Loss: 1010.12560708	 Delta: 14.7570982828
+
+root        : INFO     Iter: 22	 Loss: 996.945041127	 Delta: 13.1805659516
+
+root        : INFO     Iter: 23	 Loss: 986.598115989	 Delta: 10.3469251378
+
+root        : INFO     Iter: 24	 Loss: 978.445485175	 Delta: 8.15263081426
+
+root        : INFO     Iter: 25	 Loss: 970.703834562	 Delta: 7.74165061295
+
+root        : INFO     Iter: 26	 Loss: 963.549893499	 Delta: 7.15394106243
+
+root        : INFO     Iter: 27	 Loss: 956.438803476	 Delta: 7.11109002305
+
+root        : INFO     Iter: 28	 Loss: 949.608351705	 Delta: 6.83045177109
+
+root        : INFO     Iter: 29	 Loss: 944.185779251	 Delta: 5.42257245458
+
+root        : INFO     Iter: 30	 Loss: 939.813436638	 Delta: 4.37234261231
+
+root        : INFO     Iter: 31	 Loss: 935.500664504	 Delta: 4.3127721343
+
+root        : INFO     Iter: 32	 Loss: 931.151344027	 Delta: 4.34932047688
+
+root        : INFO     Iter: 33	 Loss: 926.913190326	 Delta: 4.2381537017
+
+root        : INFO     Iter: 34	 Loss: 923.17343216	 Delta: 3.73975816539
+
+root        : INFO     Iter: 35	 Loss: 919.821197462	 Delta: 3.35223469781
+
+root        : INFO     Iter: 36	 Loss: 916.657884152	 Delta: 3.16331331013
+
+root        : INFO     Iter: 37	 Loss: 913.745738905	 Delta: 2.912145247
+
+root        : INFO     Iter: 38	 Loss: 911.226239634	 Delta: 2.51949927118
+
+root        : INFO     Iter: 39	 Loss: 909.097121348	 Delta: 2.1291182862
+
+root        : INFO     Iter: 40	 Loss: 907.346670853	 Delta: 1.75045049516
+
+root        : INFO     Iter: 41	 Loss: 905.790203019	 Delta: 1.55646783322
+
+root        : INFO     Iter: 42	 Loss: 904.32344896	 Delta: 1.46675405896
+
+root        : INFO     Iter: 43	 Loss: 902.497636493	 Delta: 1.82581246743
+
+root        : INFO     Iter: 44	 Loss: 899.866964605	 Delta: 2.63067188769
+
+root        : INFO     Iter: 45	 Loss: 897.515845341	 Delta: 2.35111926448
+
+root        : INFO     Iter: 46	 Loss: 894.469030528	 Delta: 3.0468148131
+
+root        : INFO     Iter: 47	 Loss: 891.563494858	 Delta: 2.90553566945
+
+root        : INFO     Iter: 48	 Loss: 888.479604764	 Delta: 3.08389009414
+
+root        : INFO     Iter: 49	 Loss: 885.022534374	 Delta: 3.45707039015
+
+root        : INFO     Iter: 50	 Loss: 883.215028289	 Delta: 1.80750608525
+
+root        : INFO     Iter: 51	 Loss: 881.086150081	 Delta: 2.12887820735
+
+root        : INFO     Iter: 52	 Loss: 878.525300603	 Delta: 2.56084947863
+
+root        : INFO     Iter: 53	 Loss: 875.387405874	 Delta: 3.13789472859
+
+root        : INFO     Iter: 54	 Loss: 871.5707684	 Delta: 3.81663747417
+
+root        : INFO     Iter: 55	 Loss: 867.199039508	 Delta: 4.37172889174
+
+root        : INFO     Iter: 56	 Loss: 863.1128297	 Delta: 4.08620980789
+
+root        : INFO     Iter: 57	 Loss: 859.653986237	 Delta: 3.45884346377
+
+root        : INFO     Iter: 58	 Loss: 857.425871441	 Delta: 2.22811479531
+
+root        : INFO     Iter: 59	 Loss: 855.926014919	 Delta: 1.49985652237
+
+root        : INFO     Iter: 60	 Loss: 854.83607885	 Delta: 1.08993606934
+
+root        : INFO     Iter: 61	 Loss: 853.911219312	 Delta: 0.924859537128
+
+root        : INFO     JPPCF OK
+
+root        : INFO     [ok]
+computing t-model NMF decomposition...
+root        : INFO     Iter: 1	 Loss: 1668.07198767	 Delta: 998331.928012
+
+root        : INFO     Iter: 2	 Loss: 1650.74167565	 Delta: 17.3303120143
+
+root        : INFO     Iter: 3	 Loss: 1522.41747253	 Delta: 128.324203121
+
+root        : INFO     Iter: 4	 Loss: 1237.33397019	 Delta: 285.083502346
+
+root        : INFO     Iter: 5	 Loss: 1014.67648996	 Delta: 222.657480224
+
+root        : INFO     Iter: 6	 Loss: 845.668105898	 Delta: 169.008384064
+
+root        : INFO     Iter: 7	 Loss: 754.532466786	 Delta: 91.1356391128
+
+root        : INFO     Iter: 8	 Loss: 690.162840277	 Delta: 64.3696265082
+
+root        : INFO     Iter: 9	 Loss: 635.694399398	 Delta: 54.4684408797
+
+root        : INFO     Iter: 10	 Loss: 591.188115585	 Delta: 44.506283813
+
+root        : INFO     Iter: 11	 Loss: 557.273198062	 Delta: 33.9149175225
+
+root        : INFO     Iter: 12	 Loss: 531.74246865	 Delta: 25.5307294122
+
+root        : INFO     Iter: 13	 Loss: 513.936705448	 Delta: 17.8057632022
+
+root        : INFO     Iter: 14	 Loss: 498.650140977	 Delta: 15.2865644706
+
+root        : INFO     Iter: 15	 Loss: 487.569669126	 Delta: 11.0804718512
+
+root        : INFO     Iter: 16	 Loss: 477.839115779	 Delta: 9.73055334706
+
+root        : INFO     Iter: 17	 Loss: 467.370658533	 Delta: 10.4684572464
+
+root        : INFO     Iter: 18	 Loss: 457.140014831	 Delta: 10.2306437012
+
+root        : INFO     Iter: 19	 Loss: 448.088166728	 Delta: 9.05184810341
+
+root        : INFO     Iter: 20	 Loss: 439.511993175	 Delta: 8.57617355287
+
+root        : INFO     Iter: 21	 Loss: 431.720613325	 Delta: 7.79137985013
+
+root        : INFO     Iter: 22	 Loss: 424.702084514	 Delta: 7.01852881072
+
+root        : INFO     Iter: 23	 Loss: 419.517860189	 Delta: 5.18422432499
+
+root        : INFO     Iter: 24	 Loss: 415.178894599	 Delta: 4.33896558979
+
+root        : INFO     Iter: 25	 Loss: 410.517988809	 Delta: 4.66090579082
+
+root        : INFO     Iter: 26	 Loss: 407.790513963	 Delta: 2.72747484542
+
+root        : INFO     Iter: 27	 Loss: 405.48904738	 Delta: 2.30146658279
+
+root        : INFO     Iter: 28	 Loss: 403.431875257	 Delta: 2.05717212384
+
+root        : INFO     Iter: 29	 Loss: 401.132734839	 Delta: 2.29914041757
+
+root        : INFO     Iter: 30	 Loss: 397.041984675	 Delta: 4.09075016426
+
+root        : INFO     Iter: 31	 Loss: 395.027636667	 Delta: 2.01434800743
+
+root        : INFO     Iter: 32	 Loss: 393.541896477	 Delta: 1.48574019026
+
+root        : INFO     Iter: 33	 Loss: 392.386321643	 Delta: 1.15557483373
+
+root        : INFO     Iter: 34	 Loss: 391.348489254	 Delta: 1.03783238941
+
+root        : INFO     Iter: 35	 Loss: 390.559030819	 Delta: 0.789458435296
+
+root        : INFO     NMF OK
+root        : INFO     [ok]
+computing fix_model NMF decomposition...
+root        : INFO     non zero cell num: 1665
+root        : INFO     Iter: 1	 Loss: 1668.05822962	 Delta: 998331.94177
+
+root        : INFO     Iter: 2	 Loss: 1652.28016438	 Delta: 15.7780652418
+
+root        : INFO     Iter: 3	 Loss: 1527.04222749	 Delta: 125.237936895
+
+root        : INFO     Iter: 4	 Loss: 1257.9959161	 Delta: 269.046311386
+
+root        : INFO     Iter: 5	 Loss: 981.925093673	 Delta: 276.070822428
+
+root        : INFO     Iter: 6	 Loss: 830.958402836	 Delta: 150.966690837
+
+root        : INFO     Iter: 7	 Loss: 741.00046297	 Delta: 89.9579398653
+
+root        : INFO     Iter: 8	 Loss: 681.517609544	 Delta: 59.4828534267
+
+root        : INFO     Iter: 9	 Loss: 625.781613082	 Delta: 55.7359964616
+
+root        : INFO     Iter: 10	 Loss: 582.317083479	 Delta: 43.4645296027
+
+root        : INFO     Iter: 11	 Loss: 543.645922448	 Delta: 38.6711610316
+
+root        : INFO     Iter: 12	 Loss: 512.356152889	 Delta: 31.2897695588
+
+root        : INFO     Iter: 13	 Loss: 487.689641784	 Delta: 24.6665111045
+
+root        : INFO     Iter: 14	 Loss: 468.228565158	 Delta: 19.4610766267
+
+root        : INFO     Iter: 15	 Loss: 449.483848261	 Delta: 18.7447168973
+
+root        : INFO     Iter: 16	 Loss: 432.988523683	 Delta: 16.4953245771
+
+root        : INFO     Iter: 17	 Loss: 421.342751537	 Delta: 11.6457721461
+
+root        : INFO     Iter: 18	 Loss: 408.188822471	 Delta: 13.1539290661
+
+root        : INFO     Iter: 19	 Loss: 396.555312245	 Delta: 11.6335102261
+
+root        : INFO     Iter: 20	 Loss: 387.497623348	 Delta: 9.05768889754
+
+root        : INFO     Iter: 21	 Loss: 381.218759251	 Delta: 6.27886409692
+
+root        : INFO     Iter: 22	 Loss: 376.487116957	 Delta: 4.73164229368
+
+root        : INFO     Iter: 23	 Loss: 372.431748852	 Delta: 4.05536810454
+
+root        : INFO     Iter: 24	 Loss: 369.209783565	 Delta: 3.22196528772
+
+root        : INFO     Iter: 25	 Loss: 366.712637497	 Delta: 2.49714606761
+
+root        : INFO     Iter: 26	 Loss: 364.658511309	 Delta: 2.05412618849
+
+root        : INFO     Iter: 27	 Loss: 362.670071673	 Delta: 1.98843963586
+
+root        : INFO     Iter: 28	 Loss: 360.249591747	 Delta: 2.42047992606
+
+root        : INFO     Iter: 29	 Loss: 357.644792909	 Delta: 2.60479883733
+
+root        : INFO     Iter: 30	 Loss: 354.873409537	 Delta: 2.77138337283
+
+root        : INFO     Iter: 31	 Loss: 352.047203521	 Delta: 2.82620601599
+
+root        : INFO     Iter: 32	 Loss: 349.648234506	 Delta: 2.39896901494
+
+root        : INFO     Iter: 33	 Loss: 347.953680627	 Delta: 1.69455387868
+
+root        : INFO     Iter: 34	 Loss: 346.594189846	 Delta: 1.35949078128
+
+root        : INFO     Iter: 35	 Loss: 345.336494883	 Delta: 1.25769496253
+
+root        : INFO     Iter: 36	 Loss: 344.518801536	 Delta: 0.817693347379
+
+root        : INFO     NMF OK
+root        : INFO     [ok]
+
+root        : INFO     	 fold_id:0
+
+root        : INFO     	recall at 10:
+root        : INFO     		t-model NMF :  0.294100973723
+
+root        : INFO     		f-model NMF :  0.260917700413
+
+root        : INFO     		JPPCF :  0.248412698413
+
+root        : INFO     	recall at 50:
+root        : INFO     		t-model NMF :  0.545761637989
+
+root        : INFO     		f-model NMF :  0.551197145525
+
+root        : INFO     		JPPCF :  0.543787515006
+
+root        : INFO     	recall at 100:
+root        : INFO     		t-model NMF :  0.631422569028
+
+root        : INFO     		f-model NMF :  0.643524076297
+
+root        : INFO     		JPPCF :  0.649289715886
+
+root        : INFO     	recall at 300:
+root        : INFO     		t-model NMF :  0.855909030279
+
+root        : INFO     		f-model NMF :  0.84327064159
+
+root        : INFO     		JPPCF :  0.796171802054
+
+root        : INFO     	recall at 500:
+root        : INFO     		t-model NMF :  0.870448179272
+
+root        : INFO     		f-model NMF :  0.887605042017
+
+root        : INFO     		JPPCF :  0.879785247432
+
+root        : INFO     	recall at 1000:
+root        : INFO     		t-model NMF :  0.889355742297
+
+root        : INFO     		f-model NMF :  0.90056022409
+
+root        : INFO     		JPPCF :  0.941176470588
+
+root        : INFO     current_time_step: 2
+
+root        : INFO     	recall at 10:
+root        : INFO     		avg t-model NMF :  0.294100973723
+
+root        : INFO     		avg f-model NMF :  0.260917700413
+
+root        : INFO     		avg JPPCF :  0.248412698413
+
+root        : INFO     	recall at 50:
+root        : INFO     		avg t-model NMF :  0.545761637989
+
+root        : INFO     		avg f-model NMF :  0.551197145525
+
+root        : INFO     		avg JPPCF :  0.543787515006
+
+root        : INFO     	recall at 100:
+root        : INFO     		avg t-model NMF :  0.631422569028
+
+root        : INFO     		avg f-model NMF :  0.643524076297
+
+root        : INFO     		avg JPPCF :  0.649289715886
+
+root        : INFO     	recall at 300:
+root        : INFO     		avg t-model NMF :  0.855909030279
+
+root        : INFO     		avg f-model NMF :  0.84327064159
+
+root        : INFO     		avg JPPCF :  0.796171802054
+
+root        : INFO     	recall at 500:
+root        : INFO     		avg t-model NMF :  0.870448179272
+
+root        : INFO     		avg f-model NMF :  0.887605042017
+
+root        : INFO     		avg JPPCF :  0.879785247432
+
+root        : INFO     	recall at 1000:
+root        : INFO     		avg t-model NMF :  0.889355742297
+
+root        : INFO     		avg f-model NMF :  0.90056022409
+
+root        : INFO     		avg JPPCF :  0.941176470588
+
+root        : INFO     =========================
+
+root        : INFO     
+=========================
+
+root        : INFO     time_step number %i:	3
+root        : INFO     ----------------
+
+root        : INFO     non zero cell num: 2740
+root        : INFO     computing JPP decomposition...
+root        : INFO     Iter: 1	 Loss: 5534.04356953	 Delta: 994465.95643
+
+root        : INFO     Iter: 2	 Loss: 5510.75478656	 Delta: 23.2887829731
+
