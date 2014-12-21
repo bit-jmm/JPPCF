@@ -826,3 +826,526 @@ Sun, 21 Dec 2014 15:45:04 JPPCF.py[line:86]                            INFO Iter
 
 Sun, 21 Dec 2014 15:47:12 JPPCF.py[line:86]                            INFO Iter: 3	 Loss: 4263.48707787	 Delta: 1292.35813071
 
+Sun, 21 Dec 2014 15:49:19 JPPCF.py[line:86]                            INFO Iter: 4	 Loss: 3726.07130609	 Delta: 537.415771784
+
+Sun, 21 Dec 2014 15:51:22 JPPCF.py[line:86]                            INFO Iter: 5	 Loss: 3029.06698457	 Delta: 697.004321513
+
+Sun, 21 Dec 2014 15:53:22 JPPCF.py[line:86]                            INFO Iter: 6	 Loss: 2618.4770232	 Delta: 410.589961373
+
+Sun, 21 Dec 2014 15:55:21 JPPCF.py[line:86]                            INFO Iter: 7	 Loss: 2347.30774262	 Delta: 271.169280581
+
+Sun, 21 Dec 2014 15:57:21 JPPCF.py[line:86]                            INFO Iter: 8	 Loss: 2115.48231187	 Delta: 231.825430751
+
+Sun, 21 Dec 2014 15:59:27 JPPCF.py[line:86]                            INFO Iter: 9	 Loss: 1928.48351013	 Delta: 186.998801743
+
+Sun, 21 Dec 2014 16:01:38 JPPCF.py[line:86]                            INFO Iter: 10	 Loss: 1789.53070073	 Delta: 138.952809397
+
+Sun, 21 Dec 2014 16:03:45 JPPCF.py[line:86]                            INFO Iter: 11	 Loss: 1683.06020188	 Delta: 106.470498854
+
+Sun, 21 Dec 2014 16:05:44 JPPCF.py[line:86]                            INFO Iter: 12	 Loss: 1607.09153491	 Delta: 75.9686669639
+
+Sun, 21 Dec 2014 16:07:46 JPPCF.py[line:86]                            INFO Iter: 13	 Loss: 1548.51833169	 Delta: 58.5732032227
+
+Sun, 21 Dec 2014 16:09:54 JPPCF.py[line:86]                            INFO Iter: 14	 Loss: 1505.45715585	 Delta: 43.0611758351
+
+Sun, 21 Dec 2014 16:11:59 JPPCF.py[line:86]                            INFO Iter: 15	 Loss: 1470.03409485	 Delta: 35.4230610063
+
+Sun, 21 Dec 2014 16:14:09 JPPCF.py[line:86]                            INFO Iter: 16	 Loss: 1444.27399133	 Delta: 25.7601035145
+
+Sun, 21 Dec 2014 16:16:16 JPPCF.py[line:86]                            INFO Iter: 17	 Loss: 1425.86467876	 Delta: 18.409312575
+
+Sun, 21 Dec 2014 16:18:26 JPPCF.py[line:86]                            INFO Iter: 18	 Loss: 1405.64040586	 Delta: 20.2242729004
+
+Sun, 21 Dec 2014 16:20:39 JPPCF.py[line:86]                            INFO Iter: 19	 Loss: 1389.87258849	 Delta: 15.7678173694
+
+Sun, 21 Dec 2014 16:22:48 JPPCF.py[line:86]                            INFO Iter: 20	 Loss: 1376.57867183	 Delta: 13.2939166547
+
+Sun, 21 Dec 2014 16:24:59 JPPCF.py[line:86]                            INFO Iter: 21	 Loss: 1364.76834602	 Delta: 11.8103258125
+
+Sun, 21 Dec 2014 16:27:10 JPPCF.py[line:86]                            INFO Iter: 22	 Loss: 1355.39724636	 Delta: 9.37109965902
+
+Sun, 21 Dec 2014 16:29:22 JPPCF.py[line:86]                            INFO Iter: 23	 Loss: 1346.40453489	 Delta: 8.99271147431
+
+Sun, 21 Dec 2014 16:31:36 JPPCF.py[line:86]                            INFO Iter: 24	 Loss: 1335.34455185	 Delta: 11.0599830348
+
+Sun, 21 Dec 2014 16:33:47 JPPCF.py[line:86]                            INFO Iter: 25	 Loss: 1326.57604889	 Delta: 8.76850296341
+
+Sun, 21 Dec 2014 16:35:58 JPPCF.py[line:86]                            INFO Iter: 26	 Loss: 1316.44084074	 Delta: 10.1352081503
+
+Sun, 21 Dec 2014 16:38:08 JPPCF.py[line:86]                            INFO Iter: 27	 Loss: 1307.67921468	 Delta: 8.76162606052
+
+Sun, 21 Dec 2014 16:40:18 JPPCF.py[line:86]                            INFO Iter: 28	 Loss: 1298.83667304	 Delta: 8.84254164247
+
+Sun, 21 Dec 2014 16:42:30 JPPCF.py[line:86]                            INFO Iter: 29	 Loss: 1290.73156831	 Delta: 8.10510472192
+
+Sun, 21 Dec 2014 16:44:42 JPPCF.py[line:86]                            INFO Iter: 30	 Loss: 1282.45578234	 Delta: 8.27578597709
+
+Sun, 21 Dec 2014 16:46:50 JPPCF.py[line:86]                            INFO Iter: 31	 Loss: 1275.09520492	 Delta: 7.36057742102
+
+Sun, 21 Dec 2014 16:48:54 JPPCF.py[line:86]                            INFO Iter: 32	 Loss: 1269.80971757	 Delta: 5.28548734176
+
+Sun, 21 Dec 2014 16:50:59 JPPCF.py[line:86]                            INFO Iter: 33	 Loss: 1264.82369691	 Delta: 4.98602066548
+
+Sun, 21 Dec 2014 16:53:07 JPPCF.py[line:86]                            INFO Iter: 34	 Loss: 1259.1301995	 Delta: 5.6934974112
+
+Sun, 21 Dec 2014 16:55:12 JPPCF.py[line:86]                            INFO Iter: 35	 Loss: 1252.24493029	 Delta: 6.88526920314
+
+Sun, 21 Dec 2014 16:57:15 JPPCF.py[line:86]                            INFO Iter: 36	 Loss: 1241.74609771	 Delta: 10.4988325855
+
+Sun, 21 Dec 2014 16:59:22 JPPCF.py[line:86]                            INFO Iter: 37	 Loss: 1230.52773503	 Delta: 11.2183626803
+
+Sun, 21 Dec 2014 17:01:31 JPPCF.py[line:86]                            INFO Iter: 38	 Loss: 1221.57381038	 Delta: 8.95392464594
+
+Sun, 21 Dec 2014 17:03:35 JPPCF.py[line:86]                            INFO Iter: 39	 Loss: 1215.06636523	 Delta: 6.50744515502
+
+Sun, 21 Dec 2014 17:05:37 JPPCF.py[line:86]                            INFO Iter: 40	 Loss: 1211.13882919	 Delta: 3.92753603785
+
+Sun, 21 Dec 2014 17:07:42 JPPCF.py[line:86]                            INFO Iter: 41	 Loss: 1208.99687989	 Delta: 2.14194929886
+
+Sun, 21 Dec 2014 17:09:47 JPPCF.py[line:86]                            INFO Iter: 42	 Loss: 1206.30301616	 Delta: 2.69386372722
+
+Sun, 21 Dec 2014 17:11:54 JPPCF.py[line:86]                            INFO Iter: 43	 Loss: 1203.51628044	 Delta: 2.78673572265
+
+Sun, 21 Dec 2014 17:14:06 JPPCF.py[line:86]                            INFO Iter: 44	 Loss: 1200.85709617	 Delta: 2.65918426921
+
+Sun, 21 Dec 2014 17:16:22 JPPCF.py[line:86]                            INFO Iter: 45	 Loss: 1198.16615549	 Delta: 2.69094068283
+
+Sun, 21 Dec 2014 17:18:36 JPPCF.py[line:86]                            INFO Iter: 46	 Loss: 1195.22352816	 Delta: 2.9426273324
+
+Sun, 21 Dec 2014 17:20:51 JPPCF.py[line:86]                            INFO Iter: 47	 Loss: 1190.7663018	 Delta: 4.45722635863
+
+Sun, 21 Dec 2014 17:23:01 JPPCF.py[line:86]                            INFO Iter: 48	 Loss: 1186.20460917	 Delta: 4.5616926288
+
+Sun, 21 Dec 2014 17:25:12 JPPCF.py[line:86]                            INFO Iter: 49	 Loss: 1180.65762426	 Delta: 5.54698491324
+
+Sun, 21 Dec 2014 17:27:26 JPPCF.py[line:86]                            INFO Iter: 50	 Loss: 1175.67140556	 Delta: 4.98621869167
+
+Sun, 21 Dec 2014 17:29:41 JPPCF.py[line:86]                            INFO Iter: 51	 Loss: 1170.61606621	 Delta: 5.05533935621
+
+Sun, 21 Dec 2014 17:31:54 JPPCF.py[line:86]                            INFO Iter: 52	 Loss: 1166.07333287	 Delta: 4.54273333886
+
+Sun, 21 Dec 2014 17:34:05 JPPCF.py[line:86]                            INFO Iter: 53	 Loss: 1161.70523054	 Delta: 4.36810232605
+
+Sun, 21 Dec 2014 17:36:15 JPPCF.py[line:86]                            INFO Iter: 54	 Loss: 1157.61516648	 Delta: 4.09006406464
+
+Sun, 21 Dec 2014 17:38:31 JPPCF.py[line:86]                            INFO Iter: 55	 Loss: 1153.49650675	 Delta: 4.11865972933
+
+Sun, 21 Dec 2014 17:40:41 JPPCF.py[line:86]                            INFO Iter: 56	 Loss: 1148.70071939	 Delta: 4.79578735887
+
+Sun, 21 Dec 2014 17:42:51 JPPCF.py[line:86]                            INFO Iter: 57	 Loss: 1142.9792578	 Delta: 5.72146159419
+
+Sun, 21 Dec 2014 17:44:57 JPPCF.py[line:86]                            INFO Iter: 58	 Loss: 1138.47617538	 Delta: 4.50308241804
+
+Sun, 21 Dec 2014 17:47:00 JPPCF.py[line:86]                            INFO Iter: 59	 Loss: 1135.24780057	 Delta: 3.22837481158
+
+Sun, 21 Dec 2014 17:49:04 JPPCF.py[line:86]                            INFO Iter: 60	 Loss: 1132.72676892	 Delta: 2.52103165046
+
+Sun, 21 Dec 2014 17:51:13 JPPCF.py[line:86]                            INFO Iter: 61	 Loss: 1130.46127571	 Delta: 2.26549321001
+
+Sun, 21 Dec 2014 17:53:18 JPPCF.py[line:86]                            INFO Iter: 62	 Loss: 1128.48868327	 Delta: 1.972592438
+
+Sun, 21 Dec 2014 17:55:27 JPPCF.py[line:86]                            INFO Iter: 63	 Loss: 1126.7072394	 Delta: 1.78144386928
+
+Sun, 21 Dec 2014 17:57:33 JPPCF.py[line:86]                            INFO Iter: 64	 Loss: 1124.68119858	 Delta: 2.02604082102
+
+Sun, 21 Dec 2014 17:59:40 JPPCF.py[line:86]                            INFO Iter: 65	 Loss: 1122.80421961	 Delta: 1.87697897025
+
+Sun, 21 Dec 2014 18:01:48 JPPCF.py[line:86]                            INFO Iter: 66	 Loss: 1120.40994959	 Delta: 2.39427001946
+
+Sun, 21 Dec 2014 18:03:57 JPPCF.py[line:86]                            INFO Iter: 67	 Loss: 1118.05058845	 Delta: 2.35936113473
+
+Sun, 21 Dec 2014 18:06:06 JPPCF.py[line:86]                            INFO Iter: 68	 Loss: 1116.09928182	 Delta: 1.95130662946
+
+Sun, 21 Dec 2014 18:08:17 JPPCF.py[line:86]                            INFO Iter: 69	 Loss: 1114.35774293	 Delta: 1.74153889602
+
+Sun, 21 Dec 2014 18:08:17 JPPCF.py[line:88]                            INFO JPPCF OK
+
+Sun, 21 Dec 2014 18:08:21 demo_at_tsinghua_filter_by_10.py[line:128]                            INFO [ok]
+computing t-model NMF decomposition...
+Sun, 21 Dec 2014 18:08:32 nmf.py[line:109]                            INFO Iter: 1	 Loss: 2711.56452886	 Delta: 997288.435471
+
+Sun, 21 Dec 2014 18:08:43 nmf.py[line:109]                            INFO Iter: 2	 Loss: 2700.33740608	 Delta: 11.2271227861
+
+Sun, 21 Dec 2014 18:08:53 nmf.py[line:109]                            INFO Iter: 3	 Loss: 2498.29434935	 Delta: 202.043056721
+
+Sun, 21 Dec 2014 18:09:03 nmf.py[line:109]                            INFO Iter: 4	 Loss: 2194.2505836	 Delta: 304.043765752
+
+Sun, 21 Dec 2014 18:09:14 nmf.py[line:109]                            INFO Iter: 5	 Loss: 1917.11392039	 Delta: 277.136663213
+
+Sun, 21 Dec 2014 18:09:24 nmf.py[line:109]                            INFO Iter: 6	 Loss: 1679.2193722	 Delta: 237.894548186
+
+Sun, 21 Dec 2014 18:09:34 nmf.py[line:109]                            INFO Iter: 7	 Loss: 1525.52376856	 Delta: 153.695603646
+
+Sun, 21 Dec 2014 18:09:45 nmf.py[line:109]                            INFO Iter: 8	 Loss: 1379.87085844	 Delta: 145.652910115
+
+Sun, 21 Dec 2014 18:09:55 nmf.py[line:109]                            INFO Iter: 9	 Loss: 1269.89579174	 Delta: 109.975066706
+
+Sun, 21 Dec 2014 18:10:06 nmf.py[line:109]                            INFO Iter: 10	 Loss: 1181.81630797	 Delta: 88.0794837669
+
+Sun, 21 Dec 2014 18:10:17 nmf.py[line:109]                            INFO Iter: 11	 Loss: 1124.67832127	 Delta: 57.1379867036
+
+Sun, 21 Dec 2014 18:10:29 nmf.py[line:109]                            INFO Iter: 12	 Loss: 1085.48013828	 Delta: 39.1981829897
+
+Sun, 21 Dec 2014 18:10:41 nmf.py[line:109]                            INFO Iter: 13	 Loss: 1049.8208709	 Delta: 35.6592673764
+
+Sun, 21 Dec 2014 18:10:52 nmf.py[line:109]                            INFO Iter: 14	 Loss: 1020.70909501	 Delta: 29.1117758905
+
+Sun, 21 Dec 2014 18:11:03 nmf.py[line:109]                            INFO Iter: 15	 Loss: 1000.53799538	 Delta: 20.171099633
+
+Sun, 21 Dec 2014 18:11:14 nmf.py[line:109]                            INFO Iter: 16	 Loss: 985.064690189	 Delta: 15.4733051878
+
+Sun, 21 Dec 2014 18:11:25 nmf.py[line:109]                            INFO Iter: 17	 Loss: 971.385402404	 Delta: 13.6792877852
+
+Sun, 21 Dec 2014 18:11:36 nmf.py[line:109]                            INFO Iter: 18	 Loss: 960.127764846	 Delta: 11.2576375579
+
+Sun, 21 Dec 2014 18:11:46 nmf.py[line:109]                            INFO Iter: 19	 Loss: 949.588926612	 Delta: 10.5388382336
+
+Sun, 21 Dec 2014 18:11:57 nmf.py[line:109]                            INFO Iter: 20	 Loss: 937.256919155	 Delta: 12.3320074572
+
+Sun, 21 Dec 2014 18:12:08 nmf.py[line:109]                            INFO Iter: 21	 Loss: 924.104782216	 Delta: 13.1521369392
+
+Sun, 21 Dec 2014 18:12:18 nmf.py[line:109]                            INFO Iter: 22	 Loss: 914.059709613	 Delta: 10.0450726026
+
+Sun, 21 Dec 2014 18:12:28 nmf.py[line:109]                            INFO Iter: 23	 Loss: 905.49571562	 Delta: 8.56399399329
+
+Sun, 21 Dec 2014 18:12:38 nmf.py[line:109]                            INFO Iter: 24	 Loss: 898.311650293	 Delta: 7.1840653264
+
+Sun, 21 Dec 2014 18:12:49 nmf.py[line:109]                            INFO Iter: 25	 Loss: 891.870581668	 Delta: 6.44106862547
+
+Sun, 21 Dec 2014 18:12:59 nmf.py[line:109]                            INFO Iter: 26	 Loss: 885.739949156	 Delta: 6.13063251182
+
+Sun, 21 Dec 2014 18:13:09 nmf.py[line:109]                            INFO Iter: 27	 Loss: 879.800040321	 Delta: 5.93990883474
+
+Sun, 21 Dec 2014 18:13:19 nmf.py[line:109]                            INFO Iter: 28	 Loss: 872.597727776	 Delta: 7.20231254538
+
+Sun, 21 Dec 2014 18:13:30 nmf.py[line:109]                            INFO Iter: 29	 Loss: 866.868914033	 Delta: 5.72881374304
+
+Sun, 21 Dec 2014 18:13:40 nmf.py[line:109]                            INFO Iter: 30	 Loss: 862.648126131	 Delta: 4.22078790222
+
+Sun, 21 Dec 2014 18:13:51 nmf.py[line:109]                            INFO Iter: 31	 Loss: 858.30721985	 Delta: 4.34090628053
+
+Sun, 21 Dec 2014 18:14:01 nmf.py[line:109]                            INFO Iter: 32	 Loss: 853.686795842	 Delta: 4.62042400814
+
+Sun, 21 Dec 2014 18:14:11 nmf.py[line:109]                            INFO Iter: 33	 Loss: 849.196062024	 Delta: 4.49073381796
+
+Sun, 21 Dec 2014 18:14:22 nmf.py[line:109]                            INFO Iter: 34	 Loss: 846.008640523	 Delta: 3.18742150138
+
+Sun, 21 Dec 2014 18:14:32 nmf.py[line:109]                            INFO Iter: 35	 Loss: 843.658684784	 Delta: 2.34995573873
+
+Sun, 21 Dec 2014 18:14:43 nmf.py[line:109]                            INFO Iter: 36	 Loss: 841.253160375	 Delta: 2.40552440927
+
+Sun, 21 Dec 2014 18:14:53 nmf.py[line:109]                            INFO Iter: 37	 Loss: 839.053275562	 Delta: 2.19988481274
+
+Sun, 21 Dec 2014 18:15:03 nmf.py[line:109]                            INFO Iter: 38	 Loss: 837.075222328	 Delta: 1.97805323345
+
+Sun, 21 Dec 2014 18:15:14 nmf.py[line:109]                            INFO Iter: 39	 Loss: 834.988362649	 Delta: 2.08685967965
+
+Sun, 21 Dec 2014 18:15:25 nmf.py[line:109]                            INFO Iter: 40	 Loss: 833.278920907	 Delta: 1.70944174162
+
+Sun, 21 Dec 2014 18:15:36 nmf.py[line:109]                            INFO Iter: 41	 Loss: 831.698809272	 Delta: 1.5801116356
+
+Sun, 21 Dec 2014 18:15:46 nmf.py[line:109]                            INFO Iter: 42	 Loss: 829.697765036	 Delta: 2.00104423579
+
+Sun, 21 Dec 2014 18:15:56 nmf.py[line:109]                            INFO Iter: 43	 Loss: 826.967614902	 Delta: 2.73015013399
+
+Sun, 21 Dec 2014 18:16:06 nmf.py[line:109]                            INFO Iter: 44	 Loss: 824.399380818	 Delta: 2.56823408407
+
+Sun, 21 Dec 2014 18:16:16 nmf.py[line:109]                            INFO Iter: 45	 Loss: 822.385709843	 Delta: 2.0136709744
+
+Sun, 21 Dec 2014 18:16:26 nmf.py[line:109]                            INFO Iter: 46	 Loss: 820.768475256	 Delta: 1.617234587
+
+Sun, 21 Dec 2014 18:16:36 nmf.py[line:109]                            INFO Iter: 47	 Loss: 818.899087173	 Delta: 1.86938808328
+
+Sun, 21 Dec 2014 18:16:47 nmf.py[line:109]                            INFO Iter: 48	 Loss: 816.399602278	 Delta: 2.49948489533
+
+Sun, 21 Dec 2014 18:16:56 nmf.py[line:109]                            INFO Iter: 49	 Loss: 814.051011207	 Delta: 2.34859107097
+
+Sun, 21 Dec 2014 18:17:07 nmf.py[line:109]                            INFO Iter: 50	 Loss: 811.879245524	 Delta: 2.17176568294
+
+Sun, 21 Dec 2014 18:17:17 nmf.py[line:109]                            INFO Iter: 51	 Loss: 809.702621408	 Delta: 2.17662411556
+
+Sun, 21 Dec 2014 18:17:27 nmf.py[line:109]                            INFO Iter: 52	 Loss: 808.434683356	 Delta: 1.26793805261
+
+Sun, 21 Dec 2014 18:17:38 nmf.py[line:109]                            INFO Iter: 53	 Loss: 807.679572712	 Delta: 0.755110643222
+
+Sun, 21 Dec 2014 18:17:38 nmf.py[line:113]                            INFO NMF OK
+Sun, 21 Dec 2014 18:17:41 demo_at_tsinghua_filter_by_10.py[line:134]                            INFO [ok]
+computing fix_model NMF decomposition...
+Sun, 21 Dec 2014 18:17:42 demo_at_tsinghua_filter_by_10.py[line:142]                            INFO non zero cell num: 7728
+Sun, 21 Dec 2014 18:17:52 nmf.py[line:109]                            INFO Iter: 1	 Loss: 7753.71159086	 Delta: 992246.288409
+
+Sun, 21 Dec 2014 18:18:02 nmf.py[line:109]                            INFO Iter: 2	 Loss: 7492.4073985	 Delta: 261.304192361
+
+Sun, 21 Dec 2014 18:18:12 nmf.py[line:109]                            INFO Iter: 3	 Loss: 7195.72729383	 Delta: 296.680104668
+
+Sun, 21 Dec 2014 18:18:22 nmf.py[line:109]                            INFO Iter: 4	 Loss: 6413.83766983	 Delta: 781.889624006
+
+Sun, 21 Dec 2014 18:18:32 nmf.py[line:109]                            INFO Iter: 5	 Loss: 5533.37584736	 Delta: 880.461822463
+
+Sun, 21 Dec 2014 18:18:42 nmf.py[line:109]                            INFO Iter: 6	 Loss: 4782.1413558	 Delta: 751.234491561
+
+Sun, 21 Dec 2014 18:18:51 nmf.py[line:109]                            INFO Iter: 7	 Loss: 4222.76626678	 Delta: 559.375089022
+
+Sun, 21 Dec 2014 18:19:01 nmf.py[line:109]                            INFO Iter: 8	 Loss: 3814.90456572	 Delta: 407.861701061
+
+Sun, 21 Dec 2014 18:19:12 nmf.py[line:109]                            INFO Iter: 9	 Loss: 3513.71267723	 Delta: 301.191888494
+
+Sun, 21 Dec 2014 18:19:22 nmf.py[line:109]                            INFO Iter: 10	 Loss: 3279.90600774	 Delta: 233.806669487
+
+Sun, 21 Dec 2014 18:19:32 nmf.py[line:109]                            INFO Iter: 11	 Loss: 3095.90078607	 Delta: 184.005221674
+
+Sun, 21 Dec 2014 18:19:43 nmf.py[line:109]                            INFO Iter: 12	 Loss: 2951.45343503	 Delta: 144.447351041
+
+Sun, 21 Dec 2014 18:19:54 nmf.py[line:109]                            INFO Iter: 13	 Loss: 2837.38787196	 Delta: 114.065563064
+
+Sun, 21 Dec 2014 18:20:05 nmf.py[line:109]                            INFO Iter: 14	 Loss: 2749.51400176	 Delta: 87.873870206
+
+Sun, 21 Dec 2014 18:20:16 nmf.py[line:109]                            INFO Iter: 15	 Loss: 2681.1430027	 Delta: 68.3709990566
+
+Sun, 21 Dec 2014 18:20:28 nmf.py[line:109]                            INFO Iter: 16	 Loss: 2625.8003091	 Delta: 55.3426935999
+
+Sun, 21 Dec 2014 18:20:40 nmf.py[line:109]                            INFO Iter: 17	 Loss: 2578.36909385	 Delta: 47.4312152462
+
+Sun, 21 Dec 2014 18:20:52 nmf.py[line:109]                            INFO Iter: 18	 Loss: 2538.63131307	 Delta: 39.7377807829
+
+Sun, 21 Dec 2014 18:21:05 nmf.py[line:109]                            INFO Iter: 19	 Loss: 2506.15446772	 Delta: 32.4768453497
+
+Sun, 21 Dec 2014 18:21:17 nmf.py[line:109]                            INFO Iter: 20	 Loss: 2478.47983197	 Delta: 27.6746357458
+
+Sun, 21 Dec 2014 18:21:29 nmf.py[line:109]                            INFO Iter: 21	 Loss: 2454.21842677	 Delta: 24.2614052031
+
+Sun, 21 Dec 2014 18:21:41 nmf.py[line:109]                            INFO Iter: 22	 Loss: 2432.6390617	 Delta: 21.5793650744
+
+Sun, 21 Dec 2014 18:21:53 nmf.py[line:109]                            INFO Iter: 23	 Loss: 2413.82268424	 Delta: 18.8163774607
+
+Sun, 21 Dec 2014 18:22:05 nmf.py[line:109]                            INFO Iter: 24	 Loss: 2397.88493416	 Delta: 15.9377500765
+
+Sun, 21 Dec 2014 18:22:17 nmf.py[line:109]                            INFO Iter: 25	 Loss: 2385.26043188	 Delta: 12.6245022826
+
+Sun, 21 Dec 2014 18:22:28 nmf.py[line:109]                            INFO Iter: 26	 Loss: 2374.59341535	 Delta: 10.6670165227
+
+Sun, 21 Dec 2014 18:22:39 nmf.py[line:109]                            INFO Iter: 27	 Loss: 2364.94456734	 Delta: 9.64884801506
+
+Sun, 21 Dec 2014 18:22:51 nmf.py[line:109]                            INFO Iter: 28	 Loss: 2356.75428053	 Delta: 8.19028681108
+
+Sun, 21 Dec 2014 18:23:03 nmf.py[line:109]                            INFO Iter: 29	 Loss: 2350.10024169	 Delta: 6.65403883908
+
+Sun, 21 Dec 2014 18:23:14 nmf.py[line:109]                            INFO Iter: 30	 Loss: 2344.59636421	 Delta: 5.50387747726
+
+Sun, 21 Dec 2014 18:23:25 nmf.py[line:109]                            INFO Iter: 31	 Loss: 2339.64527239	 Delta: 4.95109181724
+
+Sun, 21 Dec 2014 18:23:38 nmf.py[line:109]                            INFO Iter: 32	 Loss: 2335.04380589	 Delta: 4.6014664994
+
+Sun, 21 Dec 2014 18:23:49 nmf.py[line:109]                            INFO Iter: 33	 Loss: 2330.92141554	 Delta: 4.12239035277
+
+Sun, 21 Dec 2014 18:24:01 nmf.py[line:109]                            INFO Iter: 34	 Loss: 2327.33791096	 Delta: 3.58350458306
+
+Sun, 21 Dec 2014 18:24:12 nmf.py[line:109]                            INFO Iter: 35	 Loss: 2323.8088022	 Delta: 3.52910875872
+
+Sun, 21 Dec 2014 18:24:24 nmf.py[line:109]                            INFO Iter: 36	 Loss: 2320.12213256	 Delta: 3.68666964083
+
+Sun, 21 Dec 2014 18:24:35 nmf.py[line:109]                            INFO Iter: 37	 Loss: 2315.97969798	 Delta: 4.14243457948
+
+Sun, 21 Dec 2014 18:24:47 nmf.py[line:109]                            INFO Iter: 38	 Loss: 2310.98429208	 Delta: 4.99540590249
+
+Sun, 21 Dec 2014 18:24:58 nmf.py[line:109]                            INFO Iter: 39	 Loss: 2305.59864325	 Delta: 5.38564882375
+
+Sun, 21 Dec 2014 18:25:09 nmf.py[line:109]                            INFO Iter: 40	 Loss: 2300.45734424	 Delta: 5.14129901845
+
+Sun, 21 Dec 2014 18:25:20 nmf.py[line:109]                            INFO Iter: 41	 Loss: 2296.10507867	 Delta: 4.35226556513
+
+Sun, 21 Dec 2014 18:25:31 nmf.py[line:109]                            INFO Iter: 42	 Loss: 2292.83461191	 Delta: 3.270466758
+
+Sun, 21 Dec 2014 18:25:42 nmf.py[line:109]                            INFO Iter: 43	 Loss: 2290.25460815	 Delta: 2.58000375959
+
+Sun, 21 Dec 2014 18:25:52 nmf.py[line:109]                            INFO Iter: 44	 Loss: 2287.72914469	 Delta: 2.52546345994
+
+Sun, 21 Dec 2014 18:26:02 nmf.py[line:109]                            INFO Iter: 45	 Loss: 2285.62249361	 Delta: 2.10665108399
+
+Sun, 21 Dec 2014 18:26:13 nmf.py[line:109]                            INFO Iter: 46	 Loss: 2283.96529094	 Delta: 1.65720267232
+
+Sun, 21 Dec 2014 18:26:24 nmf.py[line:109]                            INFO Iter: 47	 Loss: 2282.49255262	 Delta: 1.47273831153
+
+Sun, 21 Dec 2014 18:26:35 nmf.py[line:109]                            INFO Iter: 48	 Loss: 2281.09176846	 Delta: 1.40078416403
+
+Sun, 21 Dec 2014 18:26:46 nmf.py[line:109]                            INFO Iter: 49	 Loss: 2279.72209873	 Delta: 1.36966973187
+
+Sun, 21 Dec 2014 18:26:56 nmf.py[line:109]                            INFO Iter: 50	 Loss: 2278.39899654	 Delta: 1.32310219286
+
+Sun, 21 Dec 2014 18:27:07 nmf.py[line:109]                            INFO Iter: 51	 Loss: 2277.14294709	 Delta: 1.25604944983
+
+Sun, 21 Dec 2014 18:27:18 nmf.py[line:109]                            INFO Iter: 52	 Loss: 2276.05641372	 Delta: 1.08653336571
+
+Sun, 21 Dec 2014 18:27:30 nmf.py[line:109]                            INFO Iter: 53	 Loss: 2275.11493616	 Delta: 0.941477558965
+
+Sun, 21 Dec 2014 18:27:30 nmf.py[line:113]                            INFO NMF OK
+Sun, 21 Dec 2014 18:27:34 demo_at_tsinghua_filter_by_10.py[line:148]                            INFO [ok]
+
+Sun, 21 Dec 2014 18:27:34 demo_at_tsinghua_filter_by_10.py[line:150]                            INFO 	 fold_id:0
+
+Sun, 21 Dec 2014 18:27:34 demo_at_tsinghua_filter_by_10.py[line:152]                            INFO 	recall at 10:
+Sun, 21 Dec 2014 18:28:23 demo_at_tsinghua_filter_by_10.py[line:177]                            INFO 		t-model NMF :  0.366841538875
+
+Sun, 21 Dec 2014 18:28:23 demo_at_tsinghua_filter_by_10.py[line:178]                            INFO 		f-model NMF :  0.270639965026
+
+Sun, 21 Dec 2014 18:28:23 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.366380970724
+
+Sun, 21 Dec 2014 18:28:23 demo_at_tsinghua_filter_by_10.py[line:152]                            INFO 	recall at 50:
+Sun, 21 Dec 2014 18:29:13 demo_at_tsinghua_filter_by_10.py[line:177]                            INFO 		t-model NMF :  0.535013268276
+
+Sun, 21 Dec 2014 18:29:13 demo_at_tsinghua_filter_by_10.py[line:178]                            INFO 		f-model NMF :  0.508918635508
+
+Sun, 21 Dec 2014 18:29:13 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.532768514442
+
+Sun, 21 Dec 2014 18:29:13 demo_at_tsinghua_filter_by_10.py[line:152]                            INFO 	recall at 100:
+Sun, 21 Dec 2014 18:30:04 demo_at_tsinghua_filter_by_10.py[line:177]                            INFO 		t-model NMF :  0.624637262455
+
+Sun, 21 Dec 2014 18:30:04 demo_at_tsinghua_filter_by_10.py[line:178]                            INFO 		f-model NMF :  0.606206587668
+
+Sun, 21 Dec 2014 18:30:04 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.598346051312
+
+Sun, 21 Dec 2014 18:30:04 demo_at_tsinghua_filter_by_10.py[line:152]                            INFO 	recall at 300:
+Sun, 21 Dec 2014 18:30:54 demo_at_tsinghua_filter_by_10.py[line:177]                            INFO 		t-model NMF :  0.761093532174
+
+Sun, 21 Dec 2014 18:30:54 demo_at_tsinghua_filter_by_10.py[line:178]                            INFO 		f-model NMF :  0.767901625211
+
+Sun, 21 Dec 2014 18:30:54 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.741050792428
+
+Sun, 21 Dec 2014 18:30:54 demo_at_tsinghua_filter_by_10.py[line:152]                            INFO 	recall at 500:
+Sun, 21 Dec 2014 18:31:47 demo_at_tsinghua_filter_by_10.py[line:177]                            INFO 		t-model NMF :  0.795949354318
+
+Sun, 21 Dec 2014 18:31:47 demo_at_tsinghua_filter_by_10.py[line:178]                            INFO 		f-model NMF :  0.83365892582
+
+Sun, 21 Dec 2014 18:31:47 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.807771571649
+
+Sun, 21 Dec 2014 18:31:47 demo_at_tsinghua_filter_by_10.py[line:152]                            INFO 	recall at 1000:
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:177]                            INFO 		t-model NMF :  0.832410209847
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:178]                            INFO 		f-model NMF :  0.936781862206
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.896135996772
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:181]                            INFO current_time_step: 4
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 10:
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.366841538875
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.270639965026
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.366380970724
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 50:
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.535013268276
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.508918635508
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.532768514442
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 100:
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.624637262455
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.606206587668
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.598346051312
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 300:
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.761093532174
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.767901625211
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.741050792428
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 500:
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.795949354318
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.83365892582
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.807771571649
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 1000:
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.832410209847
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.936781862206
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.896135996772
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:204]                            INFO =========================
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:102]                            INFO 
+=========================
+
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:103]                            INFO time_step number %i:	5
+Sun, 21 Dec 2014 18:32:41 demo_at_tsinghua_filter_by_10.py[line:104]                            INFO ----------------
+
+Sun, 21 Dec 2014 18:32:42 demo_at_tsinghua_filter_by_10.py[line:119]                            INFO non zero cell num: 2941
+Sun, 21 Dec 2014 18:32:42 demo_at_tsinghua_filter_by_10.py[line:122]                            INFO computing JPP decomposition...
+Sun, 21 Dec 2014 18:34:44 JPPCF.py[line:86]                            INFO Iter: 1	 Loss: 6047.29996476	 Delta: 993952.700035
+
+Sun, 21 Dec 2014 18:36:47 JPPCF.py[line:86]                            INFO Iter: 2	 Loss: 6031.61059912	 Delta: 15.6893656355
+
+Sun, 21 Dec 2014 18:38:55 JPPCF.py[line:86]                            INFO Iter: 3	 Loss: 4653.94919409	 Delta: 1377.66140503
+
+Sun, 21 Dec 2014 18:41:02 JPPCF.py[line:86]                            INFO Iter: 4	 Loss: 3959.81826655	 Delta: 694.130927534
+
+Sun, 21 Dec 2014 18:43:10 JPPCF.py[line:86]                            INFO Iter: 5	 Loss: 3130.36142979	 Delta: 829.45683676
+
+Sun, 21 Dec 2014 18:45:15 JPPCF.py[line:86]                            INFO Iter: 6	 Loss: 2641.49513295	 Delta: 488.866296844
+
+Sun, 21 Dec 2014 18:47:22 JPPCF.py[line:86]                            INFO Iter: 7	 Loss: 2289.07024674	 Delta: 352.424886207
+
+Sun, 21 Dec 2014 18:49:31 JPPCF.py[line:86]                            INFO Iter: 8	 Loss: 1984.86915706	 Delta: 304.201089684
+
+Sun, 21 Dec 2014 18:51:39 JPPCF.py[line:86]                            INFO Iter: 9	 Loss: 1743.20059386	 Delta: 241.668563195
+
+Sun, 21 Dec 2014 18:53:45 JPPCF.py[line:86]                            INFO Iter: 10	 Loss: 1577.06322121	 Delta: 166.137372653
+
+Sun, 21 Dec 2014 18:55:54 JPPCF.py[line:86]                            INFO Iter: 11	 Loss: 1446.33959616	 Delta: 130.723625052
+
+Sun, 21 Dec 2014 18:57:59 JPPCF.py[line:86]                            INFO Iter: 12	 Loss: 1345.86186012	 Delta: 100.477736034
+
+Sun, 21 Dec 2014 19:00:03 JPPCF.py[line:86]                            INFO Iter: 13	 Loss: 1273.54126912	 Delta: 72.3205910023
+
+Sun, 21 Dec 2014 19:02:05 JPPCF.py[line:86]                            INFO Iter: 14	 Loss: 1218.74692808	 Delta: 54.7943410393
+
+Sun, 21 Dec 2014 19:04:06 JPPCF.py[line:86]                            INFO Iter: 15	 Loss: 1173.71422045	 Delta: 45.0327076284
+
+Sun, 21 Dec 2014 19:06:11 JPPCF.py[line:86]                            INFO Iter: 16	 Loss: 1135.51928512	 Delta: 38.1949353309
+
+Sun, 21 Dec 2014 19:08:18 JPPCF.py[line:86]                            INFO Iter: 17	 Loss: 1098.9472876	 Delta: 36.5719975215
+
+Sun, 21 Dec 2014 19:10:25 JPPCF.py[line:86]                            INFO Iter: 18	 Loss: 1066.02641399	 Delta: 32.9208736087
+
+Sun, 21 Dec 2014 19:12:34 JPPCF.py[line:86]                            INFO Iter: 19	 Loss: 1039.37582961	 Delta: 26.650584386
+
+Sun, 21 Dec 2014 19:14:37 JPPCF.py[line:86]                            INFO Iter: 20	 Loss: 1015.79607194	 Delta: 23.579757668
+
+Sun, 21 Dec 2014 19:16:39 JPPCF.py[line:86]                            INFO Iter: 21	 Loss: 995.638945108	 Delta: 20.1571268292
+
+Sun, 21 Dec 2014 19:18:43 JPPCF.py[line:86]                            INFO Iter: 22	 Loss: 982.926800284	 Delta: 12.7121448244
+
+Sun, 21 Dec 2014 19:20:49 JPPCF.py[line:86]                            INFO Iter: 23	 Loss: 975.554473031	 Delta: 7.37232725257
+
+Sun, 21 Dec 2014 19:22:57 JPPCF.py[line:86]                            INFO Iter: 24	 Loss: 966.549164649	 Delta: 9.00530838228
+
+Sun, 21 Dec 2014 19:25:04 JPPCF.py[line:86]                            INFO Iter: 25	 Loss: 954.759353133	 Delta: 11.7898115162
+
+Sun, 21 Dec 2014 19:27:06 JPPCF.py[line:86]                            INFO Iter: 26	 Loss: 944.771212327	 Delta: 9.98814080602
+
+Sun, 21 Dec 2014 19:29:08 JPPCF.py[line:86]                            INFO Iter: 27	 Loss: 934.114054827	 Delta: 10.6571574994
+
+Sun, 21 Dec 2014 19:31:10 JPPCF.py[line:86]                            INFO Iter: 28	 Loss: 924.621482772	 Delta: 9.49257205502
+
+Sun, 21 Dec 2014 19:33:09 JPPCF.py[line:86]                            INFO Iter: 29	 Loss: 916.197340966	 Delta: 8.42414180578
+
+Sun, 21 Dec 2014 19:35:10 JPPCF.py[line:86]                            INFO Iter: 30	 Loss: 907.517510103	 Delta: 8.67983086314
+
+Sun, 21 Dec 2014 19:37:07 JPPCF.py[line:86]                            INFO Iter: 31	 Loss: 899.300914916	 Delta: 8.21659518716
+
+Sun, 21 Dec 2014 19:39:05 JPPCF.py[line:86]                            INFO Iter: 32	 Loss: 892.264814424	 Delta: 7.03610049235
+
+Sun, 21 Dec 2014 19:41:08 JPPCF.py[line:86]                            INFO Iter: 33	 Loss: 884.891961042	 Delta: 7.37285338179
+
+Sun, 21 Dec 2014 19:43:10 JPPCF.py[line:86]                            INFO Iter: 34	 Loss: 878.002740345	 Delta: 6.88922069664
+
+Sun, 21 Dec 2014 19:45:13 JPPCF.py[line:86]                            INFO Iter: 35	 Loss: 872.037639905	 Delta: 5.96510044002
+
