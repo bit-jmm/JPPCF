@@ -2354,3 +2354,10 @@ Sun, 21 Dec 2014 22:27:55 demo_at_tsinghua_filter_by_10.py[line:178]            
 Sun, 21 Dec 2014 22:27:55 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.261950177684
 
 Sun, 21 Dec 2014 22:27:55 demo_at_tsinghua_filter_by_10.py[line:152]                            INFO 	recall at 50:
+Sun, 21 Dec 2014 22:32:23 demo_at_tsinghua_filter_by_10.py[line:177]                            INFO 		t-model NMF :  0.447014420184
+
+Sun, 21 Dec 2014 22:32:23 demo_at_tsinghua_filter_by_10.py[line:178]                            INFO 		f-model NMF :  0.224845486542
+
+Sun, 21 Dec 2014 22:32:23 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.4579799868
+
+Sun, 21 Dec 2014 22:32:23 demo_at_tsinghua_filter_by_10.py[line:152]                            INFO 	recall at 100:

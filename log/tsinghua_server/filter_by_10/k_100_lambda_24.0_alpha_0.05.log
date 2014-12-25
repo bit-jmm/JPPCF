@@ -2149,3 +2149,7 @@ Sun, 21 Dec 2014 22:25:44 demo_at_tsinghua_filter_by_10.py[line:104]            
 
 Sun, 21 Dec 2014 22:25:46 demo_at_tsinghua_filter_by_10.py[line:119]                            INFO non zero cell num: 5649
 Sun, 21 Dec 2014 22:25:46 demo_at_tsinghua_filter_by_10.py[line:122]                            INFO computing JPP decomposition...
+Sun, 21 Dec 2014 22:28:57 JPPCF.py[line:86]                            INFO Iter: 1	 Loss: 11451.4557293	 Delta: 988548.544271
+
+Sun, 21 Dec 2014 22:32:19 JPPCF.py[line:86]                            INFO Iter: 2	 Loss: 11354.3944665	 Delta: 97.0612628316
+

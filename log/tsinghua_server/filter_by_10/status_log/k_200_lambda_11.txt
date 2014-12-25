@@ -1767,3 +1767,84 @@ root        : INFO     		f-model NMF :  0.417151675485
 root        : INFO     		JPPCF :  0.529680020156
 
 root        : INFO     	recall at 100:
+root        : INFO     		t-model NMF :  0.607736520534
+
+root        : INFO     		f-model NMF :  0.529374527589
+
+root        : INFO     		JPPCF :  0.599787414966
+
+root        : INFO     	recall at 300:
+root        : INFO     		t-model NMF :  0.728576152683
+
+root        : INFO     		f-model NMF :  0.72891313933
+
+root        : INFO     		JPPCF :  0.746510456034
+
+root        : INFO     	recall at 500:
+root        : INFO     		t-model NMF :  0.787728332074
+
+root        : INFO     		f-model NMF :  0.800360607206
+
+root        : INFO     		JPPCF :  0.825658226253
+
+root        : INFO     	recall at 1000:
+root        : INFO     		t-model NMF :  0.847156084656
+
+root        : INFO     		f-model NMF :  0.896285273369
+
+root        : INFO     		JPPCF :  0.899858276644
+
+root        : INFO     current_time_step: 5
+
+root        : INFO     	recall at 10:
+root        : INFO     		avg t-model NMF :  0.352489606954
+
+root        : INFO     		avg f-model NMF :  0.217789430587
+
+root        : INFO     		avg JPPCF :  0.35681531872
+
+root        : INFO     	recall at 50:
+root        : INFO     		avg t-model NMF :  0.525001574704
+
+root        : INFO     		avg f-model NMF :  0.417151675485
+
+root        : INFO     		avg JPPCF :  0.529680020156
+
+root        : INFO     	recall at 100:
+root        : INFO     		avg t-model NMF :  0.607736520534
+
+root        : INFO     		avg f-model NMF :  0.529374527589
+
+root        : INFO     		avg JPPCF :  0.599787414966
+
+root        : INFO     	recall at 300:
+root        : INFO     		avg t-model NMF :  0.728576152683
+
+root        : INFO     		avg f-model NMF :  0.72891313933
+
+root        : INFO     		avg JPPCF :  0.746510456034
+
+root        : INFO     	recall at 500:
+root        : INFO     		avg t-model NMF :  0.787728332074
+
+root        : INFO     		avg f-model NMF :  0.800360607206
+
+root        : INFO     		avg JPPCF :  0.825658226253
+
+root        : INFO     	recall at 1000:
+root        : INFO     		avg t-model NMF :  0.847156084656
+
+root        : INFO     		avg f-model NMF :  0.896285273369
+
+root        : INFO     		avg JPPCF :  0.899858276644
+
+root        : INFO     =========================
+
+root        : INFO     
+=========================
+
+root        : INFO     time_step number %i:	6
+root        : INFO     ----------------
+
+root        : INFO     non zero cell num: 10236
+root        : INFO     computing JPP decomposition...

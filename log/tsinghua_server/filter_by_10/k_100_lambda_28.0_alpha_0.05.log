@@ -2141,3 +2141,25 @@ Sun, 21 Dec 2014 22:25:02 JPPCF.py[line:86]                            INFO Iter
 
 Sun, 21 Dec 2014 22:28:18 JPPCF.py[line:86]                            INFO Iter: 67	 Loss: 614.510292679	 Delta: 3.91619778938
 
+Sun, 21 Dec 2014 22:31:44 JPPCF.py[line:86]                            INFO Iter: 68	 Loss: 610.132633476	 Delta: 4.37765920269
+
+Sun, 21 Dec 2014 22:34:42 JPPCF.py[line:86]                            INFO Iter: 69	 Loss: 605.157426862	 Delta: 4.97520661399
+
+Sun, 21 Dec 2014 22:34:42 JPPCF.py[line:88]                            INFO JPPCF OK
+
+Sun, 21 Dec 2014 22:34:44 demo_at_tsinghua_filter_by_10.py[line:128]                            INFO [ok]
+computing t-model NMF decomposition...
+Sun, 21 Dec 2014 22:34:51 nmf.py[line:109]                            INFO Iter: 1	 Loss: 5662.65722075	 Delta: 994337.342779
+
+Sun, 21 Dec 2014 22:34:57 nmf.py[line:109]                            INFO Iter: 2	 Loss: 5437.23287512	 Delta: 225.424345624
+
+Sun, 21 Dec 2014 22:35:03 nmf.py[line:109]                            INFO Iter: 3	 Loss: 5149.70748322	 Delta: 287.525391899
+
+Sun, 21 Dec 2014 22:35:09 nmf.py[line:109]                            INFO Iter: 4	 Loss: 4733.52843128	 Delta: 416.179051943
+
+Sun, 21 Dec 2014 22:35:15 nmf.py[line:109]                            INFO Iter: 5	 Loss: 4406.93625521	 Delta: 326.59217607
+
+Sun, 21 Dec 2014 22:35:20 nmf.py[line:109]                            INFO Iter: 6	 Loss: 4089.47767747	 Delta: 317.458577735
+
+Sun, 21 Dec 2014 22:35:25 nmf.py[line:109]                            INFO Iter: 7	 Loss: 3854.73132178	 Delta: 234.746355692
+

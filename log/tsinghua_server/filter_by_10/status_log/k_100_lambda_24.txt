@@ -2149,3 +2149,7 @@ root        : INFO     ----------------
 
 root        : INFO     non zero cell num: 5649
 root        : INFO     computing JPP decomposition...
+root        : INFO     Iter: 1	 Loss: 11451.4557293	 Delta: 988548.544271
+
+root        : INFO     Iter: 2	 Loss: 11354.3944665	 Delta: 97.0612628316
+

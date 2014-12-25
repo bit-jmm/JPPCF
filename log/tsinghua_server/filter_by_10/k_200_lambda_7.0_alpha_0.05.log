@@ -1712,3 +1712,65 @@ Sun, 21 Dec 2014 22:27:06 demo_at_tsinghua_filter_by_10.py[line:178]            
 Sun, 21 Dec 2014 22:27:06 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.813484189972
 
 Sun, 21 Dec 2014 22:27:06 demo_at_tsinghua_filter_by_10.py[line:152]                            INFO 	recall at 1000:
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:177]                            INFO 		t-model NMF :  0.859391534392
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:178]                            INFO 		f-model NMF :  0.896269526329
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:179]                            INFO 		JPPCF :  0.904487906274
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:181]                            INFO current_time_step: 5
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 10:
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.340909234064
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.221559271857
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.368924792139
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 50:
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.516937515747
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.444246031746
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.555202821869
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 100:
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.595165658856
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.553601347947
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.634048248929
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 300:
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.721510456034
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.729469009826
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.741347001764
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 500:
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.790997417486
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.808364827412
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.813484189972
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:184]                            INFO 	recall at 1000:
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:188]                            INFO 		avg t-model NMF :  0.859391534392
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:189]                            INFO 		avg f-model NMF :  0.896269526329
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:190]                            INFO 		avg JPPCF :  0.904487906274
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:204]                            INFO =========================
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:102]                            INFO 
+=========================
+
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:103]                            INFO time_step number %i:	6
+Sun, 21 Dec 2014 22:28:56 demo_at_tsinghua_filter_by_10.py[line:104]                            INFO ----------------
+
+Sun, 21 Dec 2014 22:28:58 demo_at_tsinghua_filter_by_10.py[line:119]                            INFO non zero cell num: 10236
+Sun, 21 Dec 2014 22:28:58 demo_at_tsinghua_filter_by_10.py[line:122]                            INFO computing JPP decomposition...
+Sun, 21 Dec 2014 22:32:34 JPPCF.py[line:86]                            INFO Iter: 1	 Loss: 20601.9855801	 Delta: 979398.01442
+

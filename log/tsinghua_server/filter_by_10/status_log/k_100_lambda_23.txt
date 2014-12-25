@@ -2354,3 +2354,10 @@ root        : INFO     		f-model NMF :  0.068833853
 root        : INFO     		JPPCF :  0.261950177684
 
 root        : INFO     	recall at 50:
+root        : INFO     		t-model NMF :  0.447014420184
+
+root        : INFO     		f-model NMF :  0.224845486542
+
+root        : INFO     		JPPCF :  0.4579799868
+
+root        : INFO     	recall at 100:

@@ -1712,3 +1712,65 @@ root        : INFO     		f-model NMF :  0.808364827412
 root        : INFO     		JPPCF :  0.813484189972
 
 root        : INFO     	recall at 1000:
+root        : INFO     		t-model NMF :  0.859391534392
+
+root        : INFO     		f-model NMF :  0.896269526329
+
+root        : INFO     		JPPCF :  0.904487906274
+
+root        : INFO     current_time_step: 5
+
+root        : INFO     	recall at 10:
+root        : INFO     		avg t-model NMF :  0.340909234064
+
+root        : INFO     		avg f-model NMF :  0.221559271857
+
+root        : INFO     		avg JPPCF :  0.368924792139
+
+root        : INFO     	recall at 50:
+root        : INFO     		avg t-model NMF :  0.516937515747
+
+root        : INFO     		avg f-model NMF :  0.444246031746
+
+root        : INFO     		avg JPPCF :  0.555202821869
+
+root        : INFO     	recall at 100:
+root        : INFO     		avg t-model NMF :  0.595165658856
+
+root        : INFO     		avg f-model NMF :  0.553601347947
+
+root        : INFO     		avg JPPCF :  0.634048248929
+
+root        : INFO     	recall at 300:
+root        : INFO     		avg t-model NMF :  0.721510456034
+
+root        : INFO     		avg f-model NMF :  0.729469009826
+
+root        : INFO     		avg JPPCF :  0.741347001764
+
+root        : INFO     	recall at 500:
+root        : INFO     		avg t-model NMF :  0.790997417486
+
+root        : INFO     		avg f-model NMF :  0.808364827412
+
+root        : INFO     		avg JPPCF :  0.813484189972
+
+root        : INFO     	recall at 1000:
+root        : INFO     		avg t-model NMF :  0.859391534392
+
+root        : INFO     		avg f-model NMF :  0.896269526329
+
+root        : INFO     		avg JPPCF :  0.904487906274
+
+root        : INFO     =========================
+
+root        : INFO     
+=========================
+
+root        : INFO     time_step number %i:	6
+root        : INFO     ----------------
+
+root        : INFO     non zero cell num: 10236
+root        : INFO     computing JPP decomposition...
+root        : INFO     Iter: 1	 Loss: 20601.9855801	 Delta: 979398.01442
+
