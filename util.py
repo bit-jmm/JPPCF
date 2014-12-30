@@ -113,7 +113,7 @@ def performance_ap(Predict, data_path, at_num,
 
     (m, n) = Predict.shape
     
-    total_ndcg = 0.0
+    total_ap = 0.0
     effective_user_num = 0
     for user_id in user_dict.keys():
         true_like_list = user_dict[user_id]

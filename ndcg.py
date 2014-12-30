@@ -30,6 +30,6 @@ def get_ndcg(s, k):
     if z == 0:
         z = 1;
     ndcg = dcg/z
-    print "Line:%s, NDCG@%d is %f with DCG = %f, z = %f"%(s, k, ndcg,dcg, z)
+    #print "Line:%s, NDCG@%d is %f with DCG = %f, z = %f"%(s, k, ndcg,dcg, z)
     return ndcg
 
