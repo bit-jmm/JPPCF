@@ -1,6 +1,7 @@
 import numpy as np
 # import scipy.sparse as sp
 from nmf.nmf import NMF
+import ndcg
 import math
 
 
@@ -86,6 +87,124 @@ def avg_of_list(list_data):
     if len(list_data) > 0:
         avg = total / len(list_data)
     return avg
+def ap(rank_list):
+    n = len(rank_list)
+    total = 0.0
+    shot_num = 0
+    for i in range(n):
+        if rank_list[i] == 1:
+            shot_num += 1
+            total += shot_num/float(i+1)
+    if shot_num == 0:
+        return 0.0
+    else:
+        return total/shot_num
+
+def performance_ap(Predict, data_path, at_num,
+                   user_id_dict, doc_id_dict, current_user_like_dict):
+    user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
+    user_dict = {}
+    for user in user_like_list_file.readlines():
+        splits = user.split()
+        like_list = []
+        for i in range(1, len(splits)):
+            like_list.append(doc_id_dict[int(splits[i])])
+        user_dict[user_id_dict[int(splits[0])]] = like_list
+
+    (m, n) = Predict.shape
+    
+    total_ndcg = 0.0
+    effective_user_num = 0
+    for user_id in user_dict.keys():
+        true_like_list = user_dict[user_id]
+        if len(true_like_list) == 0:
+            continue
+        current_like_list = current_user_like_dict[user_id]
+        p_like_list = list(Predict[user_id-1,:])
+        p_like_dict = dict(zip(range(n),p_like_list))
+        sort_p_like_list = sorted(p_like_dict.items(), lambda x,y: cmp(y[1],x[1]))
+
+        sort_p_like_doc_ids = []
+        effective_doc_num = 0
+        for i in range(n):
+            if effective_doc_num == at_num:
+                break
+            p_doc_id = sort_p_like_list[i][0] + 1
+            if (p_doc_id in current_like_list) and (p_doc_id not in true_like_list):
+                continue
+            sort_p_like_doc_ids.append(p_doc_id)
+            effective_doc_num += 1
+  
+        rank_list = []
+        p_true_num = 0
+        for doc_id in sort_p_like_doc_ids:
+            if doc_id in true_like_list:
+                rank_list.append(1)
+            else:
+                rank_list.append(0)
+        user_ap = ap(rank_list)
+        total_ap += user_ap
+        effective_user_num += 1
+
+    if effective_user_num == 0:
+        avg_ap = 0
+    else:
+        avg_ap = total_ap / effective_user_num
+
+    return avg_ap
+
+def performance_ndcg(Predict, data_path, at_num,
+                     user_id_dict, doc_id_dict, current_user_like_dict):
+    user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
+    user_dict = {}
+    for user in user_like_list_file.readlines():
+        splits = user.split()
+        like_list = []
+        for i in range(1, len(splits)):
+            like_list.append(doc_id_dict[int(splits[i])])
+        user_dict[user_id_dict[int(splits[0])]] = like_list
+
+    (m, n) = Predict.shape
+    
+    total_ndcg = 0.0
+    effective_user_num = 0
+    for user_id in user_dict.keys():
+        true_like_list = user_dict[user_id]
+        if len(true_like_list) == 0:
+            continue
+        current_like_list = current_user_like_dict[user_id]
+        p_like_list = list(Predict[user_id-1,:])
+        p_like_dict = dict(zip(range(n),p_like_list))
+        sort_p_like_list = sorted(p_like_dict.items(), lambda x,y: cmp(y[1],x[1]))
+
+        sort_p_like_doc_ids = []
+        effective_doc_num = 0
+        for i in range(n):
+            if effective_doc_num == at_num:
+                break
+            p_doc_id = sort_p_like_list[i][0] + 1
+            if (p_doc_id in current_like_list) and (p_doc_id not in true_like_list):
+                continue
+            sort_p_like_doc_ids.append(p_doc_id)
+            effective_doc_num += 1
+  
+        rank_list = []
+        p_true_num = 0
+        for doc_id in sort_p_like_doc_ids:
+            if doc_id in true_like_list:
+                rank_list.append(1)
+            else:
+                rank_list.append(0)
+        user_ndcg = ndcg.get_ndcg(rank_list, len(rank_list))
+        total_ndcg += user_ndcg
+        effective_user_num += 1
+
+    if effective_user_num == 0:
+        avg_ndcg = 0
+    else:
+        avg_ndcg = total_ndcg / effective_user_num
+
+    return avg_ndcg
 
 def performanceRMSE(Predict, Rall):
     return math.sqrt(np.mean((Predict - Rall)**2))
@@ -132,7 +251,8 @@ def performance_cross_validate_recall(Predict, data_path, recall_num):
     return avg_recall
 
 
-def performance_cross_validate_recall2(Predict, data_path, recall_num, user_id_dict, doc_id_dict):
+def performance_cross_validate_recall2(Predict, data_path, recall_num,
+                                       user_id_dict, doc_id_dict, current_user_like_dict):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_dict = {}
     for user in user_like_list_file.readlines():
@@ -147,14 +267,23 @@ def performance_cross_validate_recall2(Predict, data_path, recall_num, user_id_d
     total_recall = 0.0
     effective_user_num = 0
     for user_id in user_dict.keys():
+        true_like_list = user_dict[user_id]
+        current_like_list = current_user_like_dict[user_id]
         p_like_list = list(Predict[user_id-1,:])
         p_like_dict = dict(zip(range(n),p_like_list))
         sort_p_like_list = sorted(p_like_dict.items(), lambda x,y: cmp(y[1],x[1]))
-        sort_p_like_doc_ids = []
-        for i in range(recall_num):
-            sort_p_like_doc_ids.append(sort_p_like_list[i][0] + 1)
 
-        true_like_list = user_dict[user_id] 
+        sort_p_like_doc_ids = []
+        effective_doc_num = 0
+        for i in range(n):
+            if effective_doc_num == recall_num:
+                break
+            p_doc_id = sort_p_like_list[i][0] + 1
+            if (p_doc_id in current_like_list) and (p_doc_id not in true_like_list):
+                continue
+            sort_p_like_doc_ids.append(p_doc_id)
+            effective_doc_num += 1
+  
         p_true_num = 0
         for doc_id in true_like_list:
             if doc_id in sort_p_like_doc_ids:
