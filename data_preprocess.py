@@ -301,8 +301,8 @@ if __name__ == '__main__':
 
     #get_user_like_and_doc_liked_list() 
     #filter_unactive_users_docs()
-    #generate_cross_validate_data(3)
-    generate_user_id_and_doc_id_map()
+    generate_cross_validate_data(5)
+   # generate_user_id_and_doc_id_map()
 
     import time   
     end = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))

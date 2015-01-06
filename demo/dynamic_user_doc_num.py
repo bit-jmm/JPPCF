@@ -64,7 +64,7 @@ maxiter = 100
 
 #recall_num = 100
 
-fold_num = 3
+fold_num = 5
 
 
 logging.basicConfig(level=logging.DEBUG,
@@ -200,7 +200,7 @@ for current_time_step in range(start+1, finT + 1):
         logging.info('[ok]\n')
 
         logging.info('\t fold_id:' + str(fold_id) + '\n')
-        for recall_num in [10,50,100,150,200,250,300]:
+        for recall_num in [3,5,10,50,100,150,200,250,300]:
             logging.info('\trecall at ' + str(recall_num) + ':')
             current_data_path = data_path + 'time_step_' + \
                                 str(current_time_step) + '/data_' + \
@@ -301,7 +301,7 @@ for current_time_step in range(start+1, finT + 1):
 
     logging.info('current_time_step: ' + str(current_time_step) + '\n')
 
-    for recall_num in [10,50,100,150,200,250,300]:
+    for recall_num in [3,5,10,50,100,150,200,250,300]:
         # recall
         logging.info('\trecall at ' + str(recall_num) + ':')
         avg_tnmf_recall = util.avg_of_list(trecall_dict[recall_num])
