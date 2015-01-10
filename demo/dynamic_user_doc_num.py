@@ -153,7 +153,7 @@ for current_time_step in range(start+1, finT + 1):
         for i in range(2, len(splits)):
             like_list.append(rdoc_id_dict[int(splits[i])])
         current_user_like_dict[ruser_id_dict[int(splits[0])]] = like_list
-        
+
     for fold_id in range(fold_num):
     #for fold_id in [0]:
         train_data_path = data_path + 'time_step_' + str(current_time_step) + \
@@ -167,7 +167,7 @@ for current_time_step in range(start+1, finT + 1):
         logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
 
         logging.info('computing JPP decomposition...')
-        
+
         Po = util.reshape_matrix(Po, current_user_num, k)
 
         P, Q, S = JPPCF(Rt, Po, k, lambd, regl1jpp,  epsilon, maxiter, True)
