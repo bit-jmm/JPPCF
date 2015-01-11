@@ -50,6 +50,30 @@ def get_user_like_and_doc_liked_list():
     doc_writer.close()
 
 
+def get_doc_id_citeulike_id_map():
+    data_path = './data/preprocessed_data/'
+    doc_liked_list = open(data_path + 'total_data/doc_liked_list.dat.txt', 'r')
+    doc_id_map = open(data_path + 'total_data/doc_id_citeulike_id_map.csv', 'r')
+
+    map_file = open(data_path + 'total_data/doc_id_citeulike_id_map_after_filter.dat.txt', 'w+')
+
+    doc_id_dict = {}
+    for doc in doc_id_map.readlines():
+        splits = doc.split(',')
+        doc_id_dict[splits[0]] = splits[1].strip()
+
+    i = 1
+    for doc in doc_liked_list.readlines():
+        splits = doc.split()
+        doc_id = splits[0]
+        map_file.write(str(i) + '\t' + doc_id_dict[doc_id] + '\n')
+        i += 1
+
+    doc_liked_list.close()
+    doc_id_map.close()
+    map_file.close()
+
+
 def filter_unactive_users_docs():
     data_path = './data/preprocessed_data/'
     rating_file = open(data_path + 'total_data/rating_data_file.dat.txt', 'r')
@@ -294,17 +318,17 @@ def generate_user_id_and_doc_id_map():
             user_time_distribute.write(str(current_time) + '\t' + str(len(user_id_dict)) + '\n')
             doc_time_distribute.write(str(current_time) + '\t' + str(len(doc_id_dict)) + '\n')
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     start = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     print 'process start at : ', start
     print '\n'
 
     #get_user_like_and_doc_liked_list() 
     #filter_unactive_users_docs()
-    generate_cross_validate_data(5)
-   # generate_user_id_and_doc_id_map()
-
-    import time   
+    #generate_cross_validate_data(5)
+    #generate_user_id_and_doc_id_map()
+    get_doc_id_citeulike_id_map()
+    import time
     end = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     print 'process end at : ', end
 
