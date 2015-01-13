@@ -16,7 +16,7 @@ def computeTopicLoss(X, W, H, M, R, alpha, lambd, trXX, I):
     tr2 = trXX - 2*tr(X, WMR) + tr(WMR, WMR)
     tr3 = lambd*(tr(M,M) - 2*(M.sum())+ I.sum())
     tr4 = alpha*( H.sum() + W.sum() + M.sum() )
-    Obj = tr1+ tr2 + tr3+ tr4
+    obj = tr1+ tr2 + tr3+ tr4
     return obj
 
 def computeLoss(R, P, Q, S, Po, alpha, lambd, trRR, I):
@@ -39,7 +39,7 @@ def computeLoss_with_topic(R, P, Q, S, Po, C, eta, alpha, lambd, trRR, I):
     tr2 = trRR - 2*tr(R, SPoQC) + tr(SPoQC, SPoQC)
     tr3 = lambd*(tr(S, S) - 2*(S.sum())+ I.sum())
     tr4 = alpha*(P.sum() + Q.sum() + S.sum())
-    obj = tr1+ tr2 + tr3+ tr4
+    obj = tr1 + tr2 + tr3 + tr4
     return obj
 
 def JPPTopic(X, R, k, lambd, alpha, epsilon, maxiter, verbose):
@@ -149,7 +149,7 @@ def JPPCF(R, Po, k, lambd, alpha, epsilon, maxiter, verbose):
 
     return (P, Q, S)
 
-def JPPCF_with_topic(R, Po, k, eta, lambd, alpha, epsilon, maxiter, verbose):
+def JPPCF_with_topic(R, Po, C, k, eta, lambd, alpha, epsilon, maxiter, verbose):
 
     # fix seed for reproducable experiments
 
@@ -160,7 +160,6 @@ def JPPCF_with_topic(R, Po, k, eta, lambd, alpha, epsilon, maxiter, verbose):
     P  = np.random.rand(n, k)
     Q = np.random.rand(k, m)
     S = np.random.rand(n, n)
-    C = np.zeros(R.shape)
     nI = np.eye(n)
     kI = np.eye(k)
 
@@ -204,6 +203,7 @@ def JPPCF_with_topic(R, Po, k, eta, lambd, alpha, epsilon, maxiter, verbose):
 
         prev_obj = obj
         obj = computeLoss_with_topic(R, P, Q, S, Po, C, eta, alpha, lambd, trRR, nI)
+
         delta = abs(prev_obj-obj)
         if verbose:
             logging.info('Iter: ' + str(i) + '\t Loss: ' + str(obj) + '\t Delta: ' \

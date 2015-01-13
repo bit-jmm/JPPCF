@@ -16,6 +16,58 @@ def reshape_matrix(matrix, row, col):
             R[i, j] = matrix[i, j]
     return R
 
+def cos_sim(vector_a, vector_b):
+    dot_value = 0.0
+    sum_a = 0.0
+    sum_b = 0.0
+    for i in range(len(vector_a)):
+        dot_value += vector_a[i] * vector_b[i]
+        sum_a += vector_a[i] * vector_a[i]
+        sum_b += vector_b[i] * vector_b[i]
+    dist_a = math.sqrt(sum_a)
+    dist_b = math.sqrt(sum_b)
+    sim = dot_value / (dist_a * dist_b)
+    return sim
+
+# calculate topic similarity matrix
+def cal_topic_similarity_matrix(W, data_path, user_num, doc_num, user_id_dict, \
+                                doc_id_dict, current_user_like_dict, doc_num_at_start):
+    Ct = np.zeros((user_num, doc_num))
+
+    user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
+    user_like_list_in_test_dict = {}
+    for user in user_like_list_file.readlines():
+        splits = user.split()
+        like_list = []
+        for i in range(1, len(splits)):
+            like_list.append(doc_id_dict[int(splits[i])])
+        user_like_list_in_test_dict[user_id_dict[int(splits[0])]] = like_list
+    topic_num = W.shape[1]
+    for user_id in range(user_num):
+        user_id_1 = user_id + 1
+        if user_id_1 not in current_user_like_dict.keys():
+            continue
+        current_user_like_list = current_user_like_dict[user_id_1]
+
+        if user_id_1 not in user_like_list_in_test_dict.keys():
+            train_user_like_list = current_user_like_list
+        else:
+            user_like_list_in_test = user_like_list_in_test_dict[user_id_1]
+            train_user_like_list = list(set(current_user_like_list) - set(user_like_list_in_test))
+        like_doc_num = len(train_user_like_list)
+        if like_doc_num == 0:
+            continue
+        user_topic_vector = [0] * topic_num
+        for like_doc_id in train_user_like_list:
+            for i in range(topic_num):
+                user_topic_vector[i] += W[like_doc_id-1, i]
+        user_topic_vector = [ i/float(like_doc_num) for i in user_topic_vector]
+
+        for doc_id in range(doc_num):
+            Ct[user_id, doc_id] = cos_sim(user_topic_vector, list(W[doc_id, :]))
+
+    return Ct
+
 def generate_matrice_for_file(data_path, m, n):
     R = np.zeros((m,n))
     data = np.loadtxt(data_path, dtype=int)
