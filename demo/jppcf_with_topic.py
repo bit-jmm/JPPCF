@@ -1,6 +1,6 @@
 # encoding: utf-8
 import sys
-sys.path.append('/Users/jiangming/Workspace/python/JPPCF/')
+sys.path.append('/home/zjd/jmm/JPPCF/')
 
 import os
 import numpy as np
@@ -96,7 +96,7 @@ regl1jpp = 0.05
 
 epsilon = 1
 
-maxiter = 3
+maxiter = 100
 
 #recall_num = 100
 
