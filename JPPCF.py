@@ -149,6 +149,16 @@ def JPPCF(R, Po, k, lambd, alpha, epsilon, maxiter, verbose):
 
     return (P, Q, S)
 
+def matrix_sub(A, B):
+    m, n = A.shape()
+    R = np.zeros((m, n))
+    for i in range(m):
+        for j in range(n):
+            r = A[i,j] - B[i,j]
+            if r > 0:
+                R[i,j] = r
+    return R
+
 def JPPCF_with_topic(R, Po, C, k, eta, lambd, alpha, epsilon, maxiter, verbose):
 
     # fix seed for reproducable experiments
@@ -181,7 +191,7 @@ def JPPCF_with_topic(R, Po, C, k, eta, lambd, alpha, epsilon, maxiter, verbose):
         QT = Q.T
         QQT = np.dot(Q, QT)
 
-        P =  P * ( ((reta*R - etareta*C).dot(QT)) / \
+        P =  P * ( ((np.maximum((reta*R - etareta*C), 0)).dot(QT)) / \
             np.maximum(P.dot(retareta*QQT + (alpha*kI)),eps) )
 
         PT = P.T
