@@ -107,7 +107,7 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(filename)s[line:%(lineno)d]\
                             %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='./log/jppcf_with_topic_k_' + str(k) + '_lambda_' + \
+                    filename='./log/jppcf_with_topic_predict_with_topic_k_' + str(k) + '_lambda_' + \
                             str(lambd) + '_alpha_' + str(regl1jpp) + '_eta_' + str(eta) + '.log',
                     filemode='w')
 
@@ -125,7 +125,7 @@ logging.getLogger('').addHandler(console)
 #logging.warning('This is warning message')
 
 
-result_dir = './result/tsinghua_server/filter_by_10/jppcf_with_topic/cross_validate_fold_' + str(fold_num) + \
+result_dir = './result/tsinghua_server/filter_by_10/jppcf_with_topic/predict_score_with_topic/cross_validate_fold_' + str(fold_num) + \
         '_3models_k_' + str(k) + '_lambda_' + str(lambd) + '_alpha_' + str(regl1jpp) + '_eta_' + str(eta)
 recall_result_dir = result_dir + '/recall'
 ndcg_result_dir = result_dir + '/ndcg'
@@ -161,7 +161,7 @@ Xt = X[range(doc_time_dict[start]), :]
 # learning topic distribution by jpp
 logging.info('start learning topic distribution by jpp ......')
 
-(W, H, M) = JPPTopic(X, H1, topic_num, lambd, regl1jpp, epsilon, maxiter, True)
+(W, H, M) = JPPTopic(X, H1, topic_num, lambd, regl1jpp, epsilon, 300, True)
 
 logging.info('end')
 
@@ -226,7 +226,7 @@ for current_time_step in range(start+1, finT + 1):
         Po = util.reshape_matrix(Po, current_user_num, k)
 
         P, Q, S = JPPCF_with_topic(Rt, Po, Ct, k, eta, lambd, regl1jpp,  epsilon, maxiter, True)
-        PredictR = np.dot(P, Q)
+        PredictR = ((1-eta)*np.dot(P, Q)) + (eta*Ct)
         NormPR = PredictR / PredictR.max()
 
         logging.info('[ok]\n')
