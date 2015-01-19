@@ -5,8 +5,71 @@ import csv
 import datetime
 import time
 
-def get_user_like_and_doc_liked_list():
-    data_path = './data/preprocessed_data/total_data/'
+def generate_rating_file_by_time_interval(days):
+    # set time interval (days)
+    time_interval = datetime.timedelta(days)
+    print 'set time_interval: ', time_interval
+
+    data_path = './data/preprocessed_data/'
+    matrices_data_path = data_path + 'data_divided_by_' + str(days) +'_days/'
+
+    print 'start prepare data...\n\n'
+
+    if not os.path.isdir(matrices_data_path):
+        os.mkdir(matrices_data_path)
+
+    rating_file = open(data_path + 'user_doc_rating_time.csv', 'r')
+    rating_file_reader = csv.reader(rating_file)
+
+    ratings = {}
+    rating_list = []
+    i = 0
+    for line in rating_file_reader:
+        if i==0:
+            i += 1
+            continue
+        time = datetime.datetime.strptime(line[3].split()[0], "%Y-%m-%d")
+        max_time = time
+        if i==1:
+           min_time = time
+        ratings[line[0] + ',' + line[1]] = time
+        rating_list.append((line[0],line[1],time))
+        i += 1  
+    rating_num = len(ratings)
+    print 'rating_num: ', rating_num
+    rating_file.close()
+
+    print 'min_time: ', min_time
+    print 'max_time: ', max_time
+
+    time_step_num = (max_time - min_time).days / time_interval.days + 1
+    print 'time_step_num: ', time_step_num
+
+    time_step = 1
+    rating_data_file = matrices_data_path + 'rating_data_file.dat.txt'
+    writer = open(rating_data_file, 'w+')
+    current_time = min_time + datetime.timedelta(days)
+    i = 0
+    processed_dict = {}
+    for l in rating_list:
+        key = l[0] + ',' + l[1]
+        if processed_dict.has_key(key):
+            continue
+        else:
+            processed_dict[key] = 1
+        if i%10000 == 0:
+                print ' i= ',i
+        i += 1
+        if l[2] > current_time:
+            time_step += 1
+            current_time += datetime.timedelta(days)
+        writer.write(l[0] + ' ' + l[1] + ' ' + str(time_step) + '\n')
+    writer.close()
+
+    print 'rating file process end\n'
+
+def get_user_like_and_doc_liked_list(time_interval):
+    data_path = './data/preprocessed_data/data_divided_by_' + str(time_interval) +'_days/'
     rating_file = open(data_path + 'rating_data_file.dat.txt', 'r')
 
     user_writer = open(data_path + 'user_like_list.dat.txt', 'w+')
@@ -49,37 +112,11 @@ def get_user_like_and_doc_liked_list():
     user_writer.close()
     doc_writer.close()
 
-
-def get_doc_id_citeulike_id_map():
-    data_path = './data/preprocessed_data/'
-    doc_liked_list = open(data_path + 'total_data/doc_liked_list.dat.txt', 'r')
-    doc_id_map = open(data_path + 'total_data/doc_id_citeulike_id_map.csv', 'r')
-
-    map_file = open(data_path + 'total_data/doc_id_citeulike_id_map_after_filter.dat.txt', 'w+')
-
-    doc_id_dict = {}
-    for doc in doc_id_map.readlines():
-        splits = doc.split(',')
-        doc_id_dict[splits[0]] = splits[1].strip()
-
-    i = 1
-    for doc in doc_liked_list.readlines():
-        splits = doc.split()
-        doc_id = splits[0]
-        map_file.write(str(i) + '\t' + doc_id_dict[doc_id] + '\n')
-        i += 1
-
-    doc_liked_list.close()
-    doc_id_map.close()
-    map_file.close()
-
-
-def filter_unactive_users_docs():
-    data_path = './data/preprocessed_data/'
-    rating_file = open(data_path + 'total_data/rating_data_file.dat.txt', 'r')
-    user_like_list = open(data_path + 'total_data/user_like_list.dat.txt', 'r')
-    doc_liked_list = open(data_path + 'total_data/doc_liked_list.dat.txt', 'r')
-    threshold = 10
+def filter_unactive_users_docs(time_interval, threshold):
+    data_path = './data/preprocessed_data/data_divided_by_' + str(time_interval) +'_days/'
+    rating_file = open(data_path + 'rating_data_file.dat.txt', 'r')
+    user_like_list = open(data_path + 'user_like_list.dat.txt', 'r')
+    doc_liked_list = open(data_path + 'doc_liked_list.dat.txt', 'r')
 
     print 'start filter ratings whose users and docs like list\'s len less than ', threshold 
     
@@ -251,9 +288,10 @@ def cross_validate_on_dict(doc_liked_list, fold_num, time_result_path):
 
 
 
-def generate_cross_validate_data(fold_num = 5):
-    data_path = './data/preprocessed_data/'
-    result_path = data_path + 'filtered_by_user_doc_like_list_len_10'
+def generate_cross_validate_data(time_interval, filter_threshold, fold_num = 5):
+    data_path = './data/preprocessed_data/data_divided_by_' + str(time_interval) +'_days/'
+    origin_data_path = './data/preprocessed_data/'
+    result_path = data_path + 'filtered_by_user_doc_like_list_len_' + str(filter_threshold)
     rating_data = np.loadtxt(result_path + '/rating_file.dat.txt', dtype=int)
     start_time = rating_data[0][2]
     end_time = rating_data[-1][2]
@@ -285,9 +323,10 @@ def generate_cross_validate_data(fold_num = 5):
                 break
 
     
-def generate_user_id_and_doc_id_map():
-    data_path = './data/preprocessed_data/'
-    result_path = data_path + 'filtered_by_user_doc_like_list_len_10'
+def generate_user_id_and_doc_id_map(time_interval, filter_threshold):
+    origin_data_path = './data/preprocessed_data/'
+    data_path = './data/preprocessed_data/data_divided_by_' + str(time_interval) +'_days/'
+    result_path = data_path + 'filtered_by_user_doc_like_list_len_' + str(filter_threshold)
     rating_data = np.loadtxt(result_path + '/rating_file.dat.txt', dtype=int)
     user_id_map = open(result_path + '/user_id_map.dat.txt', 'w+')
     doc_id_map = open(result_path + '/doc_id_map.dat.txt', 'w+')
@@ -318,16 +357,44 @@ def generate_user_id_and_doc_id_map():
             user_time_distribute.write(str(current_time) + '\t' + str(len(user_id_dict)) + '\n')
             doc_time_distribute.write(str(current_time) + '\t' + str(len(doc_id_dict)) + '\n')
 
+def get_doc_id_citeulike_id_map(time_interval):
+    origin_data_path = './data/preprocessed_data/'
+    data_path = './data/preprocessed_data/data_divided_by_' + str(time_interval) +'_days/'
+    doc_liked_list = open(data_path + 'doc_liked_list.dat.txt', 'r')
+    doc_id_map = open(origin_data_path + 'doc_id_citeulike_id_map.csv', 'r')
+
+    map_file = open(data_path + 'doc_id_citeulike_id_map_after_filter.dat.txt', 'w+')
+
+    doc_id_dict = {}
+    for doc in doc_id_map.readlines():
+        splits = doc.split(',')
+        doc_id_dict[splits[0]] = splits[1].strip()
+
+    i = 1
+    for doc in doc_liked_list.readlines():
+        splits = doc.split()
+        doc_id = splits[0]
+        map_file.write(str(i) + '\t' + doc_id_dict[doc_id] + '\n')
+        i += 1
+
+    doc_liked_list.close()
+    doc_id_map.close()
+    map_file.close()
+
 if __name__ == '__main__':
     start = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     print 'process start at : ', start
     print '\n'
-
-    #get_user_like_and_doc_liked_list() 
-    #filter_unactive_users_docs()
-    #generate_cross_validate_data(5)
-    #generate_user_id_and_doc_id_map()
-    get_doc_id_citeulike_id_map()
+    time_interval = 360
+    filter_threshold = 10
+    fold_num = 5
+    
+    generate_rating_file_by_time_interval(time_interval)
+    get_user_like_and_doc_liked_list(time_interval) 
+    filter_unactive_users_docs(time_interval, filter_threshold)
+    generate_cross_validate_data(time_interval, filter_threshold, fold_num)
+    generate_user_id_and_doc_id_map(time_interval, filter_threshold)
+    get_doc_id_citeulike_id_map(time_interval)
     import time
     end = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     print 'process end at : ', end
