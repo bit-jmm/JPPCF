@@ -385,7 +385,7 @@ if __name__ == '__main__':
     start = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     print 'process start at : ', start
     print '\n'
-    time_interval = 360
+    time_interval = 180
     filter_threshold = 10
     fold_num = 5
     

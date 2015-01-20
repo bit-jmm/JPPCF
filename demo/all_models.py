@@ -25,7 +25,7 @@ if len(argvs) == 4:
     
 print 'k: ', k, '\tlambda: ',  lambd, '\teta: ', eta ,'\n'
 
-topic_num = 10
+topic_num = 20
 time_interval = 360
 filter_threshold = 10
 
@@ -111,7 +111,7 @@ logging.basicConfig(level=logging.DEBUG,
                             %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
                     filename='./log/all_models_k_' + str(k) + '_lambda_' + \
-                            str(lambd) + '_alpha_' + str(regl1jpp) + '.log',
+                            str(lambd) + '_alpha_' + str(regl1jpp) + '_eta_' + str(eta) + '.log',
                     filemode='w')
 
 ##################################################################
@@ -134,7 +134,7 @@ if not os.path.isdir(time_filter_dir):
     os.mkdir(time_filter_dir)
 
 result_dir = time_filter_dir + '/fold_' + str(fold_num) + \
-        '_3models_k_' + str(k) + '_lambda_' + str(lambd) + '_alpha_' + str(regl1jpp)
+        '_3models_k_' + str(k) + '_lambda_' + str(lambd) + '_alpha_' + str(regl1jpp) + '_eta_' + str(eta)
 recall_result_dir = result_dir + '/recall'
 ndcg_result_dir = result_dir + '/ndcg'
 ap_result_dir = result_dir + '/ap'
@@ -175,7 +175,7 @@ logging.info('start learning topic distribution by jpp ......')
 logging.info('end')
 
 # number of period we consider
-finT = time_step_num - 1
+finT = time_step_num
 
 #for all the consecutive periods
 for current_time_step in range(start+1, finT+1):
@@ -289,11 +289,8 @@ for current_time_step in range(start+1, finT+1):
         logging.info('[ok]\n')
 
         logging.info('\t fold_id:' + str(fold_id) + '\n')
-        for recall_num in [3,5,10,50,100,150,200,250,300]:
+        for recall_num in [3,5,10,20,50,100,150,200,250,300]:
             logging.info('\trecall at ' + str(recall_num) + ':')
-            current_data_path = data_path + 'time_step_' + \
-                                str(current_time_step) + '/data_' + \
-                                str(fold_id)
             tnmf_recall = util.performance_cross_validate_recall2(
                     NormPRbaseline, current_data_path, recall_num,
                     ruser_id_dict, rdoc_id_dict, current_user_like_dict)
@@ -333,9 +330,6 @@ for current_time_step in range(start+1, finT+1):
 
             # ndcg performance
             logging.info('\nndcg at ' + str(recall_num) + ':')
-            current_data_path = data_path + 'time_step_' + \
-                                str(current_time_step) + '/data_' + \
-                                str(fold_id)
             tnmf_ndcg = util.performance_ndcg(
                     NormPRbaseline, current_data_path, recall_num,
                     ruser_id_dict, rdoc_id_dict, current_user_like_dict)
@@ -375,9 +369,6 @@ for current_time_step in range(start+1, finT+1):
 
             # ap performance
             logging.info('\nap at ' + str(recall_num) + ':')
-            current_data_path = data_path + 'time_step_' + \
-                                str(current_time_step) + '/data_' + \
-                                str(fold_id)
             tnmf_ap = util.performance_ap(
                     NormPRbaseline, current_data_path, recall_num,
                     ruser_id_dict, rdoc_id_dict, current_user_like_dict)
