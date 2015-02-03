@@ -31,7 +31,7 @@ def cos_sim(vector_a, vector_b):
 
 # calculate topic similarity matrix
 def cal_topic_similarity_matrix(W, data_path, user_num, doc_num, user_id_dict, \
-                                doc_id_dict, current_user_like_dict, doc_num_at_start):
+                                doc_id_dict, current_user_like_dict, train = True):
     Ct = np.zeros((user_num, doc_num))
 
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
@@ -47,9 +47,14 @@ def cal_topic_similarity_matrix(W, data_path, user_num, doc_num, user_id_dict, \
         user_id_1 = user_id + 1
         if user_id_1 not in current_user_like_dict.keys():
             continue
+        if (not train) and (user_id_1 not in user_like_list_in_test_dict.keys()):
+            continue
+
         current_user_like_list = current_user_like_dict[user_id_1]
 
-        if user_id_1 not in user_like_list_in_test_dict.keys():
+        if not train:
+            train_user_like_list = user_like_list_in_test_dict[user_id_1]
+        elif user_id_1 not in user_like_list_in_test_dict.keys():
             train_user_like_list = current_user_like_list
         else:
             user_like_list_in_test = user_like_list_in_test_dict[user_id_1]
