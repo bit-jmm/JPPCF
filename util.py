@@ -129,6 +129,60 @@ def generate_matrice_between_time2(X, m, n, start_time, end_time,
 
     return R
 
+def generate_rating_list_between_time3(X, start_time, end_time,
+                                   train_data_path, user_id_dict,
+                                   doc_id_dict):
+    r_list = {}
+    (row, col) = X.shape
+
+    if start_time <= end_time:
+        for i in range(row):
+            if X[i, 2] < start_time:
+                continue
+            if X[i, 2] > end_time:
+                break
+            r_list[(X[i, 0], X[i, 1])] =  (X[i, 2], 1)
+    if train_data_path != '':
+        train_data = np.loadtxt(train_data_path, dtype=int)
+        (row, col) = train_data.shape
+        for i in range(row):
+            r_list[(user_id_dict[train_data[i, 0]], doc_id_dict[train_data[i, 1]])] = (end_time + 1, 1)
+
+    return r_list
+
+def generate_train_and_test_file_for_timesvdpp(R, user_num, doc_num, data_path,
+                                               user_id_dict, doc_id_dict, start_time, end_time):
+    r_list = generate_rating_list_between_time3(R, start_time, end_time, data_path + '/train.dat.txt',
+                                                user_id_dict, doc_id_dict)
+    train_rating_num = len(r_list)
+    train_file = open(data_path + '/timesvdpp_train', 'w')
+    train_file.write('%%MatrixMarket matrix coordinate real general\n')
+    train_file.write(str(user_num) + ' ' + str(doc_num) + ' ' + str(train_rating_num) + '\n')
+    for i in range(user_num):
+        for j in range(doc_num):
+            train_file.write(str(i+1) + ' ' + str(j+1) + ' ' + str(r_list.get((i+1,j+1), (end_time+1, 0))[0]) + ' ' + str(r_list.get((i+1,j+1), (end_time+1, 0))[1]) + '\n')
+    train_file.close()
+
+    test_file = open(data_path + '/timesvdpp_test', 'w')
+    test_file.write('%%MatrixMarket matrix coordinate real general\n')
+
+    test_data = np.loadtxt(data_path + '/test.dat.txt', dtype=int)
+    test_rating_num = user_num * doc_num
+    test_file.write(str(user_num) + ' ' + str(doc_num) + ' ' + str(test_rating_num) + '\n')
+    
+    for i in range(user_num):
+        for j in range(doc_num):
+            test_file.write(str(i+1) + ' ' + str(j+1) + ' ' + str(end_time+1) + ' 1\n')
+    test_file.close()
+
+def create_predict_matrix(user_num, doc_num, data_path):
+    R = np.zeros((user_num, doc_num), dtype=float)
+    predict = np.loadtxt(data_path + '/timesvdpp_test.predict', dtype=float, skiprows=1)
+    m, n = predict.shape
+    for i in range(1, m):
+        R[predict[i,0]-1, predict[i,1]-1] = predict[i, 2]
+    return R
+
 def nmf(A, k=10, iter_num=100, epsilon=0.01, calc_error=True,
         calc_error_num=10):
     nmf = NMF()
