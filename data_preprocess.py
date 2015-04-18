@@ -396,7 +396,7 @@ if __name__ == '__main__':
     generate_user_id_and_doc_id_map(time_interval, filter_threshold)
     get_doc_id_citeulike_id_map(time_interval)
     import time
-    end = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+    end = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     print 'process end at : ', end
 
     print 'process take time : ', str(datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S') - datetime.datetime.strptime(start,'%Y-%m-%d %H:%M:%S'))
