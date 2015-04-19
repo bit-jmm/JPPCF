@@ -28,14 +28,12 @@ topic_num = 10
 
 data_path = './data/preprocessed_data/filtered_by_user_doc_like_list_len_10/'
 
-doc_id_map_after_filter = np.loadtxt( \
+doc_id_map_after_filter = np.loadtxt(
     './data/preprocessed_data/total_data/doc_id_citeulike_id_map_after_filter.dat.txt', int)
-doc_id_map_after_filter_dict = dict(zip(doc_id_map_after_filter[:, 0], \
+doc_id_map_after_filter_dict = dict(zip(doc_id_map_after_filter[:, 0],
                                         doc_id_map_after_filter[:, 1]))
 
-doc_id_map_in_total = open( \
-    './data/preprocessed_data/total_data/doc_id_citeulike_id_map.csv', 'r'). \
-    readlines()
+doc_id_map_in_total = open('./data/preprocessed_data/total_data/doc_id_citeulike_id_map.csv', 'r').readlines()
 del doc_id_map_in_total[0]
 
 doc_id_map_in_total_dict = {}
@@ -98,7 +96,7 @@ epsilon = 1
 
 maxiter = 100
 
-#recall_num = 100
+# recall_num = 100
 
 fold_num = 5
 
@@ -106,27 +104,27 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(filename)s[line:%(lineno)d]\
                             %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='./log/jppcf_with_topic_predict_with_topic_k_' + str(k) + '_lambda_' + \
-                             str(lambd) + '_alpha_' + str(regl1jpp) + '_eta_' + str(eta) + '.log',
+                    filename='./log/jppcf_with_topic_predict_with_topic_k_{0}_lambda_{1}_alpha_{2}_eta_{3}.log'.format(
+                        str(k), str(lambd), str(regl1jpp), str(eta)),
                     filemode='w')
 
 ##################################################################
-#定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，
-#并将其添加到当前的日志处理对象#
+# 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，
+# 并将其添加到当前的日志处理对象#
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
 console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 ##################################################################
-#logging.debug('This is debug message')
-#logging.info('This is info message')
-#logging.warning('This is warning message')
+# logging.debug('This is debug message')
+# logging.info('This is info message')
+# logging.warning('This is warning message')
 
 
-result_dir = './result/tsinghua_server/filter_by_10/jppcf_with_topic/predict_score_with_topic/cross_validate_fold_' + str(
-    fold_num) + \
-             '_3models_k_' + str(k) + '_lambda_' + str(lambd) + '_alpha_' + str(regl1jpp) + '_eta_' + str(eta)
+result_dir = './result/tsinghua_server/filter_by_10/jppcf_with_topic/predict_score_with_topic/cross_validate_fold_' + \
+             str(fold_num) + '_3models_k_' + str(k) + '_lambda_' + \
+             str(lambd) + '_alpha_' + str(regl1jpp) + '_eta_' + str(eta)
 recall_result_dir = result_dir + '/recall'
 ndcg_result_dir = result_dir + '/ndcg'
 ap_result_dir = result_dir + '/ap'
@@ -168,7 +166,7 @@ logging.info('end')
 # number of period we consider
 finT = time_step_num - 1
 
-#for all the consecutive periods
+# for all the consecutive periods
 for current_time_step in range(start + 1, finT + 1):
 
     logging.info('\n=========================\n')
@@ -196,12 +194,10 @@ for current_time_step in range(start + 1, finT + 1):
         current_user_like_dict[ruser_id_dict[int(splits[0])]] = like_list
 
     for fold_id in range(fold_num):
-        #for fold_id in [0]:
-        train_data_path = data_path + 'time_step_' + str(current_time_step) + \
-                          '/data_' + str(fold_id) + '/train.dat.txt'
-        current_data_path = data_path + 'time_step_' + \
-                            str(current_time_step) + '/data_' + \
-                            str(fold_id)
+        train_data_path = '{0}time_step_{1}/data_{2}/train.dat.txt'.format(data_path, str(current_time_step),
+                                                                           str(fold_id))
+        current_data_path = '{0}time_step_{1}/data_{2}'.format(data_path, str(current_time_step), str(fold_id))
+
         Rt = util.generate_matrice_for_file2(train_data_path,
                                              current_user_num,
                                              current_doc_num,
@@ -238,7 +234,7 @@ for current_time_step in range(start + 1, finT + 1):
                 NormPR, current_data_path, recall_num,
                 ruser_id_dict, rdoc_id_dict, current_user_like_dict)
 
-            if jrecall_dict.has_key(recall_num):
+            if recall_num in jrecall_dict:
                 jrecall_dict[recall_num].append(jppcf_recall)
             else:
                 jrecall_dict[recall_num] = [jppcf_recall]
@@ -250,7 +246,7 @@ for current_time_step in range(start + 1, finT + 1):
                 NormPR, current_data_path, recall_num,
                 ruser_id_dict, rdoc_id_dict, current_user_like_dict)
 
-            if jndcg_dict.has_key(recall_num):
+            if recall_num in jndcg_dict:
                 jndcg_dict[recall_num].append(jppcf_ndcg)
             else:
                 jndcg_dict[recall_num] = [jppcf_ndcg]
@@ -262,7 +258,7 @@ for current_time_step in range(start + 1, finT + 1):
                 NormPR, current_data_path, recall_num,
                 ruser_id_dict, rdoc_id_dict, current_user_like_dict)
 
-            if jap_dict.has_key(recall_num):
+            if recall_num in jap_dict:
                 jap_dict[recall_num].append(jppcf_ap)
             else:
                 jap_dict[recall_num] = [jppcf_ap]

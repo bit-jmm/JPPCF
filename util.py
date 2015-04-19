@@ -31,8 +31,8 @@ def cos_sim(vector_a, vector_b):
 
 
 # calculate topic similarity matrix
-def cal_topic_similarity_matrix(W, data_path, user_num, doc_num, user_id_dict, \
-                                doc_id_dict, current_user_like_dict, train=True):
+def cal_topic_similarity_matrix(W, data_path, user_num, doc_num,
+                                current_user_like_dict, train=True):
     Ct = np.zeros((user_num, doc_num))
 
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
@@ -41,32 +41,32 @@ def cal_topic_similarity_matrix(W, data_path, user_num, doc_num, user_id_dict, \
         splits = user.split()
         like_list = []
         for i in range(1, len(splits)):
-            like_list.append(doc_id_dict[int(splits[i])])
-        user_like_list_in_test_dict[user_id_dict[int(splits[0])]] = like_list
+            like_list.append(int(splits[i]))
+        user_like_list_in_test_dict[int(splits[0])] = like_list
     topic_num = W.shape[1]
     for user_id in range(user_num):
-        user_id_1 = user_id + 1
-        if user_id_1 not in current_user_like_dict.keys():
+        if user_id not in current_user_like_dict:
             continue
-        if (not train) and (user_id_1 not in user_like_list_in_test_dict.keys()):
+        if (not train) and (user_id not in user_like_list_in_test_dict):
             continue
 
-        current_user_like_list = current_user_like_dict[user_id_1]
+        current_user_like_list = current_user_like_dict[user_id]
 
         if not train:
-            train_user_like_list = user_like_list_in_test_dict[user_id_1]
-        elif user_id_1 not in user_like_list_in_test_dict.keys():
+            train_user_like_list = user_like_list_in_test_dict[user_id]
+        elif user_id not in user_like_list_in_test_dict:
             train_user_like_list = current_user_like_list
         else:
-            user_like_list_in_test = user_like_list_in_test_dict[user_id_1]
-            train_user_like_list = list(set(current_user_like_list) - set(user_like_list_in_test))
+            user_like_list_in_test = user_like_list_in_test_dict[user_id]
+            train_user_like_list = list(
+                set(current_user_like_list) - set(user_like_list_in_test))
         like_doc_num = len(train_user_like_list)
         if like_doc_num == 0:
             continue
         user_topic_vector = [0] * topic_num
         for like_doc_id in train_user_like_list:
             for i in range(topic_num):
-                user_topic_vector[i] += W[like_doc_id - 1, i]
+                user_topic_vector[i] += W[like_doc_id, i]
         user_topic_vector = [i / float(like_doc_num) for i in user_topic_vector]
 
         for doc_id in range(doc_num):
@@ -84,16 +84,17 @@ def generate_matrice_for_file(data_path, m, n):
     return R
 
 
-def generate_matrice_for_file2(data_path, m, n, user_id_dict, doc_id_dict):
+def generate_matrice_for_file2(data_path, m, n):
     R = np.zeros((m, n))
     data = np.loadtxt(data_path, dtype=int)
     (row, col) = data.shape
     for i in range(row):
-        R[user_id_dict[data[i, 0]] - 1, doc_id_dict[data[i, 1]] - 1] = 1
+        R[data[i, 0], data[i, 1]] = 1
     return R
 
 
-def generate_matrice_between_time(X, m, n, start_time, end_time, train_data_path=''):
+def generate_matrice_between_time(X, m, n, start_time, end_time,
+                                  train_data_path=''):
     R = np.zeros((m, n))
     (row, col) = X.shape
 
@@ -103,19 +104,18 @@ def generate_matrice_between_time(X, m, n, start_time, end_time, train_data_path
                 continue
             if X[i, 2] > end_time:
                 break
-            R[X[i, 0] - 1, X[i, 1] - 1] = 1
+            R[X[i, 0], X[i, 1]] = 1
     if train_data_path != '':
         train_data = np.loadtxt(train_data_path, dtype=int)
         (row, col) = train_data.shape
         for i in range(row):
-            R[train_data[i, 0] - 1, train_data[i, 1] - 1] = 1
+            R[train_data[i, 0], train_data[i, 1]] = 1
 
     return R
 
 
 def generate_matrice_between_time2(X, m, n, start_time, end_time,
-                                   train_data_path, user_id_dict,
-                                   doc_id_dict):
+                                   train_data_path):
     R = np.zeros((m, n))
     (row, col) = X.shape
 
@@ -130,14 +130,13 @@ def generate_matrice_between_time2(X, m, n, start_time, end_time,
         train_data = np.loadtxt(train_data_path, dtype=int)
         (row, col) = train_data.shape
         for i in range(row):
-            R[user_id_dict[train_data[i, 0]] - 1, doc_id_dict[train_data[i, 1]] - 1] = 1
+            R[train_data[i, 0], train_data[i, 1]] = 1
 
     return R
 
 
 def generate_rating_list_between_time3(X, start_time, end_time,
-                                       train_data_path, user_id_dict,
-                                       doc_id_dict):
+                                       train_data_path):
     r_list = {}
     (row, col) = X.shape
 
@@ -152,23 +151,28 @@ def generate_rating_list_between_time3(X, start_time, end_time,
         train_data = np.loadtxt(train_data_path, dtype=int)
         (row, col) = train_data.shape
         for i in range(row):
-            r_list[(user_id_dict[train_data[i, 0]], doc_id_dict[train_data[i, 1]])] = (end_time + 1, 1)
+            r_list[(train_data[i, 0], train_data[i, 1])] = (end_time + 1, 1)
 
     return r_list
 
 
 def generate_train_and_test_file_for_timesvdpp(R, user_num, doc_num, data_path,
-                                               user_id_dict, doc_id_dict, start_time, end_time):
-    r_list = generate_rating_list_between_time3(R, start_time, end_time, data_path + '/train.dat.txt',
+                                               user_id_dict, doc_id_dict,
+                                               start_time, end_time):
+    r_list = generate_rating_list_between_time3(R, start_time, end_time,
+                                                data_path + '/train.dat.txt',
                                                 user_id_dict, doc_id_dict)
     train_rating_num = len(r_list)
     train_file = open(data_path + '/timesvdpp_train', 'w')
     train_file.write('%%MatrixMarket matrix coordinate real general\n')
-    train_file.write(str(user_num) + ' ' + str(doc_num) + ' ' + str(train_rating_num) + '\n')
+    train_file.write(
+        str(user_num) + ' ' + str(doc_num) + ' ' + str(train_rating_num) + '\n')
     for i in range(user_num):
         for j in range(doc_num):
             train_file.write(
-                str(i + 1) + ' ' + str(j + 1) + ' ' + str(r_list.get((i + 1, j + 1), (end_time + 1, 0))[0]) + ' ' + str(
+                str(i + 1) + ' ' + str(j + 1) + ' ' + str(
+                    r_list.get((i + 1, j + 1), (end_time + 1, 0))[
+                        0]) + ' ' + str(
                     r_list.get((i + 1, j + 1), (end_time + 1, 0))[1]) + '\n')
     train_file.close()
 
@@ -177,17 +181,20 @@ def generate_train_and_test_file_for_timesvdpp(R, user_num, doc_num, data_path,
 
     test_data = np.loadtxt(data_path + '/test.dat.txt', dtype=int)
     test_rating_num = user_num * doc_num
-    test_file.write(str(user_num) + ' ' + str(doc_num) + ' ' + str(test_rating_num) + '\n')
+    test_file.write(
+        str(user_num) + ' ' + str(doc_num) + ' ' + str(test_rating_num) + '\n')
 
     for i in range(user_num):
         for j in range(doc_num):
-            test_file.write(str(i + 1) + ' ' + str(j + 1) + ' ' + str(end_time + 1) + ' 1\n')
+            test_file.write(str(i + 1) + ' ' + str(j + 1) + ' ' + str(
+                end_time + 1) + ' 1\n')
     test_file.close()
 
 
 def create_predict_matrix(user_num, doc_num, data_path):
     R = np.zeros((user_num, doc_num), dtype=float)
-    predict = np.loadtxt(data_path + '/timesvdpp_test.predict', dtype=float, skiprows=1)
+    predict = np.loadtxt(data_path + '/timesvdpp_test.predict', dtype=float,
+                         skiprows=1)
     m, n = predict.shape
     for i in range(1, m):
         R[predict[i, 0] - 1, predict[i, 1] - 1] = predict[i, 2]
@@ -227,15 +234,15 @@ def ap(rank_list):
 
 
 def performance_ap(Predict, data_path, at_num,
-                   user_id_dict, doc_id_dict, current_user_like_dict):
+                   current_user_like_dict):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_dict = {}
     for user in user_like_list_file.readlines():
         splits = user.split()
         like_list = []
         for i in range(1, len(splits)):
-            like_list.append(doc_id_dict[int(splits[i])])
-        user_dict[user_id_dict[int(splits[0])]] = like_list
+            like_list.append(int(splits[i]))
+        user_dict[int(splits[0])] = like_list
 
     (m, n) = Predict.shape
 
@@ -248,7 +255,8 @@ def performance_ap(Predict, data_path, at_num,
         current_like_list = current_user_like_dict[user_id]
         p_like_list = list(Predict[user_id - 1, :])
         p_like_dict = dict(zip(range(n), p_like_list))
-        sort_p_like_list = sorted(p_like_dict.items(), lambda x, y: cmp(y[1], x[1]))
+        sort_p_like_list = sorted(p_like_dict.items(),
+            lambda x, y: cmp(y[1], x[1]))
 
         sort_p_like_doc_ids = []
         effective_doc_num = 0
@@ -256,7 +264,8 @@ def performance_ap(Predict, data_path, at_num,
             if effective_doc_num == at_num:
                 break
             p_doc_id = sort_p_like_list[i][0] + 1
-            if (p_doc_id in current_like_list) and (p_doc_id not in true_like_list):
+            if (p_doc_id in current_like_list) and (
+                        p_doc_id not in true_like_list):
                 continue
             sort_p_like_doc_ids.append(p_doc_id)
             effective_doc_num += 1
@@ -281,15 +290,15 @@ def performance_ap(Predict, data_path, at_num,
 
 
 def performance_ndcg(Predict, data_path, at_num,
-                     user_id_dict, doc_id_dict, current_user_like_dict):
+                     current_user_like_dict):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_dict = {}
     for user in user_like_list_file.readlines():
         splits = user.split()
         like_list = []
         for i in range(1, len(splits)):
-            like_list.append(doc_id_dict[int(splits[i])])
-        user_dict[user_id_dict[int(splits[0])]] = like_list
+            like_list.append(int(splits[i]))
+        user_dict[int(splits[0])] = like_list
 
     (m, n) = Predict.shape
 
@@ -302,7 +311,8 @@ def performance_ndcg(Predict, data_path, at_num,
         current_like_list = current_user_like_dict[user_id]
         p_like_list = list(Predict[user_id - 1, :])
         p_like_dict = dict(zip(range(n), p_like_list))
-        sort_p_like_list = sorted(p_like_dict.items(), lambda x, y: cmp(y[1], x[1]))
+        sort_p_like_list = sorted(p_like_dict.items(),
+            lambda x, y: cmp(y[1], x[1]))
 
         sort_p_like_doc_ids = []
         effective_doc_num = 0
@@ -310,13 +320,13 @@ def performance_ndcg(Predict, data_path, at_num,
             if effective_doc_num == at_num:
                 break
             p_doc_id = sort_p_like_list[i][0] + 1
-            if (p_doc_id in current_like_list) and (p_doc_id not in true_like_list):
+            if (p_doc_id in current_like_list) and (
+                        p_doc_id not in true_like_list):
                 continue
             sort_p_like_doc_ids.append(p_doc_id)
             effective_doc_num += 1
 
         rank_list = []
-        p_true_num = 0
         for doc_id in sort_p_like_doc_ids:
             if doc_id in true_like_list:
                 rank_list.append(1)
@@ -355,7 +365,8 @@ def performance_cross_validate_recall(Predict, data_path, recall_num):
     for user_id in user_dict.keys():
         p_like_list = list(Predict[user_id - 1, :])
         p_like_dict = dict(zip(range(n), p_like_list))
-        sort_p_like_list = sorted(p_like_dict.items(), lambda x, y: cmp(y[1], x[1]))
+        sort_p_like_list = sorted(p_like_dict.items(),
+            lambda x, y: cmp(y[1], x[1]))
         sort_p_like_doc_ids = []
         for i in range(recall_num):
             sort_p_like_doc_ids.append(sort_p_like_list[i][0] + 1)
@@ -381,15 +392,15 @@ def performance_cross_validate_recall(Predict, data_path, recall_num):
 
 
 def performance_cross_validate_recall2(Predict, data_path, recall_num,
-                                       user_id_dict, doc_id_dict, current_user_like_dict):
+                                       current_user_like_dict):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_dict = {}
     for user in user_like_list_file.readlines():
         splits = user.split()
         like_list = []
         for i in range(1, len(splits)):
-            like_list.append(doc_id_dict[int(splits[i])])
-        user_dict[user_id_dict[int(splits[0])]] = like_list
+            like_list.append(int(splits[i]))
+        user_dict[int(splits[0])] = like_list
 
     (m, n) = Predict.shape
 
@@ -398,17 +409,19 @@ def performance_cross_validate_recall2(Predict, data_path, recall_num,
     for user_id in user_dict.keys():
         true_like_list = user_dict[user_id]
         current_like_list = current_user_like_dict[user_id]
-        p_like_list = list(Predict[user_id - 1, :])
+        p_like_list = list(Predict[user_id, :])
         p_like_dict = dict(zip(range(n), p_like_list))
-        sort_p_like_list = sorted(p_like_dict.items(), lambda x, y: cmp(y[1], x[1]))
+        sort_p_like_list = sorted(p_like_dict.items(),
+            lambda x, y: cmp(y[1], x[1]))
 
         sort_p_like_doc_ids = []
         effective_doc_num = 0
         for i in range(n):
             if effective_doc_num == recall_num:
                 break
-            p_doc_id = sort_p_like_list[i][0] + 1
-            if (p_doc_id in current_like_list) and (p_doc_id not in true_like_list):
+            p_doc_id = sort_p_like_list[i][0]
+            if (p_doc_id in current_like_list) and (
+                        p_doc_id not in true_like_list):
                 continue
             sort_p_like_doc_ids.append(p_doc_id)
             effective_doc_num += 1
@@ -433,8 +446,10 @@ def performance_cross_validate_recall2(Predict, data_path, recall_num,
 
 
 def performance_recall(Predict, data_path, time_step, recall_num):
-    user_like_list_file = open(data_path + 'user_like_list_at_time_step' + str(time_step) + '.dat.txt')
-    doc_liked_list_file = open(data_path + 'doc_liked_list_at_time_step' + str(time_step) + '.dat.txt')
+    user_like_list_file = open(
+        data_path + 'user_like_list_at_time_step' + str(time_step) + '.dat.txt')
+    doc_liked_list_file = open(
+        data_path + 'doc_liked_list_at_time_step' + str(time_step) + '.dat.txt')
 
     user_dict = {}
 
@@ -453,7 +468,8 @@ def performance_recall(Predict, data_path, time_step, recall_num):
         if user_dict.has_key(user_id + 1):
             p_like_list = list(Predict[user_id, :])
             p_like_dict = dict(zip(range(n), p_like_list))
-            sort_p_like_list = sorted(p_like_dict.items(), lambda x, y: cmp(y[1], x[1]))
+            sort_p_like_list = sorted(p_like_dict.items(),
+                lambda x, y: cmp(y[1], x[1]))
             sort_p_like_doc_ids = []
             for i in range(recall_num):
                 sort_p_like_doc_ids.append(sort_p_like_list[i][0] + 1)

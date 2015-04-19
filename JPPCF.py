@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-import math
 import numpy as np
-# import scipy.sparse as sp
-from sys import float_info
 import logging
+
 
 def tr(A, B):
     return (A * B).sum()
+
 
 def computeTopicLoss(X, W, H, M, R, alpha, lambd, trXX, I):
     MR = M.dot(R)
@@ -30,6 +29,7 @@ def computeLoss(R, P, Q, S, Po, alpha, lambd, trRR, I):
     obj = tr1+ tr2 + tr3+ tr4
     return obj
 
+
 def computeLoss_with_topic(R, P, Q, S, Po, C, eta, alpha, lambd, trRR, I):
     reta = 1 - eta
     SPo = S.dot(Po)
@@ -41,6 +41,7 @@ def computeLoss_with_topic(R, P, Q, S, Po, C, eta, alpha, lambd, trRR, I):
     tr4 = alpha*(P.sum() + Q.sum() + S.sum())
     obj = tr1 + tr2 + tr3 + tr4
     return obj
+
 
 def JPPTopic(X, R, k, lambd, alpha, epsilon, maxiter, verbose):
 
@@ -158,6 +159,7 @@ def matrix_sub(A, B):
             if r > 0:
                 R[i,j] = r
     return R
+
 
 def JPPCF_with_topic(R, Po, C, k, eta, lambd, alpha, epsilon, maxiter, verbose):
 
