@@ -3,8 +3,8 @@ import sys
 sys.path.append('/home/zjd/jmm/JPPCF/')
 
 import os
-import util
-from JPPCF import *
+from utility import util
+from model.JPPCF import *
 
 import logging
 

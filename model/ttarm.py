@@ -1,18 +1,16 @@
 # encoding: utf-8
 import sys
-
-sys.path.append('/home/zjd/jmm/JPPCF/')
-
 import os
-import util
-from JPPCF import *
+from utility import util
+from utility import evaluate
+from model.JPPCF import *
 
 import logging
 
 argvs = sys.argv
 
 # We fix the num of latent feature
-k = 100
+k = 20
 
 lambd = 0.5
 
@@ -36,7 +34,7 @@ filter_data_path = data_path + 'filtered_by_user_doc_like_list_len_' + str(
     filter_threshold) + '/'
 
 doc_id_map_after_filter = np.loadtxt(
-    data_path + 'doc_id_citeulike_id_map_after_filter.dat.txt', int)
+    filter_data_path + 'doc_id_citeulike_id_map_after_filter.dat.txt', int)
 doc_id_citeulike_id_map_after_filter_dict = dict(
     zip(doc_id_map_after_filter[:, 0], doc_id_map_after_filter[:, 1]))
 
@@ -51,18 +49,12 @@ for row in doc_id_map_in_total:
 
 user_id_map = np.loadtxt(filter_data_path + 'user_id_map.dat.txt', int)
 doc_id_map = np.loadtxt(filter_data_path + 'doc_id_map.dat.txt', int)
-user_time_dist = np.loadtxt(filter_data_path + 'user_time_distribute.dat.txt',
-                            int)
-doc_time_dist = np.loadtxt(filter_data_path + 'doc_time_distribute.dat.txt',
-                           int)
+
+user_time_dist = np.loadtxt(filter_data_path + 'user_time_distribute.dat.txt', int)
+doc_time_dist = np.loadtxt(filter_data_path + 'doc_time_distribute.dat.txt', int)
 
 user_time_dict = dict(zip(user_time_dist[:, 0], user_time_dist[:, 1]))
 doc_time_dict = dict(zip(doc_time_dist[:, 0], doc_time_dist[:, 1]))
-
-user_id_dict = dict(zip(user_id_map[:, 0], user_id_map[:, 1]))
-ruser_id_dict = dict(zip(user_id_map[:, 1], user_id_map[:, 0]))
-doc_id_dict = dict(zip(doc_id_map[:, 0], doc_id_map[:, 1]))
-rdoc_id_dict = dict(zip(doc_id_map[:, 1], doc_id_map[:, 0]))
 
 doc_id_citeulike_id_dict = {}
 X = np.zeros((doc_id_map.shape[0], 8000))
@@ -104,7 +96,7 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(filename)s[line:%(lineno)d]\
                             %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='./log/ttarm_k_' + str(k) + '_lambda_' + \
+                    filename='./log/new_ttarm_k_' + str(k) + '_lambda_' + \
                              str(lambd) + '_alpha_' + str(
                         regl1jpp) + '_eta_' + str(eta) + '.log',
                     filemode='w')
@@ -128,7 +120,7 @@ time_filter_dir = './result/time_interval_' + str(time_interval) +\
 if not os.path.isdir(time_filter_dir):
     os.mkdir(time_filter_dir)
 
-result_dir = time_filter_dir + '/ttarm_eta_' + str(eta) + \
+result_dir = time_filter_dir + '/new_ttarm_eta_' + str(eta) + \
              '_fold_' + str(fold_num) + '_k_' + str(k) + '_lambda_' + \
              str(lambd) + '_alpha_' + str(regl1jpp)
 recall_result_dir = result_dir + '/recall'
@@ -155,6 +147,7 @@ Rt = util.generate_matrice_between_time(R, user_time_dict[start],
 
 logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
 logging.info('start nmf:\n')
+
 (P, Q) = util.nmf(Rt, k, maxiter, regl1nmf, epsilon)
 logging.info('[ok]\n')
 
@@ -245,11 +238,12 @@ for current_time_step in range(start + 1, finT + 1):
         for recall_num in [3, 5, 10, 20, 50, 100, 150, 200, 250, 300]:
             logging.info('\trecall at ' + str(recall_num) + ':')
 
-            jppcf_with_topic_recall = util.performance_cross_validate_recall2(
+            # recall evaluate.py
+            jppcf_with_topic_recall = evaluate.performance_recall(
                 NormPR2, current_data_path, recall_num,
-                ruser_id_dict, rdoc_id_dict, current_user_like_dict)
+                current_user_like_dict)
 
-            if j_topic_recall_dict.has_key(recall_num):
+            if recall_num in j_topic_recall_dict:
                 j_topic_recall_dict[recall_num].append(jppcf_with_topic_recall)
             else:
                 j_topic_recall_dict[recall_num] = [jppcf_with_topic_recall]
@@ -258,11 +252,11 @@ for current_time_step in range(start + 1, finT + 1):
 
             # ndcg performance
             logging.info('\nndcg at ' + str(recall_num) + ':')
-            jppcf_with_topic_ndcg = util.performance_ndcg(
+            jppcf_with_topic_ndcg = evaluate.performance_ndcg(
                 NormPR2, current_data_path, recall_num,
-                ruser_id_dict, rdoc_id_dict, current_user_like_dict)
+                current_user_like_dict)
 
-            if j_topic_ndcg_dict.has_key(recall_num):
+            if recall_num in j_topic_ndcg_dict:
                 j_topic_ndcg_dict[recall_num].append(jppcf_with_topic_ndcg)
             else:
                 j_topic_ndcg_dict[recall_num] = [jppcf_with_topic_ndcg]
@@ -271,10 +265,10 @@ for current_time_step in range(start + 1, finT + 1):
 
             # ap performance
             logging.info('\nap at ' + str(recall_num) + ':')
-            jppcf_with_topic_ap = util.performance_ndcg(
+            jppcf_with_topic_ap = evaluate.performance_ndcg(
                 NormPR2, current_data_path, recall_num,
-                ruser_id_dict, rdoc_id_dict, current_user_like_dict)
-            if j_topic_ap_dict.has_key(recall_num):
+                current_user_like_dict)
+            if recall_num in j_topic_ap_dict:
                 j_topic_ap_dict[recall_num].append(jppcf_with_topic_ap)
             else:
                 j_topic_ap_dict[recall_num] = [jppcf_with_topic_ap]
