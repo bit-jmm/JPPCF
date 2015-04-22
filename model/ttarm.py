@@ -1,341 +1,326 @@
 # encoding: utf-8
-import sys
 import os
-from utility import util
-from utility import evaluate
-from model.JPPCF import *
-
 import logging
 
-argvs = sys.argv
-
-# We fix the num of latent feature
-k = 20
-
-lambd = 0.5
-
-eta = 0.2
-
-if len(argvs) == 4:
-    k = int(float(argvs[1]))
-    lambd = float(argvs[2])
-    eta = float(argvs[3])
-
-print 'k: ', k, '\tlambda: ', lambd, '\teta: ', eta, '\n'
-
-topic_num = 20
-time_interval = 360
-filter_threshold = 10
-
-origin_data_path = './data/preprocessed_data/'
-data_path = origin_data_path + 'data_divided_by_' + str(
-    time_interval) + '_days/'
-filter_data_path = data_path + 'filtered_by_user_doc_like_list_len_' + str(
-    filter_threshold) + '/'
-
-doc_id_map_after_filter = np.loadtxt(
-    filter_data_path + 'doc_id_citeulike_id_map_after_filter.dat.txt', int)
-doc_id_citeulike_id_map_after_filter_dict = dict(
-    zip(doc_id_map_after_filter[:, 0], doc_id_map_after_filter[:, 1]))
-
-doc_id_map_in_total = open(origin_data_path + 'doc_id_citeulike_id_map.csv',
-                           'r').readlines()
-del doc_id_map_in_total[0]
-
-doc_id_map_in_total_dict = {}
-for row in doc_id_map_in_total:
-    splits = row.strip().split(',')
-    doc_id_map_in_total_dict[int(splits[1])] = int(splits[0])
-
-user_id_map = np.loadtxt(filter_data_path + 'user_id_map.dat.txt', int)
-doc_id_map = np.loadtxt(filter_data_path + 'doc_id_map.dat.txt', int)
-
-user_time_dist = np.loadtxt(filter_data_path + 'user_time_distribute.dat.txt', int)
-doc_time_dist = np.loadtxt(filter_data_path + 'doc_time_distribute.dat.txt', int)
-
-user_time_dict = dict(zip(user_time_dist[:, 0], user_time_dist[:, 1]))
-doc_time_dict = dict(zip(doc_time_dist[:, 0], doc_time_dist[:, 1]))
-
-doc_id_citeulike_id_dict = {}
-X = np.zeros((doc_id_map.shape[0], 8000))
-
-doc_words = open(origin_data_path + 'mult.dat.txt', 'r').readlines()
-
-# get doc_id citeulike_id dict and doc word matrix
-for i in range(doc_id_map.shape[0]):
-    citeulike_id = doc_id_citeulike_id_map_after_filter_dict[doc_id_map[i, 1]]
-
-    doc_id_in_total = doc_id_map_in_total_dict[citeulike_id]
-    words = doc_words[doc_id_in_total - 1].strip().split()
-    del words[0]
-    for w in words:
-        splits = w.split(':')
-        X[doc_id_map[i, 1], int(splits[0])] = int(splits[1])
-
-user_num = user_id_map.shape[0]
-doc_num = doc_id_map.shape[0]
-print 'user_num: ', user_num, '\n'
-print 'doc_num: ', doc_num, '\n'
-
-R = np.loadtxt(filter_data_path + 'rating_file.dat.txt', int)
-time_step_num = R[:, 2].max()
-
-# exit(0)
-
-regl1nmf = 0.05
-
-regl1jpp = 0.05
-
-epsilon = 1
-
-maxiter = 100
-
-fold_num = 5
-
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s %(filename)s[line:%(lineno)d]\
-                            %(levelname)s %(message)s',
-                    datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='./log/new_ttarm_k_' + str(k) + '_lambda_' + \
-                             str(lambd) + '_alpha_' + str(
-                        regl1jpp) + '_eta_' + str(eta) + '.log',
-                    filemode='w')
-
-##################################################################
-# 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，
-# 并将其添加到当前的日志处理对象#
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
-formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
-console.setFormatter(formatter)
-logging.getLogger('').addHandler(console)
-##################################################################
-# logging.debug('This is debug message')
-# logging.info('This is info message')
-# logging.warning('This is warning message')
+from utility import util
+from utility import evaluate
+from utility import fileutil
+from model.JPPCF import *
 
 
-time_filter_dir = './result/time_interval_' + str(time_interval) +\
-                  '_filter_by_' + str(filter_threshold)
-if not os.path.isdir(time_filter_dir):
-    os.mkdir(time_filter_dir)
+class Ttarm:
+    topic_num = 20
+    time_interval = 360
+    filter_threshold = 10
+    regl1nmf = 0.05
+    regl1jpp = 0.05
+    epsilon = 1
+    maxiter = 100
+    fold_num = 5
 
-result_dir = time_filter_dir + '/new_ttarm_eta_' + str(eta) + \
-             '_fold_' + str(fold_num) + '_k_' + str(k) + '_lambda_' + \
-             str(lambd) + '_alpha_' + str(regl1jpp)
-recall_result_dir = result_dir + '/recall'
-ndcg_result_dir = result_dir + '/ndcg'
-ap_result_dir = result_dir + '/ap'
+    def __init__(self, k=20, lambd=10, eta=0.3):
+        self.k = k
+        self.lambd = lambd
+        self.eta = eta
+        self.origin_data_path = \
+            os.path.normpath(os.path.join(__file__,
+                                          '../../data/preprocessed_data'))
 
-if not os.path.isdir(result_dir):
-    os.mkdir(result_dir)
-if not os.path.isdir(recall_result_dir):
-    os.mkdir(recall_result_dir)
-if not os.path.isdir(ndcg_result_dir):
-    os.mkdir(ndcg_result_dir)
-if not os.path.isdir(ap_result_dir):
-    os.mkdir(ap_result_dir)
+        self.data_path = os.path.join(self.origin_data_path,
+                                      'data_divided_by_' +
+                                      str(self.time_interval) + '_days')
+        self.filter_data_path = \
+            os.path.join(self.data_path,
+                         'filtered_by_user_doc_like_list_len_' +
+                         str(self.filter_threshold))
 
-logging.info('user num: ' + str(user_num) + '\n')
-logging.info('doc num: ' + str(doc_num) + '\n')
-logging.info('time step num: ' + str(time_step_num) + '\n')
+        logging.basicConfig(level=logging.DEBUG,
+                            format='%(asctime)s %(filename)s[line:%(lineno)d]\
+                                    %(levelname)s %(message)s',
+                            datefmt='%a, %d %b %Y %H:%M:%S',
+                            filename='../log/new_ttarm_k_' +
+                                     str(k) + '_lambda_' +
+                                     str(lambd) + '_alpha_' +
+                                     str(self.regl1jpp) + '_eta_' +
+                                     str(eta) + '.log',
+                            filemode='w')
 
-# the start time period used for init of W(1) and H(1), using normal NMF
-start = 1
-Rt = util.generate_matrice_between_time(R, user_time_dict[start],
-                                        doc_time_dict[start], start, start)
+        ##################################################################
+        # 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，
+        # 并将其添加到当前的日志处理对象#
+        console = logging.StreamHandler()
+        console.setLevel(logging.INFO)
+        formatter = logging.Formatter(
+            '%(name)-12s: %(levelname)-8s %(message)s')
+        console.setFormatter(formatter)
+        logging.getLogger('').addHandler(console)
+        ##################################################################
 
-logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
-logging.info('start nmf:\n')
+    def prepare_data(self):
 
-(P, Q) = util.nmf(Rt, k, maxiter, regl1nmf, epsilon)
-logging.info('[ok]\n')
+        user_id_map = np.loadtxt(os.path.join(self.filter_data_path,
+                                              'user_id_map.dat.txt'), int)
+        doc_id_map = np.loadtxt(os.path.join(self.filter_data_path,
+                                             'doc_id_map.dat.txt'), int)
 
-logging.info(str(P.shape) + '\t' + str(Q.shape) + '\n')
+        user_time_dist = np.loadtxt(
+            os.path.join(self.filter_data_path, 'user_time_distribute.dat.txt'),
+            int)
+        doc_time_dist = np.loadtxt(
+            os.path.join(self.filter_data_path, 'doc_time_distribute.dat.txt'),
+            int)
 
-# init W and H with nmf
-Xt = X[range(doc_time_dict[start]), :]
-(W1, H1) = util.nmf(Xt, topic_num, maxiter, regl1nmf, epsilon)
+        user_time_dict = dict(zip(user_time_dist[:, 0], user_time_dist[:, 1]))
+        doc_time_dict = dict(zip(doc_time_dist[:, 0], doc_time_dist[:, 1]))
 
-# learning topic distribution by jpp
-logging.info('start learning topic distribution by jpp ......')
+        R = np.loadtxt(
+            os.path.join(self.filter_data_path, 'rating_file.dat.txt'),
+            float)
+        return (user_time_dict, doc_time_dict,
+                user_id_map, doc_id_map, R)
 
-(W, H, M) = JPPTopic(X, H1, topic_num, lambd, regl1jpp, epsilon, 100, True)
+    def topic_distribute(self, doc_id_map, doc_time_dict):
+        doc_id_map_after_filter = \
+            np.loadtxt(
+                os.path.join(self.filter_data_path,
+                             'doc_id_citeulike_id_map_after_filter.dat.txt'),
+                int)
 
-logging.info('end')
+        doc_id_citeulike_id_map = open(self.origin_data_path +
+                                       '/doc_id_citeulike_id_map.csv',
+                                       'r').readlines()
+        del doc_id_citeulike_id_map[0]
 
-# number of period we consider
-finT = time_step_num
+        citeulike_id_doc_id_dict = {}
+        for row in doc_id_citeulike_id_map:
+            splits = row.strip().split(',')
+            citeulike_id_doc_id_dict[int(splits[1])] = int(splits[0])
 
-# for all the consecutive periods
-for current_time_step in range(start + 1, finT + 1):
+        doc_id_citeulike_id_map_after_filter_dict = dict(
+            zip(doc_id_map_after_filter[:, 0], doc_id_map_after_filter[:, 1]))
 
-    logging.info('\n=========================\n')
-    logging.info('time_step number %i:\t' + str(current_time_step))
-    logging.info('----------------\n')
+        X = np.zeros((doc_id_map.shape[0], 8000))
 
-    if current_time_step == start + 1:
-        Po2 = P
-    else:
-        Po2 = P2
+        doc_words = open(os.path.join(self.origin_data_path, 'mult.dat.txt'),
+                         'r').readlines()
 
-    j_topic_recall_dict = {}
-    j_topic_ndcg_dict = {}
-    j_topic_ap_dict = {}
+        # get doc_id citeulike_id dict and doc word matrix
+        for i in xrange(doc_id_map.shape[0]):
+            citeulike_id = doc_id_citeulike_id_map_after_filter_dict[
+                doc_id_map[i, 1]]
 
-    current_user_num = user_time_dict[current_time_step]
-    current_doc_num = doc_time_dict[current_time_step]
+            doc_id_in_total = citeulike_id_doc_id_dict[citeulike_id]
+            words = doc_words[doc_id_in_total - 1].strip().split()
+            del words[0]
+            for w in words:
+                splits = w.split(':')
+                X[doc_id_map[i, 1], int(splits[0])] = int(splits[1])
 
-    current_user_like_dict = {}
-    like_file = open(filter_data_path + 'user_like_list_at_time_step' + \
-                     str(current_time_step) + '.dat.txt')
-    for user in like_file.readlines():
-        splits = user.split()
-        like_list = []
-        for i in range(2, len(splits)):
-            like_list.append(int(splits[i]))
-        current_user_like_dict[int(splits[0])] = like_list
+        # init W and H with nmf
+        Xt = X[range(doc_time_dict[1]), :]
+        (W1, H1) = util.nmf(Xt, self.topic_num, self.maxiter,
+                            self.regl1nmf, self.epsilon)
 
-    for fold_id in range(fold_num):
-        current_data_path = filter_data_path + 'time_step_' + \
-                            str(current_time_step) + '/data_' + \
-                            str(fold_id)
-        train_data_path = current_data_path + '/train.dat.txt'
+        # learning topic distribution by jpp
+        logging.info('start learning topic distribution by jpp ......')
 
-        Rt = util.generate_matrice_for_file2(train_data_path,
-                                             current_user_num,
-                                             current_doc_num
-                                             )
+        (W, H, M) = JPPTopic(X, H1, self.topic_num, self.lambd,
+                             self.regl1jpp, self.epsilon, self.maxiter, True)
+
+        logging.info('end')
+        return W
+
+    def evaluate(self, metric, metric_dict, predict_matrix, current_data_path,
+                 recall_num, current_user_like_dict):
+        logging.info(str.format('\t{0} at {1}:', metric, recall_num))
+        metric_value = None
+        if metric == 'rmse':
+            exec(str.format('metric_value = evaluate.performance_{0}(predict_matrix,\
+            current_data_path)', metric))
+        else:
+            exec(str.format('metric_value = evaluate.performance_{0}(predict_matrix,\
+            current_data_path, recall_num, current_user_like_dict)', metric))
+        util.add_list_value_for_dict(metric_dict, recall_num, metric_value)
+        logging.info('\tTTARM :  ' + str(metric_value) + '\n')
+
+    def write_avg_metric_value(self, metric, metric_dict, recall_num,
+                               metric_result_dir):
+        logging.info(str.format('\tAverage {0} at {1}:', metric, recall_num))
+
+        avg_metric_value = util.avg_of_list(metric_dict[recall_num])
+        logging.info('\t\tavg TTARM :  ' + str(avg_metric_value) + '\n\n\n')
+
+        exist = False
+        if os.path.isfile(metric_result_dir + '/recall_at_' + str(
+                recall_num) + '.txt'):
+            exist = True
+        result_file = open(metric_result_dir + '/recall_at_' + str(
+                           recall_num) + '.txt', 'a')
+        if not exist:
+            result_file.write('TTARM\n')
+
+        result_file.write(str(avg_metric_value) + '\n')
+        result_file.close()
+
+    def run(self):
+        print 'k: %d\tlambda:%d \teta: %.1f\n' % (self.k, self.lambd, self.eta)
+        (user_time_dict, doc_time_dict,
+         user_id_map, doc_id_map, R) = self.prepare_data()
+        time_step_num = int(R[-1, 3])
+
+        user_num = user_id_map.shape[0]
+        doc_num = doc_id_map.shape[0]
+
+        W = self.topic_distribute(doc_id_map, doc_time_dict)
+
+        time_filter_dir = \
+            os.path.normpath(os.path.join(__file__,
+                                          '../../result/new_ttarm_time_step_' +
+                                          str(self.time_interval) +
+                                          '_filter_by_' +
+                                          str(self.filter_threshold)))
+        fileutil.mkdir(time_filter_dir)
+
+        result_dir = os.path.join(time_filter_dir,
+                                  '/eta_' + str(self.eta) +
+                                  '_fold_' + str(self.fold_num) +
+                                  '_k_' + str(self.k) + '_lambda_' +
+                                  str(self.lambd) + '_alpha_' +
+                                  str(self.regl1jpp))
+
+        recall_result_dir = os.path.join(result_dir, 'recall')
+        ndcg_result_dir = os.path.join(result_dir, 'ndcg')
+        map_result_dir = os.path.join(result_dir, 'map')
+        rmse_result_dir = os.path.join(result_dir, 'rmse')
+
+        for d in [recall_result_dir, ndcg_result_dir,
+                  map_result_dir, rmse_result_dir]:
+            fileutil.mkdir(d)
+
+        logging.info('user num: ' + str(user_num) + '\n')
+        logging.info('doc num: ' + str(doc_num) + '\n')
+        logging.info('time step num: ' + str(time_step_num) + '\n')
+
+        # the start time period used for init of W(1) and H(1), using normal NMF
+        start = 1
+        Rt = util.generate_matrice_between_time(R, user_time_dict[start],
+                                                doc_time_dict[start], start,
+                                                start)
+
         logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
+        logging.info('start nmf:\n')
 
-        # calculate user item topic similarity matrix
-        Ct_train = util.cal_topic_similarity_matrix(W,
-                                                    current_data_path,
-                                                    current_user_num,
-                                                    current_doc_num,
-                                                    current_user_like_dict,
-                                                    True)
-
-        logging.info('computing JPP_with_topic decomposition...')
-
-        Po2 = util.reshape_matrix(Po2, current_user_num, k)
-
-        P2, Q2, S2 = JPPCF_with_topic(Rt, Po2, Ct_train, k, eta,
-                                      lambd, regl1jpp, epsilon, maxiter, True)
-
-        Ct_test = util.cal_topic_similarity_matrix(W,
-                                                   current_data_path,
-                                                   current_user_num,
-                                                   current_doc_num,
-                                                   current_user_like_dict,
-                                                   False)
-        PredictR2 = ((1 - eta) * np.dot(P2, Q2)) + (eta * Ct_test)
-        NormPR2 = PredictR2 / PredictR2.max()
-
+        (P, Q) = util.nmf(Rt, self.k, self.maxiter, self.regl1nmf, self.epsilon)
         logging.info('[ok]\n')
 
-        logging.info('\t fold_id:' + str(fold_id) + '\n')
-        for recall_num in [3, 5, 10, 20, 50, 100, 150, 200, 250, 300]:
-            logging.info('\trecall at ' + str(recall_num) + ':')
+        # for all the consecutive periods
+        for current_time_step in range(start + 1, time_step_num + 1):
 
-            # recall evaluate.py
-            jppcf_with_topic_recall = evaluate.performance_recall(
-                NormPR2, current_data_path, recall_num,
-                current_user_like_dict)
+            logging.info('\n=========================\n')
+            logging.info('time_step number %i:\t' + str(current_time_step))
+            logging.info('----------------\n')
 
-            if recall_num in j_topic_recall_dict:
-                j_topic_recall_dict[recall_num].append(jppcf_with_topic_recall)
+            if current_time_step == start + 1:
+                Po2 = P
             else:
-                j_topic_recall_dict[recall_num] = [jppcf_with_topic_recall]
-            logging.info(
-                '\tJPPCF_with_topic :  ' + str(jppcf_with_topic_recall) + '\n')
+                Po2 = P2
 
-            # ndcg performance
-            logging.info('\nndcg at ' + str(recall_num) + ':')
-            jppcf_with_topic_ndcg = evaluate.performance_ndcg(
-                NormPR2, current_data_path, recall_num,
-                current_user_like_dict)
+            recall_dict = {}
+            ndcg_dict = {}
+            map_dict = {}
+            rmse_dict = {}
 
-            if recall_num in j_topic_ndcg_dict:
-                j_topic_ndcg_dict[recall_num].append(jppcf_with_topic_ndcg)
-            else:
-                j_topic_ndcg_dict[recall_num] = [jppcf_with_topic_ndcg]
-            logging.info(
-                '\tJPPCF_with_topic :  ' + str(jppcf_with_topic_ndcg) + '\n')
+            current_user_num = user_time_dict[current_time_step]
+            current_doc_num = doc_time_dict[current_time_step]
 
-            # ap performance
-            logging.info('\nap at ' + str(recall_num) + ':')
-            jppcf_with_topic_ap = evaluate.performance_ndcg(
-                NormPR2, current_data_path, recall_num,
-                current_user_like_dict)
-            if recall_num in j_topic_ap_dict:
-                j_topic_ap_dict[recall_num].append(jppcf_with_topic_ap)
-            else:
-                j_topic_ap_dict[recall_num] = [jppcf_with_topic_ap]
-            logging.info(
-                '\tJPPCF_with_topic :  ' + str(jppcf_with_topic_ap) + '\n')
+            current_user_like_dict = {}
+            like_file = open(os.path.join(self.filter_data_path,
+                                          'user_like_list_at_time_step' +
+                                          str(current_time_step) + '.dat.txt'))
+            for line in like_file.readlines():
+                splits = line.strip().split()
+                like_list = []
+                for i in xrange(2, len(splits)):
+                    doc_rating = splits[i].split(':')
+                    like_list.append((doc_rating[0], doc_rating[1]))
+                current_user_like_dict[splits[0]] = like_list
 
-    logging.info('current_time_step: ' + str(current_time_step) + '\n')
+            for fold_id in range(self.fold_num):
+                current_data_path = self.filter_data_path + 'time_step_' + \
+                                    str(current_time_step) + '/data_' + \
+                                    str(fold_id)
+                train_data_path = current_data_path + '/train.dat.txt'
 
-    for recall_num in [3, 5, 10, 20, 50, 100, 150, 200, 250, 300]:
-        # recall
-        logging.info('\trecall at ' + str(recall_num) + ':')
-        avg_jppcf_with_topic_recall = util.avg_of_list(
-            j_topic_recall_dict[recall_num])
-        logging.info('\t\tavg JPPCF_with_topic :  ' + str(
-            avg_jppcf_with_topic_recall) + '\n\n\n')
+                Rt = util.generate_matrice_for_file(train_data_path,
+                                                    current_user_num,
+                                                    current_doc_num
+                                                    )
+                logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
 
-        exist = False
-        if os.path.isfile(recall_result_dir + '/recall_at_' + str(
-                recall_num) + '.txt'):
-            exist = True
+                # calculate user item topic similarity matrix
+                Ct_train = \
+                    util.cal_topic_similarity_matrix(W,
+                                                     current_data_path,
+                                                     current_user_num,
+                                                     current_doc_num,
+                                                     current_user_like_dict,
+                                                     True)
+                logging.info('computing JPP_with_topic decomposition...')
 
-        result_file = open(
-            recall_result_dir + '/recall_at_' + str(recall_num) + '.txt', 'a')
-        if not exist:
-            result_file.write('jppcf_with_topic\n')
+                Po2 = util.reshape_matrix(Po2, current_user_num, self.k)
 
-        result_file.write(str(avg_jppcf_with_topic_recall) + '\n')
-        result_file.close()
+                P2, Q2, S2 = JPPCF_with_topic(Rt, Po2, Ct_train, self.k,
+                                              self.eta,
+                                              self.lambd, self.regl1jpp,
+                                              self.epsilon, self.maxiter, True)
 
-        # ndcg
-        logging.info('\tndcg at ' + str(recall_num) + ':')
-        avg_jppcf_with_topic_ndcg = util.avg_of_list(
-            j_topic_ndcg_dict[recall_num])
-        logging.info('\t\tavg JPPCF_with_topic :  ' + str(
-            avg_jppcf_with_topic_ndcg) + '\n\n\n')
+                Ct_test = \
+                    util.cal_topic_similarity_matrix(W,
+                                                     current_data_path,
+                                                     current_user_num,
+                                                     current_doc_num,
+                                                     current_user_like_dict,
+                                                     False)
 
-        exist = False
-        if os.path.isfile(ndcg_result_dir + '/ndcg_at_' + str(
-                recall_num) + '.txt'):
-            exist = True
+                PredictR2 = ((1 - self.eta) * np.dot(P2, Q2)) + \
+                            (self.eta * Ct_test)
+                NormPR2 = PredictR2 / PredictR2.max()
 
-        result_file = open(
-            ndcg_result_dir + '/ndcg_at_' + str(recall_num) + '.txt', 'a')
-        if not exist:
-            result_file.write('jppcf_with_topic\n')
+                logging.info('[ok]\n')
 
-        result_file.write(str(avg_jppcf_with_topic_ndcg) + '\n')
-        result_file.close()
+                logging.info('\t fold_id:' + str(fold_id) + '\n')
+                for recall_num in [3, 10, 50, 100, 300, 500, 1000]:
+                    # recall evaluate
+                    self.evaluate('recall', recall_dict, NormPR2,
+                                  current_data_path, recall_num,
+                                  current_user_like_dict)
+                    # ndcg performance
+                    self.evaluate('ndcg', ndcg_dict, NormPR2,
+                                  current_data_path, recall_num,
+                                  current_user_like_dict)
+                    # map performance
+                    self.evaluate('map', map_dict, NormPR2,
+                                  current_data_path, recall_num,
+                                  current_user_like_dict)
+                    # rmse performance
+                    self.evaluate('rmse', rmse_dict, NormPR2,
+                                  current_data_path, recall_num,
+                                  current_user_like_dict)
 
-        # ap
-        logging.info('\tap at ' + str(recall_num) + ':')
-        avg_jppcf_with_topic_ap = util.avg_of_list(j_topic_ap_dict[recall_num])
-        logging.info('\t\tavg JPPCF_with_topic :  ' + str(
-            avg_jppcf_with_topic_ap) + '\n\n\n')
+            logging.info('current_time_step: ' + str(current_time_step) + '\n')
 
-        exist = False
-        if os.path.isfile(ap_result_dir + '/ap_at_' + str(recall_num) + '.txt'):
-            exist = True
+            for recall_num in [3, 10, 50, 100, 300, 500, 1000]:
+                # recall
+                self.write_avg_metric_value('recall', recall_dict, recall_num,
+                                            recall_result_dir)
+                # ndcg
+                self.write_avg_metric_value('ndcg', ndcg_dict, recall_num,
+                                            ndcg_result_dir)
+                # map
+                self.write_avg_metric_value('map', map_dict, recall_num,
+                                            map_result_dir)
+                # rmse
+                self.write_avg_metric_value('rmse', rmse_dict, recall_num,
+                                            rmse_result_dir)
 
-        result_file = open(ap_result_dir + '/ap_at_' + str(recall_num) + '.txt',
-                           'a')
-        if not exist:
-            result_file.write('jppcf_with_topic\n')
-
-        result_file.write(str(avg_jppcf_with_topic_ap) + '\n')
-        result_file.close()
-
-    logging.info('=========================\n')
-
-logging.info('\n all process done! exit now...')
+        logging.info('\n all process done! exit now...')

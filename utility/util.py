@@ -4,6 +4,13 @@ from nmf.nmf import NMF
 import copy
 
 
+def add_list_value_for_dict(d, key, value):
+    if key in d:
+        d[key].append(value)
+    else:
+        d[key] = [value]
+
+
 def reshape_matrix(matrix, row, col):
     m, n = matrix.shape
     if row == m and col == n:
@@ -37,14 +44,17 @@ def cal_topic_similarity_matrix(doc_word_matrix, data_path, user_num, doc_num,
 
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_like_list_in_test_dict = {}
-    for user in user_like_list_file.readlines():
-        splits = user.split()
+    for line in user_like_list_file.readlines():
+        splits = line.strip().split()
         like_list = []
-        for i in range(1, len(splits)):
-            like_list.append(int(splits[i]))
-        user_like_list_in_test_dict[int(splits[0])] = like_list
+        for i in xrange(2, len(splits)):
+            doc_rating = splits[i].split(':')
+            like_list.append((doc_rating[0], doc_rating[1]))
+        user_like_list_in_test_dict[splits[0]] = like_list
     topic_num = doc_word_matrix.shape[1]
-    for user_id in range(user_num):
+
+    for user_id in xrange(user_num):
+        user_id = str(user_id)
         if user_id not in current_user_like_dict:
             continue
         if (not train) and (user_id not in user_like_list_in_test_dict):
@@ -64,10 +74,15 @@ def cal_topic_similarity_matrix(doc_word_matrix, data_path, user_num, doc_num,
         if like_doc_num == 0:
             continue
         user_topic_vector = [0] * topic_num
-        for like_doc_id in train_user_like_list:
+        max_rating = 0.0
+        for doc_rating in train_user_like_list:
+            doc_id = int(doc_rating[0])
+            rating = float(doc_rating[1])
+            if rating > max_rating:
+                max_rating = rating
             for i in range(topic_num):
-                user_topic_vector[i] += doc_word_matrix[like_doc_id, i]
-        user_topic_vector = [i / float(like_doc_num) for i in user_topic_vector]
+                user_topic_vector[i] += rating * doc_word_matrix[doc_id, i]
+        user_topic_vector = [i / (like_doc_num * max_rating) for i in user_topic_vector]
 
         for doc_id in range(doc_num):
             ct[user_id, doc_id] = cos_sim(user_topic_vector,
@@ -77,20 +92,13 @@ def cal_topic_similarity_matrix(doc_word_matrix, data_path, user_num, doc_num,
 
 
 def generate_matrice_for_file(data_path, m, n):
-    matrix = np.zeros((m, n))
-    data = np.loadtxt(data_path, dtype=int)
-    (row, col) = data.shape
-    for i in range(row):
-        matrix[data[i, 0] - 1, data[i, 1] - 1] = 1
-    return matrix
-
-
-def generate_matrice_for_file2(data_path, m, n):
     R = np.zeros((m, n))
-    data = np.loadtxt(data_path, dtype=int)
-    (row, col) = data.shape
+    rating = np.loadtxt(data_path, dtype=float)
+    (row, col) = rating.shape
     for i in range(row):
-        R[data[i, 0], data[i, 1]] = 1
+        user_id = int(rating[i, 0])
+        doc_id = int(rating[i, 1])
+        R[user_id, doc_id] = rating[i, 2]
     return R
 
 
@@ -101,39 +109,23 @@ def generate_matrice_between_time(rating, m, n, start_time, end_time,
 
     if start_time <= end_time:
         for i in range(row):
-            if rating[i, 2] < start_time:
+            user_id = int(rating[i, 0])
+            doc_id = int(rating[i, 1])
+            timestep = int(rating[i, 3])
+            if int(timestep) < start_time:
                 continue
-            if rating[i, 2] > end_time:
+            if int(timestep) > end_time:
                 break
-            matrix[rating[i, 0], rating[i, 1]] = 1
+            matrix[user_id, doc_id] = rating[i, 2]
     if train_data_path != '':
-        train_data = np.loadtxt(train_data_path, dtype=int)
+        train_data = np.loadtxt(train_data_path, dtype=float)
         (row, col) = train_data.shape
         for i in range(row):
-            matrix[train_data[i, 0], train_data[i, 1]] = 1
+            user_id = int(train_data[i, 0])
+            doc_id = int(train_data[i, 1])
+            matrix[user_id, doc_id] = train_data[i, 2]
 
     return matrix
-
-
-def generate_matrice_between_time2(rating, m, n, start_time, end_time,
-                                   train_data_path):
-    R = np.zeros((m, n))
-    (row, col) = rating.shape
-
-    if start_time <= end_time:
-        for i in range(row):
-            if rating[i, 2] < start_time:
-                continue
-            if rating[i, 2] > end_time:
-                break
-            R[rating[i, 0] - 1, rating[i, 1] - 1] = 1
-    if train_data_path != '':
-        train_data = np.loadtxt(train_data_path, dtype=int)
-        (row, col) = train_data.shape
-        for i in range(row):
-            R[train_data[i, 0], train_data[i, 1]] = 1
-
-    return R
 
 
 def generate_rating_list_between_time3(rating, start_time, end_time,

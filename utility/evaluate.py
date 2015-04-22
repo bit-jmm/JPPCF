@@ -16,7 +16,7 @@ def performance_rmse(predict_matrix, data_path):
     return util.rmse(predict_matrix, true_matrix)
 
 
-def performance_ap(predict, data_path, at_num,
+def performance_map(predict, data_path, at_num,
                    current_user_like_dict):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_dict = {}

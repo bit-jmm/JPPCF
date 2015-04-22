@@ -3,7 +3,7 @@ import numpy as np
 import csv
 import datetime
 import time
-
+from utility import util
 
 class PrepareData:
 
@@ -412,10 +412,9 @@ class PrepareData:
                     split_str = user_rating.split(':')
                     user_id = split_str[0]
                     rating = split_str[1]
-                    if user_id in user_like_list_dict_in_test:
-                        user_like_list_dict_in_test[user_id].append(doc_id)
-                    else:
-                        user_like_list_dict_in_test[user_id] = [doc_id]
+                    doc_rating = doc_id + ':' + rating
+                    util.add_list_value_for_dict(user_like_list_dict_in_test,
+                                                 user_id, doc_rating)
                     test_file.write(str.format('{0} {1} {2} {3}\n',
                                                user_id, doc_id,
                                                rating, current_time_step))
@@ -432,9 +431,10 @@ class PrepareData:
                                                     user_id, doc_id,
                                                     rating, current_time_step))
 
-            for user_id in user_like_list_dict_in_test:
-                temp = user_id + ' ' + ' '.join(
-                    d for d in user_like_list_dict_in_test[user_id]) + '\n'
+            for user_id in user_like_list_dict_in_test.keys():
+                temp = user_id + ' ' +\
+                       str(len(user_like_list_dict_in_test[user_id])) + ' ' +\
+                       ' '.join(user_like_list_dict_in_test[user_id]) + '\n'
                 user_like_list_file.write(temp)
 
             train_file.close()
@@ -474,7 +474,6 @@ if __name__ == '__main__':
     start = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     print 'process start at : ', start
     print '\n'
-
     p = PrepareData(os.path.realpath(__file__ +
                                      '\..\..\data\preprocessed_data') +
                     '\\', 10, 5, 360)
