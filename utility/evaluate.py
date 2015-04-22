@@ -2,7 +2,7 @@ import numpy as np
 from utility import util
 
 
-def performance_rmse(predict_matrix, data_path):
+def get_rmse(predict_matrix, data_path):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
 
     true_matrix = np.zeros(predict_matrix.shape)
@@ -16,8 +16,8 @@ def performance_rmse(predict_matrix, data_path):
     return util.rmse(predict_matrix, true_matrix)
 
 
-def performance_map(predict, data_path, at_num,
-                   current_user_like_dict):
+def get_map(predict, data_path, at_num,
+                    current_user_like_dict):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_dict = {}
     for user in user_like_list_file.readlines():
@@ -71,7 +71,7 @@ def performance_map(predict, data_path, at_num,
     return avg_ap
 
 
-def performance_ndcg(predict, data_path, at_num,
+def get_ndcg(predict, data_path, at_num,
                      current_user_like_dict):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_dict = {}
@@ -126,7 +126,7 @@ def performance_ndcg(predict, data_path, at_num,
     return avg_ndcg
 
 
-def performance_recall(predict, data_path, recall_num,
+def get_recall(predict, data_path, recall_num,
                        current_user_like_dict):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_dict = {}

@@ -17,6 +17,7 @@ class Ttarm:
     epsilon = 1
     maxiter = 100
     fold_num = 5
+    model_name = 'TTARM'
 
     def __init__(self, k=20, lambd=10, eta=0.3):
         self.k = k
@@ -135,29 +136,30 @@ class Ttarm:
         logging.info(str.format('\t{0} at {1}:', metric, recall_num))
         metric_value = None
         if metric == 'rmse':
-            exec(str.format('metric_value = evaluate.performance_{0}(predict_matrix,\
+            exec(str.format('metric_value = evaluate.get_{0}(predict_matrix,\
             current_data_path)', metric))
         else:
-            exec(str.format('metric_value = evaluate.performance_{0}(predict_matrix,\
+            exec(str.format('metric_value = evaluate.get_{0}(predict_matrix,\
             current_data_path, recall_num, current_user_like_dict)', metric))
         util.add_list_value_for_dict(metric_dict, recall_num, metric_value)
-        logging.info('\tTTARM :  ' + str(metric_value) + '\n')
+        logging.info('\t' + self.model_name + ' :  ' + str(metric_value) + '\n')
 
     def write_avg_metric_value(self, metric, metric_dict, recall_num,
                                metric_result_dir):
         logging.info(str.format('\tAverage {0} at {1}:', metric, recall_num))
 
         avg_metric_value = util.avg_of_list(metric_dict[recall_num])
-        logging.info('\t\tavg TTARM :  ' + str(avg_metric_value) + '\n\n\n')
+        logging.info('\t\tavg ' + self.model_name + ' :  ' +
+                     str(avg_metric_value) + '\n\n\n')
 
         exist = False
-        if os.path.isfile(metric_result_dir + '/recall_at_' + str(
+        if os.path.isfile(metric_result_dir + '/' + metric + '_at_' + str(
                 recall_num) + '.txt'):
             exist = True
-        result_file = open(metric_result_dir + '/recall_at_' + str(
+        result_file = open(metric_result_dir + '/' + metric + '_at_' + str(
                            recall_num) + '.txt', 'a')
         if not exist:
-            result_file.write('TTARM\n')
+            result_file.write(self.model_name+ '\n')
 
         result_file.write(str(avg_metric_value) + '\n')
         result_file.close()
@@ -265,7 +267,8 @@ class Ttarm:
                                                      current_doc_num,
                                                      current_user_like_dict,
                                                      True)
-                logging.info('computing JPP_with_topic decomposition...')
+                logging.info('computing ' + self.model_name +
+                             ' decomposition...')
 
                 Po2 = util.reshape_matrix(Po2, current_user_num, self.k)
 
