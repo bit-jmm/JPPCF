@@ -9,13 +9,13 @@ from model.JPPCF import *
 
 
 class Ttarm:
-    topic_num = 20
+    topic_num = 50
     time_interval = 360
     filter_threshold = 10
     regl1nmf = 0.05
     regl1jpp = 0.05
     epsilon = 1
-    maxiter = 100
+    maxiter = 50
     fold_num = 5
     model_name = 'TTARM'
 
@@ -39,7 +39,7 @@ class Ttarm:
                             format='%(asctime)s %(filename)s[line:%(lineno)d]\
                                     %(levelname)s %(message)s',
                             datefmt='%a, %d %b %Y %H:%M:%S',
-                            filename='../log/new_ttarm_k_' +
+                            filename='./log/new_ttarm_k_' +
                                      str(k) + '_lambda_' +
                                      str(lambd) + '_alpha_' +
                                      str(self.regl1jpp) + '_eta_' +
@@ -126,46 +126,54 @@ class Ttarm:
         logging.info('start learning topic distribution by jpp ......')
 
         (W, H, M) = JPPTopic(X, H1, self.topic_num, self.lambd,
-                             self.regl1jpp, self.epsilon, self.maxiter, True)
+                             self.regl1jpp, self.epsilon, 100, True)
 
         logging.info('end')
         return W
 
     def evaluate(self, metric, metric_dict, predict_matrix, current_data_path,
-                 recall_num, current_user_like_dict):
+                 recall_num, current_user_like_dict, cold = False):
         logging.info(str.format('\t{0} at {1}:', metric, recall_num))
-        metric_value = None
+        metric_value = -1
         if metric == 'rmse':
             exec(str.format('metric_value = evaluate.get_{0}(predict_matrix,\
-            current_data_path)', metric))
+            current_data_path, cold)', metric))
         else:
             exec(str.format('metric_value = evaluate.get_{0}(predict_matrix,\
-            current_data_path, recall_num, current_user_like_dict)', metric))
-        util.add_list_value_for_dict(metric_dict, recall_num, metric_value)
+            current_data_path, recall_num, current_user_like_dict, cold)',
+                            metric))
+        if metric_value != -1:
+            util.add_list_value_for_dict(metric_dict, recall_num, metric_value)
         logging.info('\t' + self.model_name + ' :  ' + str(metric_value) + '\n')
 
     def write_avg_metric_value(self, metric, metric_dict, recall_num,
-                               metric_result_dir):
+                               metric_result_dir, cold=False):
+        if cold:
+            metric += '_for_cold_start'
+            logging.info('for cold start evaluate...')
         logging.info(str.format('\tAverage {0} at {1}:', metric, recall_num))
-
+        if recall_num not in metric_dict:
+            logging.info('no test data!!!!!')
+            return
         avg_metric_value = util.avg_of_list(metric_dict[recall_num])
         logging.info('\t\tavg ' + self.model_name + ' :  ' +
                      str(avg_metric_value) + '\n\n\n')
 
-        exist = False
-        if os.path.isfile(metric_result_dir + '/' + metric + '_at_' + str(
-                recall_num) + '.txt'):
-            exist = True
-        result_file = open(metric_result_dir + '/' + metric + '_at_' + str(
-                           recall_num) + '.txt', 'a')
-        if not exist:
-            result_file.write(self.model_name+ '\n')
+        result_file_path = os.path.join(metric_result_dir,
+                                        str.format('{0}_at_{1}.txt',
+                                                   metric, recall_num))
+        if os.path.isfile(result_file_path):
+            result_file = open(result_file_path, 'a')
+            result_file.write(str(avg_metric_value) + '\n')
+        else:
+            result_file = open(result_file_path, 'a')
+            result_file.write(self.model_name + '\n')
+            result_file.write(str(avg_metric_value) + '\n')
 
-        result_file.write(str(avg_metric_value) + '\n')
         result_file.close()
 
     def run(self):
-        print 'k: %d\tlambda:%d \teta: %.1f\n' % (self.k, self.lambd, self.eta)
+        print 'k: %d\tlambda:%d \teta: %.2f\n' % (self.k, self.lambd, self.eta)
         (user_time_dict, doc_time_dict,
          user_id_map, doc_id_map, R) = self.prepare_data()
         time_step_num = int(R[-1, 3])
@@ -183,12 +191,13 @@ class Ttarm:
                                           str(self.filter_threshold)))
         fileutil.mkdir(time_filter_dir)
 
-        result_dir = os.path.join(time_filter_dir,
-                                  '/eta_' + str(self.eta) +
-                                  '_fold_' + str(self.fold_num) +
-                                  '_k_' + str(self.k) + '_lambda_' +
-                                  str(self.lambd) + '_alpha_' +
-                                  str(self.regl1jpp))
+        result_dir = \
+            os.path.join(
+                time_filter_dir,
+                str.format('eta_{0}_fold_{1}_k_{2}_lambda_{3}_alpha_{4}',
+                           self.eta, self.fold_num,
+                           self.k, self.lambd, self.regl1jpp))
+        fileutil.mkdir(result_dir)
 
         recall_result_dir = os.path.join(result_dir, 'recall')
         ndcg_result_dir = os.path.join(result_dir, 'ndcg')
@@ -231,6 +240,10 @@ class Ttarm:
             ndcg_dict = {}
             map_dict = {}
             rmse_dict = {}
+            recall_cold_dict = {}
+            ndcg_cold_dict = {}
+            map_cold_dict = {}
+            rmse_cold_dict = {}
 
             current_user_num = user_time_dict[current_time_step]
             current_doc_num = doc_time_dict[current_time_step]
@@ -248,15 +261,17 @@ class Ttarm:
                 current_user_like_dict[splits[0]] = like_list
 
             for fold_id in range(self.fold_num):
-                current_data_path = self.filter_data_path + 'time_step_' + \
-                                    str(current_time_step) + '/data_' + \
-                                    str(fold_id)
-                train_data_path = current_data_path + '/train.dat.txt'
+                current_data_path = \
+                    os.path.join(self.filter_data_path,
+                                 str.format('time_step_{0}/data_{1}',
+                                            current_time_step, fold_id))
+
+                train_data_path = os.path.join(current_data_path,
+                                               'train.dat.txt')
 
                 Rt = util.generate_matrice_for_file(train_data_path,
                                                     current_user_num,
-                                                    current_doc_num
-                                                    )
+                                                    current_doc_num)
                 logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
 
                 # calculate user item topic similarity matrix
@@ -293,22 +308,41 @@ class Ttarm:
 
                 logging.info('\t fold_id:' + str(fold_id) + '\n')
                 for recall_num in [3, 10, 50, 100, 300, 500, 1000]:
-                    # recall evaluate
+                    # recall performance
                     self.evaluate('recall', recall_dict, NormPR2,
                                   current_data_path, recall_num,
                                   current_user_like_dict)
+                    # recall for cold start performance
+                    self.evaluate('recall', recall_cold_dict, NormPR2,
+                                  current_data_path, recall_num,
+                                  current_user_like_dict, cold=True)
+
                     # ndcg performance
                     self.evaluate('ndcg', ndcg_dict, NormPR2,
                                   current_data_path, recall_num,
                                   current_user_like_dict)
+                    # ndcg for cold start performance
+                    self.evaluate('ndcg', ndcg_cold_dict, NormPR2,
+                                  current_data_path, recall_num,
+                                  current_user_like_dict, cold=True)
+
                     # map performance
                     self.evaluate('map', map_dict, NormPR2,
                                   current_data_path, recall_num,
                                   current_user_like_dict)
+                    # map for cold start performance
+                    self.evaluate('map', map_cold_dict, NormPR2,
+                                  current_data_path, recall_num,
+                                  current_user_like_dict, cold=True)
+
                     # rmse performance
                     self.evaluate('rmse', rmse_dict, NormPR2,
                                   current_data_path, recall_num,
                                   current_user_like_dict)
+                    # rmse for cold start performance
+                    self.evaluate('rmse', rmse_cold_dict, NormPR2,
+                                  current_data_path, recall_num,
+                                  current_user_like_dict, cold=True)
 
             logging.info('current_time_step: ' + str(current_time_step) + '\n')
 
@@ -316,14 +350,25 @@ class Ttarm:
                 # recall
                 self.write_avg_metric_value('recall', recall_dict, recall_num,
                                             recall_result_dir)
+                self.write_avg_metric_value('recall', recall_cold_dict,
+                                            recall_num, recall_result_dir,
+                                            cold=True)
                 # ndcg
                 self.write_avg_metric_value('ndcg', ndcg_dict, recall_num,
                                             ndcg_result_dir)
+                self.write_avg_metric_value('ndcg', ndcg_cold_dict, recall_num,
+                                            ndcg_result_dir, cold=True)
+
                 # map
                 self.write_avg_metric_value('map', map_dict, recall_num,
                                             map_result_dir)
+                self.write_avg_metric_value('map', map_cold_dict, recall_num,
+                                            map_result_dir, cold=True)
+
                 # rmse
                 self.write_avg_metric_value('rmse', rmse_dict, recall_num,
                                             rmse_result_dir)
+                self.write_avg_metric_value('rmse', rmse_cold_dict, recall_num,
+                                            rmse_result_dir, cold=True)
 
         logging.info('\n all process done! exit now...')

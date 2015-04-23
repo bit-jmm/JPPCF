@@ -4,6 +4,7 @@ import csv
 import datetime
 import time
 from utility import util
+from utility import fileutil
 
 class PrepareData:
 
@@ -367,32 +368,11 @@ class PrepareData:
         doc_id_map_after_filter.close()
         map_file.close()
 
-    def cross_validate_on_dict(self, doc_liked_list, time_result_path,
-                               current_time_step):
+    def cross_validate_on_ratings(self, ratings, time_result_path,
+                                  current_time_step):
         fold_num = self.__fold_num
-        # the last dict store the like list for docs
-        # whose like list len lower than fold_num
-        folds_dict_list = [{} for i in xrange(fold_num+1)]
+        fold_dict = util.random_split_list(ratings, fold_num)
 
-        for doc_id in doc_liked_list.keys():
-            user_ratings = doc_liked_list[doc_id]
-            list_len = len(user_ratings)
-            if list_len < fold_num:
-                folds_dict_list[fold_num][doc_id] = user_ratings
-            else:
-                step_len = list_len / fold_num
-                remainder = list_len % fold_num
-                for i in xrange(fold_num):
-                    for j in xrange(i * step_len, (i + 1) * step_len):
-                        if doc_id in folds_dict_list[i]:
-                            folds_dict_list[i][doc_id].append(user_ratings[j])
-                        else:
-                            folds_dict_list[i][doc_id] = [user_ratings[j]]
-                    for j in xrange(list_len - remainder, list_len):
-                        if doc_id in folds_dict_list[i]:
-                            folds_dict_list[i][doc_id].append(user_ratings[j])
-                        else:
-                            folds_dict_list[i][doc_id] = [user_ratings[j]]
         # end evenly split user-doc pair to folds
         # start generate train_data and test_data
         for i in xrange(fold_num):
@@ -401,45 +381,67 @@ class PrepareData:
                 os.mkdir(data_path)
             train_file = open(data_path + '/train.dat.txt', 'w+')
             test_file = open(data_path + '/test.dat.txt', 'w+')
+            cold_test_file = open(data_path + '/cold_test.dat.txt', 'w+')
+
             user_like_list_file = open(
                 data_path + '/user_like_list_in_test.dat.txt', 'w+')
+            user_like_list_cold_file = open(
+                data_path + '/user_like_list_in_cold_test.dat.txt', 'w+')
 
-            user_like_list_dict_in_test = {}
-
-            doc_dict = folds_dict_list[i]
-            for doc_id in doc_dict.keys():
-                for user_rating in doc_dict[doc_id]:
-                    split_str = user_rating.split(':')
-                    user_id = split_str[0]
-                    rating = split_str[1]
-                    doc_rating = doc_id + ':' + rating
-                    util.add_list_value_for_dict(user_like_list_dict_in_test,
-                                                 user_id, doc_rating)
-                    test_file.write(str.format('{0} {1} {2} {3}\n',
-                                               user_id, doc_id,
-                                               rating, current_time_step))
-            for fold_id in xrange(fold_num + 1):
+            # generate train file
+            doc_ids_in_train = []
+            for fold_id in xrange(fold_num):
                 if fold_id == i:
                     continue
-                doc_dict = folds_dict_list[fold_id]
-                for doc_id in doc_dict.keys():
-                    for user_rating in doc_dict[doc_id]:
-                        split_str = user_rating.split(':')
-                        user_id = split_str[0]
-                        rating = split_str[1]
-                        train_file.write(str.format('{0} {1} {2} {3}\n',
-                                                    user_id, doc_id,
-                                                    rating, current_time_step))
+                ratings_in_fold = fold_dict[fold_id]
+                for (user_id, doc_id, rating) in ratings_in_fold:
+                    doc_ids_in_train.append(doc_id)
+                    train_file.write(str.format('{0} {1} {2} {3}\n',
+                                                user_id, doc_id,
+                                                rating, current_time_step))
+            # generate whole test file and
+            # test file for evaluate cold start problem
+            doc_dist_path = \
+                os.path.join(fileutil.parent_dir_of(time_result_path),
+                             'doc_time_distribute.dat.txt')
+            max_doc_id = fileutil.num_in_file(doc_dist_path,
+                                              current_time_step-1, 2)
+            user_like_list_dict_in_test = {}
+            user_like_list_dict_in_cold_test = {}
+
+            ratings_in_fold = fold_dict[i]
+            for (user_id, doc_id, rating) in ratings_in_fold:
+                doc_rating = doc_id + ':' + rating
+                util.add_list_value_for_dict(user_like_list_dict_in_test,
+                                             user_id, doc_rating)
+                if int(doc_id) >= max_doc_id and\
+                   doc_id not in doc_ids_in_train:
+                    cold_test_file.write(str.format('{0} {1} {2} {3}\n',
+                                                    user_id, doc_id, rating,
+                                                    current_time_step))
+                    util.add_list_value_for_dict(
+                        user_like_list_dict_in_cold_test,
+                        user_id, doc_rating)
+                test_file.write(str.format('{0} {1} {2} {3}\n',
+                                           user_id, doc_id, rating,
+                                           current_time_step))
 
             for user_id in user_like_list_dict_in_test.keys():
                 temp = user_id + ' ' +\
                        str(len(user_like_list_dict_in_test[user_id])) + ' ' +\
                        ' '.join(user_like_list_dict_in_test[user_id]) + '\n'
                 user_like_list_file.write(temp)
+            for user_id in user_like_list_dict_in_cold_test.keys():
+                temp = user_id + ' ' +\
+                       str(len(user_like_list_dict_in_cold_test[user_id])) + ' ' +\
+                       ' '.join(user_like_list_dict_in_cold_test[user_id]) + '\n'
+                user_like_list_cold_file.write(temp)
 
             train_file.close()
             test_file.close()
+            cold_test_file.close()
             user_like_list_file.close()
+            user_like_list_cold_file.close()
 
     def generate_cross_validate_data(self):
         data_path = self.__data_path + 'data_divided_by_' + str(
@@ -459,15 +461,16 @@ class PrepareData:
             doc_liked_file = open(
                 result_path + '/doc_liked_list_at_time_step' + str(
                     current_time_step) + '.dat.txt', 'r')
-            doc_liked_dict = {}
+            ratings = []
             for line in doc_liked_file.readlines():
-                splits = line.split()
+                splits = line.strip().split()
                 doc_id = splits[0]
-                user_ratings = [splits[uid] for uid in xrange(2, len(splits))]
-                doc_liked_dict[doc_id] = user_ratings
-
-            self.cross_validate_on_dict(doc_liked_dict, time_path,
-                                        current_time_step)
+                for uid in xrange(2, len(splits)):
+                    user_rating = splits[uid].split(':')
+                    user_id = user_rating[0]
+                    rating = user_rating[1]
+                    ratings.append((user_id, doc_id, rating))
+            self.cross_validate_on_ratings(ratings, time_path, current_time_step)
 
 
 if __name__ == '__main__':

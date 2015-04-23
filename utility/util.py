@@ -2,6 +2,7 @@ import math
 import numpy as np
 from nmf.nmf import NMF
 import copy
+import random
 
 
 def add_list_value_for_dict(d, key, value):
@@ -263,3 +264,25 @@ def norm_by_threshold(matrix, threshold):
             else:
                 matrix[i][j] = 0
     return matrix
+
+
+# return random item in a item list and remove it
+def random_item_from(item_list):
+    n = len(item_list)
+    i = random.randint(0, n-1)
+    value = item_list[i]
+    del item_list[i]
+    return value
+
+
+# split list into n folds
+def random_split_list(item_list, fold_num):
+    folds = {}
+    n = len(item_list)
+    num_of_fold = n / int(fold_num)
+    for i in xrange(fold_num-1):
+        for j in xrange(num_of_fold):
+            item = random_item_from(item_list)
+            add_list_value_for_dict(folds, i, item)
+    folds[fold_num-1] = item_list
+    return folds

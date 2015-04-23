@@ -2,10 +2,18 @@ import numpy as np
 from utility import util
 
 
-def get_user_dict(data_path):
-    user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
+def get_user_dict(data_path, cold):
+    if cold:
+        user_like_list_file = open(data_path + '/user_like_list_in_cold_test.dat.txt')
+    else:
+        user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
+
+    lines = user_like_list_file.readlines()
+    if len(lines) == 0:
+        return -1
+
     user_dict = {}
-    for line in user_like_list_file.readlines():
+    for line in lines:
         splits = line.strip().split()
         like_list = []
         for i in range(2, len(splits)):
@@ -27,11 +35,18 @@ def get_rating_from_list(doc_id, doc_list, doc_rating_list):
     return float(doc_rating_list[i][1])
 
 
-def get_rmse(predict_matrix, data_path):
-    user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
+def get_rmse(predict_matrix, data_path, cold):
+    if cold:
+        user_like_list_file = open(data_path + '/user_like_list_in_cold_test.dat.txt')
+    else:
+        user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
+
+    lines = user_like_list_file.readlines()
+    if len(lines) == 0:
+        return -1
     true_matrix = np.zeros(predict_matrix.shape, dtype=float)
 
-    for user in user_like_list_file.readlines():
+    for user in lines:
         splits = user.strip().split()
         user_id = int(splits[0])
         for i in range(2, len(splits)):
@@ -43,9 +58,10 @@ def get_rmse(predict_matrix, data_path):
     return util.rmse(predict_matrix, true_matrix)
 
 
-def get_map(predict, data_path, at_num,
-            current_user_like_dict):
-    user_dict = get_user_dict(data_path)
+def get_map(predict, data_path, at_num, current_user_like_dict, cold):
+    user_dict = get_user_dict(data_path, cold)
+    if user_dict == -1:
+        return -1
     (m, n) = predict.shape
     total_ap = 0.0
     effective_user_num = 0
@@ -89,9 +105,10 @@ def get_map(predict, data_path, at_num,
     return avg_ap
 
 
-def get_ndcg(predict, data_path, at_num,
-             current_user_like_dict):
-    user_dict = get_user_dict(data_path)
+def get_ndcg(predict, data_path, at_num, current_user_like_dict, cold):
+    user_dict = get_user_dict(data_path, cold)
+    if user_dict == -1:
+        return -1
     (m, n) = predict.shape
     total_ndcg = 0.0
     effective_user_num = 0
@@ -137,8 +154,10 @@ def get_ndcg(predict, data_path, at_num,
     return avg_ndcg
 
 
-def get_recall(predict, data_path, recall_num, current_user_like_dict):
-    user_dict = get_user_dict(data_path)
+def get_recall(predict, data_path, recall_num, current_user_like_dict, cold):
+    user_dict = get_user_dict(data_path, cold)
+    if user_dict == -1:
+        return -1
     (m, n) = predict.shape
     total_recall = 0.0
     effective_user_num = 0
