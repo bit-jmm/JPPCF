@@ -2,63 +2,81 @@ import numpy as np
 from utility import util
 
 
+def get_user_dict(data_path):
+    user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
+    user_dict = {}
+    for line in user_like_list_file.readlines():
+        splits = line.strip().split()
+        like_list = []
+        for i in range(2, len(splits)):
+            doc_rating = splits[i].split(':')
+            doc_id = doc_rating[0]
+            rating = doc_rating[1]
+            like_list.append((doc_id, rating))
+        user_dict[splits[0]] = like_list
+    user_like_list_file.close()
+    return user_dict
+
+
+def get_doc_list(doc_rating_list):
+    return [doc for (doc, rating) in doc_rating_list]
+
+
+def get_rating_from_list(doc_id, doc_list, doc_rating_list):
+    i = doc_list.index(doc_id)
+    return float(doc_rating_list[i][1])
+
+
 def get_rmse(predict_matrix, data_path):
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
-
-    true_matrix = np.zeros(predict_matrix.shape)
+    true_matrix = np.zeros(predict_matrix.shape, dtype=float)
 
     for user in user_like_list_file.readlines():
-        splits = user.split()
+        splits = user.strip().split()
         user_id = int(splits[0])
-        for i in range(1, len(splits)):
-            true_matrix[user_id][int(splits[i])] = 1
+        for i in range(2, len(splits)):
+            doc_rating = splits[i].split(':')
+            doc_id = int(doc_rating[0])
+            rating = float(doc_rating[1])
+            true_matrix[user_id][doc_id] = rating
 
     return util.rmse(predict_matrix, true_matrix)
 
 
 def get_map(predict, data_path, at_num,
-                    current_user_like_dict):
-    user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
-    user_dict = {}
-    for user in user_like_list_file.readlines():
-        splits = user.split()
-        like_list = []
-        for i in range(1, len(splits)):
-            like_list.append(int(splits[i]))
-        user_dict[int(splits[0])] = like_list
-
+            current_user_like_dict):
+    user_dict = get_user_dict(data_path)
     (m, n) = predict.shape
-
     total_ap = 0.0
     effective_user_num = 0
     for user_id in user_dict.keys():
-        true_like_list = user_dict[user_id]
-        if len(true_like_list) == 0:
+        t_doc_rating_list = user_dict[user_id]
+        t_doc_list = get_doc_list(t_doc_rating_list)
+        if len(t_doc_list) == 0:
             continue
-        current_like_list = current_user_like_dict[user_id]
-        p_like_list = list(predict[user_id, :])
+        c_doc_rating_list = current_user_like_dict[user_id]
+        c_doc_list = get_doc_list(c_doc_rating_list)
+
+        p_like_list = list(predict[int(user_id), :])
         p_like_dict = dict(zip(range(n), p_like_list))
         sort_p_like_list = sorted(p_like_dict.items(),
-            lambda x, y: cmp(y[1], x[1]))
-
-        sort_p_like_doc_ids = []
+                                  lambda x, y: cmp(y[1], x[1]))
         effective_doc_num = 0
+        rank_list = []
         for i in range(n):
             if effective_doc_num == at_num:
                 break
-            p_doc_id = sort_p_like_list[i][0]
-            if (p_doc_id in current_like_list) and (
-                        p_doc_id not in true_like_list):
+            p_doc_id = str(sort_p_like_list[i][0])
+            if (p_doc_id in c_doc_list) and (p_doc_id not in t_doc_list):
                 continue
-            sort_p_like_doc_ids.append(p_doc_id)
+            if p_doc_id in t_doc_list:
+                rating = get_rating_from_list(p_doc_id, t_doc_list,
+                                              t_doc_rating_list)
+                rank_list.append(rating)
+            else:
+                rank_list.append(0.0)
             effective_doc_num += 1
 
-        rank_list = []
-        for doc_id in sort_p_like_doc_ids:
-            if doc_id in true_like_list:
-                rank_list.append(1)
-            else:
-                rank_list.append(0)
         user_ap = util.ap(rank_list)
         total_ap += user_ap
         effective_user_num += 1
@@ -72,48 +90,41 @@ def get_map(predict, data_path, at_num,
 
 
 def get_ndcg(predict, data_path, at_num,
-                     current_user_like_dict):
-    user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
-    user_dict = {}
-    for user in user_like_list_file.readlines():
-        splits = user.split()
-        like_list = []
-        for i in range(1, len(splits)):
-            like_list.append(int(splits[i]))
-        user_dict[int(splits[0])] = like_list
-
+             current_user_like_dict):
+    user_dict = get_user_dict(data_path)
     (m, n) = predict.shape
-
     total_ndcg = 0.0
     effective_user_num = 0
     for user_id in user_dict.keys():
-        true_like_list = user_dict[user_id]
-        if len(true_like_list) == 0:
+
+        t_doc_rating_list = user_dict[user_id]
+        t_doc_list = get_doc_list(t_doc_rating_list)
+        if len(t_doc_rating_list) == 0:
             continue
-        current_like_list = current_user_like_dict[user_id]
-        p_like_list = list(predict[user_id, :])
+
+        c_doc_rating_list = current_user_like_dict[user_id]
+        c_doc_list = get_doc_list(c_doc_rating_list)
+
+        p_like_list = list(predict[int(user_id), :])
         p_like_dict = dict(zip(range(n), p_like_list))
         sort_p_like_list = sorted(p_like_dict.items(),
-            lambda x, y: cmp(y[1], x[1]))
+                                  lambda x, y: cmp(y[1], x[1]))
 
-        sort_p_like_doc_ids = []
         effective_doc_num = 0
+        rank_list = []
         for i in range(n):
             if effective_doc_num == at_num:
                 break
-            p_doc_id = sort_p_like_list[i][0]
-            if (p_doc_id in current_like_list) and (
-                        p_doc_id not in true_like_list):
+            p_doc_id = str(sort_p_like_list[i][0])
+            if (p_doc_id in c_doc_list) and (p_doc_id not in t_doc_list):
                 continue
-            sort_p_like_doc_ids.append(p_doc_id)
-            effective_doc_num += 1
-
-        rank_list = []
-        for doc_id in sort_p_like_doc_ids:
-            if doc_id in true_like_list:
-                rank_list.append(1)
+            if p_doc_id in t_doc_list:
+                rating = get_rating_from_list(p_doc_id, t_doc_list,
+                                              t_doc_rating_list)
+                rank_list.append(rating)
             else:
-                rank_list.append(0)
+                rank_list.append(0.0)
+            effective_doc_num += 1
         user_ndcg = util.get_ndcg(rank_list, len(rank_list))
         total_ndcg += user_ndcg
         effective_user_num += 1
@@ -126,45 +137,31 @@ def get_ndcg(predict, data_path, at_num,
     return avg_ndcg
 
 
-def get_recall(predict, data_path, recall_num,
-                       current_user_like_dict):
-    user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
-    user_dict = {}
-    for user in user_like_list_file.readlines():
-        splits = user.split()
-        like_list = []
-        for i in range(1, len(splits)):
-            like_list.append(int(splits[i]))
-        user_dict[int(splits[0])] = like_list
-
+def get_recall(predict, data_path, recall_num, current_user_like_dict):
+    user_dict = get_user_dict(data_path)
     (m, n) = predict.shape
-
     total_recall = 0.0
     effective_user_num = 0
     for user_id in user_dict.keys():
-        true_like_list = user_dict[user_id]
-        current_like_list = current_user_like_dict[user_id]
-        p_like_list = list(predict[user_id, :])
+        true_like_list = get_doc_list(user_dict[user_id])
+        current_like_list = get_doc_list(current_user_like_dict[user_id])
+        p_like_list = list(predict[int(user_id), :])
         p_like_dict = dict(zip(range(n), p_like_list))
         sort_p_like_list = sorted(p_like_dict.items(),
                                   lambda x, y: cmp(y[1], x[1]))
 
-        sort_p_like_doc_ids = []
         effective_doc_num = 0
+        p_true_num = 0
         for i in range(n):
             if effective_doc_num == recall_num:
                 break
-            p_doc_id = sort_p_like_list[i][0]
-            if (p_doc_id in current_like_list) and (
-                        p_doc_id not in true_like_list):
+            p_doc_id = str(sort_p_like_list[i][0])
+            if (p_doc_id in current_like_list) and \
+                    (p_doc_id not in true_like_list):
                 continue
-            sort_p_like_doc_ids.append(p_doc_id)
-            effective_doc_num += 1
-
-        p_true_num = 0
-        for doc_id in true_like_list:
-            if doc_id in sort_p_like_doc_ids:
+            if p_doc_id in true_like_list:
                 p_true_num += 1
+            effective_doc_num += 1
 
         user_recall = 0
         if len(true_like_list) > 0:
