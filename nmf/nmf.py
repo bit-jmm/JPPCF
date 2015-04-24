@@ -93,7 +93,7 @@ class NMF(object):
             HT = H.T
             HHT = np.dot(H, HT)
             W = W * ((np.dot(A, HT)) / np.maximum(np.dot(W, HHT) + lambd, eps))
-            
+
             WT = W.T
             WTW = np.dot(WT, W)
             WTA = np.dot(WT, A)

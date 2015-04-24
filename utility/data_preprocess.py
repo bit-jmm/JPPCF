@@ -471,26 +471,3 @@ class PrepareData:
                     rating = user_rating[1]
                     ratings.append((user_id, doc_id, rating))
             self.cross_validate_on_ratings(ratings, time_path, current_time_step)
-
-
-if __name__ == '__main__':
-    start = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-    print 'process start at : ', start
-    print '\n'
-    p = PrepareData(os.path.realpath(__file__ +
-                                     '\..\..\data\preprocessed_data') +
-                    '\\', 10, 5, 360)
-
-    p.generate_rating_file_by_time_interval()
-    p.get_user_like_and_doc_liked_list()
-    p.filter_unactive_users_docs()
-    p.generate_users_and_docs_dist()
-    p.get_doc_id_citeulike_id_map()
-    p.generate_cross_validate_data()
-
-    end = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-    print 'process end at : ', end
-
-    print 'process take time : ', str(
-        datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S') -
-        datetime.datetime.strptime(start, '%Y-%m-%d %H:%M:%S'))
