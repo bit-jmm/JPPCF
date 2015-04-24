@@ -14,7 +14,7 @@ class Ttarm:
     regl1nmf = 0.05
     regl1jpp = 0.05
     epsilon = 1
-    maxiter = 50
+    maxiter = 30
     fold_num = 5
     model_name = 'TTARM'
 
@@ -126,7 +126,7 @@ class Ttarm:
         logging.info('start learning topic distribution by jpp ......')
 
         (W, H, M) = JPPTopic(X, H1, self.topic_num, self.lambd,
-                             self.regl1jpp, self.epsilon, 100, True)
+                             self.regl1jpp, self.epsilon, 50, True)
 
         logging.info('end')
         return W
