@@ -22,13 +22,13 @@ def prepare_data(time_step):
     print 'process end at : ', end
 
     print 'process take time : ', str(
-        datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S') -
-        datetime.datetime.strptime(start, '%Y-%m-%d %H:%M:%S'))
+        time.datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S') -
+        time.datetime.datetime.strptime(start, '%Y-%m-%d %H:%M:%S'))
 
 if __name__ == '__main__':
 
     time_step = 360
-    #prepare_data(time_step)
+    # prepare_data(time_step)
 
     ttarm = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step)
     log_path = os.path.realpath(os.path.join(__file__, '../log'))
