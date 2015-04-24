@@ -10,7 +10,6 @@ from model.JPPCF import *
 
 class Ttarm:
     topic_num = 50
-    time_interval = 360
     filter_threshold = 10
     regl1nmf = 0.05
     regl1jpp = 0.05
@@ -19,10 +18,11 @@ class Ttarm:
     fold_num = 5
     model_name = 'TTARM'
 
-    def __init__(self, k=20, lambd=10, eta=0.3):
+    def __init__(self, k=20, lambd=10, eta=0.3, time_interval=360):
         self.k = k
         self.lambd = lambd
         self.eta = eta
+        self.time_interval = time_interval
         self.origin_data_path = \
             os.path.normpath(os.path.join(__file__,
                                           '../../data/preprocessed_data'))
@@ -133,7 +133,10 @@ class Ttarm:
 
     def evaluate(self, metric, metric_dict, predict_matrix, current_data_path,
                  recall_num, current_user_like_dict, cold = False):
-        logging.info(str.format('\t{0} at {1}:', metric, recall_num))
+        if cold:
+            logging.info(str.format('\t{0}_for_cold at {1}:', metric, recall_num))
+        else:
+            logging.info(str.format('\t{0} at {1}:', metric, recall_num))
         metric_value = -1
         if metric == 'rmse':
             exec(str.format('metric_value = evaluate.get_{0}(predict_matrix,\
@@ -335,14 +338,14 @@ class Ttarm:
                                   current_data_path, recall_num,
                                   current_user_like_dict, cold=True)
 
-                    # rmse performance
-                    self.evaluate('rmse', rmse_dict, NormPR2,
-                                  current_data_path, recall_num,
-                                  current_user_like_dict)
-                    # rmse for cold start performance
-                    self.evaluate('rmse', rmse_cold_dict, NormPR2,
-                                  current_data_path, recall_num,
-                                  current_user_like_dict, cold=True)
+
+                # rmse performance
+                self.evaluate('rmse', rmse_dict, NormPR2, current_data_path,
+                              3, current_user_like_dict)
+                # rmse for cold start performance
+                self.evaluate('rmse', rmse_cold_dict, NormPR2,
+                              current_data_path, 3,
+                              current_user_like_dict, cold=True)
 
             logging.info('current_time_step: ' + str(current_time_step) + '\n')
 
@@ -365,10 +368,9 @@ class Ttarm:
                 self.write_avg_metric_value('map', map_cold_dict, recall_num,
                                             map_result_dir, cold=True)
 
-                # rmse
-                self.write_avg_metric_value('rmse', rmse_dict, recall_num,
-                                            rmse_result_dir)
-                self.write_avg_metric_value('rmse', rmse_cold_dict, recall_num,
-                                            rmse_result_dir, cold=True)
+            # rmse
+            self.write_avg_metric_value('rmse', rmse_dict, 3, rmse_result_dir)
+            self.write_avg_metric_value('rmse', rmse_cold_dict, 3,
+                                        rmse_result_dir, cold=True)
 
         logging.info('\n all process done! exit now...')
