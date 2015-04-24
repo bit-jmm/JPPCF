@@ -164,7 +164,7 @@ for current_time_step in range(start+1, finT+1):
                             str(current_time_step) + '/data_' + \
                             str(fold_id)
         train_data_path = current_data_path + '/train.dat.txt'
-        
+
         Rt = util.generate_matrice_for_file2(train_data_path,
                                              current_user_num,
                                              current_doc_num,
@@ -180,9 +180,9 @@ for current_time_step in range(start+1, finT+1):
         P, Q, S = JPPCF(Rt, Po, k, lambd, regl1jpp,  epsilon, maxiter, True)
         PredictR = np.dot(P, Q)
         NormPR = PredictR / PredictR.max()
-        
+
         logging.info('[ok]\n')
-        
+
         logging.info('\t fold_id:' + str(fold_id) + '\n')
         for recall_num in [3,5,10,20,50,100,150,200,250,300]:
             logging.info('\trecall at ' + str(recall_num) + ':')
@@ -194,7 +194,7 @@ for current_time_step in range(start+1, finT+1):
                     jrecall_dict[recall_num].append(jppcf_recall)
             else:
                     jrecall_dict[recall_num] = [jppcf_recall]
-                    
+
             logging.info('\t\tJPPCF :  ' + str(jppcf_recall) + '\n')
 
             # ndcg performance

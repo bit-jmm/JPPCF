@@ -8,9 +8,9 @@ def tr(A, B):
 
 
 def computeTopicLoss(X, W, H, M, R, alpha, lambd, trXX, I):
-    MR = M.dot(R)
-    WH = W.dot(H)
-    WMR = W.dot(MR)
+    MR = np.dot(M, R)
+    WH = np.dot(W, H)
+    WMR = np.dot(W, MR)
     tr1 = trXX - 2*tr(X, WH) + tr(WH, WH)
     tr2 = trXX - 2*tr(X, WMR) + tr(WMR, WMR)
     tr3 = lambd*(tr(M,M) - 2*(M.sum())+ I.sum())
@@ -19,9 +19,9 @@ def computeTopicLoss(X, W, H, M, R, alpha, lambd, trXX, I):
     return obj
 
 def computeLoss(R, P, Q, S, Po, alpha, lambd, trRR, I):
-    SPo = S.dot(Po)
-    PQ = P.dot(Q)
-    SPoQ = SPo.dot(Q)
+    SPo = np.dot(S, Po)
+    PQ = np.dot(P, Q)
+    SPoQ = np.dot(SPo, Q)
     tr1 = trRR - 2*tr(R, PQ) + tr(PQ, PQ)
     tr2 = trRR - 2*tr(R, SPoQ) + tr(SPoQ, SPoQ)
     tr3 = lambd*(tr(S, S) - 2*(S.sum())+ I.sum())
@@ -32,9 +32,9 @@ def computeLoss(R, P, Q, S, Po, alpha, lambd, trRR, I):
 
 def computeLoss_with_topic(R, P, Q, S, Po, C, eta, alpha, lambd, trRR, I):
     reta = 1 - eta
-    SPo = S.dot(Po)
-    PQC = (reta*(P.dot(Q))) + (eta*C)
-    SPoQC = (reta*(SPo.dot(Q))) + (eta*C)
+    SPo = np.dot(S, Po)
+    PQC = (reta*(np.dot(P, Q))) + (eta*C)
+    SPoQC = (reta*(np.dot(SPo, Q))) + (eta*C)
     tr1 = trRR - 2*tr(R, PQC) + tr(PQC, PQC)
     tr2 = trRR - 2*tr(R, SPoQC) + tr(SPoQC, SPoQC)
     tr3 = lambd*(tr(S, S) - 2*(S.sum())+ I.sum())
@@ -65,21 +65,21 @@ def JPPTopic(X, R, k, lambd, alpha, epsilon, maxiter, verbose):
 
         if delta < epsilon and i > 10:
             break
-        J = M.dot(R)
+        J = np.dot(M, R)
         JT = J.T
         HT = H.T
         RT = R.T
 
-        W = W * ((X.dot(HT+JT)) / (np.maximum(W.dot(J.dot(JT) + \
-                H.dot(HT) + alpha), eps)) )
+        W = W * ((np.dot(X, HT+JT)) / (np.maximum(np.dot(W, np.dot(J, JT) + \
+                np.dot(H, HT) + alpha), eps)) )
 
         WT = W.T
-        WTW = WT.dot(W)
-        WTX = WT.dot(X)
+        WTW = np.dot(WT, W)
+        WTX = np.dot(WT, X)
 
-        M = M * ((WTX.dot(RT) + (lambd*kI)) / (np.maximum( (WTW.dot(J).dot(RT)) + \
+        M = M * ((np.dot(WTX, RT) + (lambd*kI)) / (np.maximum( (np.dot(np.dot(WTW, J), RT)) + \
                 (lambd*M) + alpha, eps)))
-        H = H * ( (WTX) / (np.maximum( WTW.dot(H) + alpha, eps)) )
+        H = H * ( (WTX) / (np.maximum( np.dot(WTW, H) + alpha, eps)) )
 
         prev_obj = obj
         obj = computeTopicLoss(X, W, H, M, R, alpha, lambd, trXX, kI)
@@ -118,25 +118,25 @@ def JPPCF(R, Po, k, lambd, alpha, epsilon, maxiter, verbose):
         if delta < epsilon and i > 10:
             break
         QT = Q.T
-        QQT = Q.dot(QT)
+        QQT = np.dot(Q, QT)
 
-        P =  P * ( (R.dot(QT)) / \
-            np.maximum(P.dot(QQT + (alpha*kI)),eps) )
+        P =  P * ( (np.dot(R, QT)) / \
+            np.maximum(np.dot(P, QQT + (alpha*kI)), eps) )
 
         PT = P.T
-        PoTST = Po.T.dot(S.T)
-        PQ = P.dot(Q)
-        SPo = S.dot(Po)
+        PoTST = np.dot(Po.T, S.T)
+        PQ = np.dot(P, Q)
+        SPo = np.dot(S, Po)
 
-        Q = Q * (((PT + PoTST).dot(R)) / \
-            np.maximum((PT.dot(P) + PoTST.dot(\
-            SPo) + (alpha*kI)).dot(Q),eps))
+        Q = Q * ((np.dot((PT + PoTST), R)) / \
+            np.maximum(np.dot((np.dot(PT, P) + np.dot(PoTST, SPo) +\
+                (alpha*kI)), Q), eps))
 
-        QTPoT = Q.T.dot(Po.T)
-        SPoQ = SPo.dot(Q)
+        QTPoT = np.dot(Q.T, Po.T)
+        SPoQ = np.dot(SPo, Q)
 
-        S = S * ( ((R.dot(QTPoT)) + (lambd*nI)) / \
-            np.maximum( (SPoQ.dot(QTPoT)) \
+        S = S * ( ((np.dot(R, QTPoT)) + (lambd*nI)) / \
+            np.maximum( (np.dot(SPoQ, QTPoT)) \
             + ((lambd + alpha)*S),eps) )
 
         prev_obj = obj
@@ -193,8 +193,8 @@ def JPPCF_with_topic(R, Po, C, k, eta, lambd, alpha, epsilon, maxiter, verbose):
         QT = Q.T
         QQT = np.dot(Q, QT)
 
-        P =  P * ( ((np.maximum((reta*R - etareta*C), 0)).dot(QT)) / \
-            np.maximum(P.dot(retareta*QQT + (alpha*kI)),eps) )
+        P =  P * ( (np.dot((np.maximum((reta*R - etareta*C), 0)), QT)) / \
+            np.maximum(np.dot(P, retareta*QQT + (alpha*kI)), eps) )
 
         PT = P.T
         PoTST = np.dot(Po.T, S.T)
@@ -202,15 +202,15 @@ def JPPCF_with_topic(R, Po, C, k, eta, lambd, alpha, epsilon, maxiter, verbose):
         SPo = np.dot(S, Po)
         SPoQ = np.dot(SPo, Q)
 
-        Q = Q * (((reta*(PT + PoTST)).dot(R)) / \
-            np.maximum((reta*(PT.dot((eta*C) + (reta*PQ)) + PoTST.dot( \
-            (eta*C) + (reta*SPoQ)))) + (alpha*Q),eps))
+        Q = Q * ((np.dot((reta*(PT + PoTST)), R)) / \
+            np.maximum((reta*(np.dot(PT, (eta*C) + (reta*PQ)) + np.dot(PoTST, \
+            (eta*C) + (reta*SPoQ)))) + (alpha*Q), eps))
 
         QTPoT = np.dot(Q.T, Po.T)
         SPoQ = np.dot(SPo, Q)
 
-        S = S * ( ((reta*(R.dot(QTPoT))) + (lambd*nI)) / \
-            np.maximum( (reta*(((reta*SPoQ)+(eta*C)).dot(QTPoT))) \
+        S = S * ( ((reta*(np.dot(R, QTPoT))) + (lambd*nI)) / \
+            np.maximum( (reta*(np.dot(((reta*SPoQ)+(eta*C)), QTPoT))) \
             + ((lambd + alpha)*S),eps) )
 
         prev_obj = obj
