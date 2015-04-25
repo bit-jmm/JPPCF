@@ -279,13 +279,14 @@ class Ttarm:
                 logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
 
                 # calculate user item topic similarity matrix
-                Ct_train = \
+                Ct_train, Ct_test = \
                     util.cal_topic_similarity_matrix(W,
                                                      current_data_path,
                                                      current_user_num,
                                                      current_doc_num,
-                                                     current_user_like_dict,
-                                                     True)
+                                                     current_user_like_dict
+                                                     )
+
                 logging.info('computing ' + self.model_name +
                              ' decomposition...')
 
@@ -295,14 +296,6 @@ class Ttarm:
                                               self.eta,
                                               self.lambd, self.regl1jpp,
                                               self.epsilon, self.maxiter, True)
-
-                Ct_test = \
-                    util.cal_topic_similarity_matrix(W,
-                                                     current_data_path,
-                                                     current_user_num,
-                                                     current_doc_num,
-                                                     current_user_like_dict,
-                                                     False)
 
                 PredictR2 = ((1 - self.eta) * np.dot(P2, Q2)) + \
                             (self.eta * Ct_test)
