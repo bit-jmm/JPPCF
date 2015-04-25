@@ -2,6 +2,7 @@ import os
 import time
 from utility.data_preprocess import PrepareData
 from model.ttarm import Ttarm
+from model.trm import Trm
 
 
 def prepare_data(time_step):
@@ -30,8 +31,10 @@ if __name__ == '__main__':
     time_step = 360
     # prepare_data(time_step)
 
-    ttarm = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step)
     log_path = os.path.realpath(os.path.join(__file__, '../log'))
     if not os.path.isdir(log_path):
         os.mkdir(log_path)
-    ttarm.run()
+
+    #model = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step)
+    model = Trm(k=20, lambd=10, time_interval=time_step)
+    model.run()

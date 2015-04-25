@@ -54,10 +54,7 @@ def cal_topic_similarity_matrix(doc_word_matrix, data_path, user_num, doc_num,
         user_like_list_in_test_dict[splits[0]] = like_list
     topic_num = doc_word_matrix.shape[1]
 
-    for user_id in xrange(user_num):
-        user_id = str(user_id)
-        if user_id not in current_user_like_dict:
-            continue
+    for user_id in current_user_like_dict:
         if (not train) and (user_id not in user_like_list_in_test_dict):
             continue
 
