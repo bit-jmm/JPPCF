@@ -39,12 +39,9 @@ def cos_sim(vector_a, vector_b):
 
 
 # calculate topic similarity matrix
-def cal_topic_similarity_matrix(doc_topic_matrix, data_path, user_num, doc_num,
-                                current_user_like_dict):
-    ctrain = np.zeros((user_num, doc_num))
-    ctest = np.zeros((user_num, doc_num))
-
-    doc_topic = doc_topic_matrix[range(doc_num), :]
+def cal_topic_similarity_matrix(doc_word_matrix, data_path, user_num, doc_num,
+                                current_user_like_dict, train=True):
+    ct = np.zeros((user_num, doc_num))
 
     user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt')
     user_like_list_in_test_dict = {}
@@ -55,51 +52,44 @@ def cal_topic_similarity_matrix(doc_topic_matrix, data_path, user_num, doc_num,
             doc_rating = splits[i].split(':')
             like_list.append((doc_rating[0], doc_rating[1]))
         user_like_list_in_test_dict[splits[0]] = like_list
-    topic_num = doc_topic_matrix.shape[1]
+    topic_num = doc_word_matrix.shape[1]
 
-    rating_train = np.zeros((user_num, doc_num))
-    rating_test = np.zeros((user_num, doc_num))
+    for user_id in xrange(user_num):
+        user_id = str(user_id)
+        if user_id not in current_user_like_dict:
+            continue
+        if (not train) and (user_id not in user_like_list_in_test_dict):
+            continue
 
-    for user_id in current_user_like_dict:
-        if user_id in user_like_list_in_test_dict:
-            like_list = user_like_list_in_test_dict[user_id]
-            for doc_rating in like_list:
-                doc_id = int(doc_rating[0])
-                rating = float(doc_rating[1])
-                rating_test[int(user_id), doc_id] = rating
+        current_user_like_list = current_user_like_dict[user_id]
 
-    for user_id in current_user_like_dict:
-        current_like_list = current_user_like_dict[user_id]
-        if user_id not in user_like_list_in_test_dict:
-            like_list = current_like_list
+        if not train:
+            train_user_like_list = user_like_list_in_test_dict[user_id]
+        elif user_id not in user_like_list_in_test_dict:
+            train_user_like_list = current_user_like_list
         else:
-            like_list_in_test = user_like_list_in_test_dict[user_id]
-            like_list = list(set(current_like_list) - set(like_list_in_test))
-        for doc_rating in like_list:
+            user_like_list_in_test = user_like_list_in_test_dict[user_id]
+            train_user_like_list = list(
+                set(current_user_like_list) - set(user_like_list_in_test))
+        like_doc_num = len(train_user_like_list)
+        if like_doc_num == 0:
+            continue
+        user_topic_vector = [0] * topic_num
+        max_rating = 0.0
+        for doc_rating in train_user_like_list:
             doc_id = int(doc_rating[0])
             rating = float(doc_rating[1])
-            rating_train[int(user_id), doc_id] = rating
+            if rating > max_rating:
+                max_rating = rating
+            for i in range(topic_num):
+                user_topic_vector[i] += rating * doc_word_matrix[doc_id, i]
+        user_topic_vector = [i / (like_doc_num * max_rating) for i in user_topic_vector]
 
-    sum_rating_train = rating_train.sum(1)
-    sum_rating_test = rating_test.sum(1)
+        for doc_id in range(doc_num):
+            ct[user_id, doc_id] = cos_sim(user_topic_vector,
+                                          list(doc_word_matrix[doc_id, :]))
 
-    user_topic_train = np.dot(rating_train, doc_topic)
-    user_topic_test = np.dot(rating_test, doc_topic)
-
-    for user_id in xrange(user_num):
-        for topic_id in xrange(topic_num):
-            if sum_rating_train[user_id] > 0:
-                user_topic_train[user_id, topic_id] /= sum_rating_train[user_id]
-            if sum_rating_test[user_id] > 0:
-                user_topic_test[user_id, topic_id] /= sum_rating_test[user_id]
-
-    for user_id in xrange(user_num):
-        for doc_id in xrange(doc_num):
-            ctrain[user_id, doc_id] = cos_sim(list(user_topic_train[user_id, :]),
-                                              list(doc_topic[doc_id, :]))
-            ctest[user_id, doc_id] = cos_sim(list(user_topic_test[user_id, :]),
-                                              list(doc_topic[doc_id, :]))
-    return (ctrain, ctest)
+    return ct
 
 
 def generate_matrice_for_file(data_path, m, n):
