@@ -157,8 +157,9 @@ class Ttarm:
         logging.info(str.format('\tAverage {0} at {1}:', metric, recall_num))
         if recall_num not in metric_dict:
             logging.info('no test data!!!!!')
-            return
-        avg_metric_value = util.avg_of_list(metric_dict[recall_num])
+            avg_metric_value = -1
+        else:
+            avg_metric_value = util.avg_of_list(metric_dict[recall_num])
         logging.info('\t\tavg ' + self.model_name + ' :  ' +
                      str(avg_metric_value) + '\n\n\n')
 
