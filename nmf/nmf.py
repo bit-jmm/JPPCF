@@ -5,7 +5,7 @@ import numpy as np
 # import scipy.sparse as sp
 from sys import float_info
 import logging
-from model.JPPCF import *
+
 
 class NMF(object):
 
@@ -92,14 +92,11 @@ class NMF(object):
 
             HT = H.T
             HHT = np.dot(H, HT)
-            result = matrix_dots_map_async([(A, HT), (W, HHT)])
-
-            W = W * ((result[0]) / np.maximum(result[1] + lambd, eps))
+            W = W * ((np.dot(A, HT)) / np.maximum(np.dot(W, HHT) + lambd, eps))
 
             WT = W.T
-            result = matrix_dots_map_async([(WT, W), (WT, A)])
-            WTW = result[0]
-            WTA = result[1]
+            WTW = np.dot(WT, W)
+            WTA = np.dot(WT, A)
             # update H
             # H=H.*(W'*A)./(W'*W*H+eps)
             H = H * ((WTA) / np.maximum(np.dot(WTW, H)+lambd, eps))
@@ -109,8 +106,7 @@ class NMF(object):
             delta = abs(pre_obj-obj)
 
             if verbose:
-                logging.info('Iter: ' + str(i) + '\t Loss: ' +\
-                        str(obj) + '\t Delta: ' + str(delta) + '\n')
+                logging.info('Iter: ' + str(i) + '\t Loss: ' + str(obj) + '\t Delta: ' + str(delta) + '\n')
         self.H = H
         self.W = W
 

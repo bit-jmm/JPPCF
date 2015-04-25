@@ -1,38 +1,10 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import logging
-import multiprocessing as mul
+
 
 def tr(A, B):
     return (A * B).sum()
-
-def mult(matices):
-    return np.dot(matices[0], matices[1])
-
-def matrix_dots_map_async(matrices):
-    pool_size = len(matrices)
-    cpu_num = mul.cpu_count()
-    if pool_size > cpu_num:
-        pool_size = cpu_num
-    p = mul.Pool(pool_size)
-    result = p.map_async(mult, matrices)
-    p.close()
-    p.join()
-    return result.get()
-
-def tran(matrix):
-    return matrix.T
-
-def matrix_trans_map_async(matrices):
-    pool_size = len(matrices)
-    cpu_num = mul.cpu_count()
-    if pool_size > cpu_num:
-        pool_size = cpu_num
-    p = mul.Pool(pool_size)
-    result = p.map_async(tran, matrices)
-    p.close()
-    p.join()
-    return result.get()
 
 
 def computeTopicLoss(X, W, H, M, R, alpha, lambd, trXX, I):
@@ -94,27 +66,20 @@ def JPPTopic(X, R, k, lambd, alpha, epsilon, maxiter, verbose):
         if delta < epsilon and i > 10:
             break
         J = np.dot(M, R)
-        result = matrix_trans_map_async([J, H, R])
-        JT = result[0]
-        HT = result[1]
-        RT = result[2]
+        JT = J.T
+        HT = H.T
+        RT = R.T
 
-        result = matrix_dots_map_async([(X, HT+JT), (J, JT), (H, HT)])
-
-        W = W * ((result[0]) / (np.maximum(np.dot(W, result[1] + \
-                result[2] + alpha), eps)) )
+        W = W * ((np.dot(X, HT+JT)) / (np.maximum(np.dot(W, np.dot(J, JT) + \
+                np.dot(H, HT) + alpha), eps)) )
 
         WT = W.T
-        result = matrix_dots_map_async([(WT, W), (WT, X)])
-        WTW = result[0]
-        WTX = result[1]
+        WTW = np.dot(WT, W)
+        WTX = np.dot(WT, X)
 
-        result = matrix_dots_map_async([(WTX, RT), (WTW, J), (WTW, H)])
-
-        M = M * ((result[0] + (lambd*kI)) / (np.maximum( (np.dot(result[1], RT)) + \
+        M = M * ((np.dot(WTX, RT) + (lambd*kI)) / (np.maximum( (np.dot(np.dot(WTW, J), RT)) + \
                 (lambd*M) + alpha, eps)))
-
-        H = H * ( (WTX) / (np.maximum( result[2] + alpha, eps)) )
+        H = H * ( (WTX) / (np.maximum( np.dot(WTW, H) + alpha, eps)) )
 
         prev_obj = obj
         obj = computeTopicLoss(X, W, H, M, R, alpha, lambd, trXX, kI)
@@ -153,35 +118,26 @@ def JPPCF(R, Po, k, lambd, alpha, epsilon, maxiter, verbose):
         if delta < epsilon and i > 10:
             break
         QT = Q.T
-        result = matrix_dots_map_async([(Q, QT), (R, QT)])
-        QQT = result[0]
-        RQT = result[1]
+        QQT = np.dot(Q, QT)
 
-        P =  P * ( (RQT) / \
+        P =  P * ( (np.dot(R, QT)) / \
             np.maximum(np.dot(P, QQT + (alpha*kI)), eps) )
 
-        result = matrix_trans_map_async([P, Po, S])
-        PT = result[0]
-        PoTST = np.dot(result[1], result[2])
+        PT = P.T
+        PoTST = np.dot(Po.T, S.T)
+        PQ = np.dot(P, Q)
+        SPo = np.dot(S, Po)
 
-        result = matrix_dots_map_async([(P, Q), (S, Po), (PT+PoTST, R),
-                                        (PT, P), (PoTST, SPo)])
-        PQ = result[0]
-        SPo = result[1]
-
-        Q = Q * ((result[2]) / np.maximum(np.dot((result[3] + result[4] +\
+        Q = Q * ((np.dot((PT + PoTST), R)) / \
+            np.maximum(np.dot((np.dot(PT, P) + np.dot(PoTST, SPo) +\
                 (alpha*kI)), Q), eps))
 
-        result = matrix_trans_map_async([Q, Po])
+        QTPoT = np.dot(Q.T, Po.T)
+        SPoQ = np.dot(SPo, Q)
 
-        new_result = matrix_dots_map_async([(result[0], result[1]), (SPo, Q)])
-        QTPoT = new_result[0]
-        SPoQ = new_result[1]
-
-        result = matrix_dots_map_async([(R, QTPoT), (SPoQ, QTPoT)])
-
-        S = S * ( ((result[0]) + (lambd*nI)) / \
-            np.maximum( (result[1]) + ((lambd + alpha)*S), eps ) )
+        S = S * ( ((np.dot(R, QTPoT)) + (lambd*nI)) / \
+            np.maximum( (np.dot(SPoQ, QTPoT)) \
+            + ((lambd + alpha)*S),eps) )
 
         prev_obj = obj
         obj = computeLoss(R, P, Q, S, Po, alpha, lambd, trRR, nI)
@@ -234,41 +190,28 @@ def JPPCF_with_topic(R, Po, C, k, eta, lambd, alpha, epsilon, maxiter, verbose):
 
         if delta < epsilon and i > 10:
             break
-        result = matrix_trans_map_async([Q, Po, S])
-        QT = result[0]
-
-        new_result = matrix_dots_map_async([(Q, QT), (result[1], result[2]),
-                                            (S, Po)])
-        QQT = new_result[0]
-        PoTST = new_result[1]
-        SPo = new_result[2]
+        QT = Q.T
+        QQT = np.dot(Q, QT)
 
         P =  P * ( (np.dot((np.maximum((reta*R - etareta*C), 0)), QT)) / \
             np.maximum(np.dot(P, retareta*QQT + (alpha*kI)), eps) )
 
         PT = P.T
-        result = matrix_dots_map_async([(SPo, Q), (P, Q),
-                                        ((reta*(PT + PoTST)), R)])
-        SPoQ = result[0]
-        PQ = result[1]
+        PoTST = np.dot(Po.T, S.T)
+        PQ = np.dot(P, Q)
+        SPo = np.dot(S, Po)
+        SPoQ = np.dot(SPo, Q)
 
-        result = matrix_dots_map_async([(reta*(PT + PoTST), R),
-                                        (PT, (eta*C) + (reta*PQ)),
-                                        (PoTST, (eta*C) + (reta*SPoQ))])
+        Q = Q * ((np.dot((reta*(PT + PoTST)), R)) / \
+            np.maximum((reta*(np.dot(PT, (eta*C) + (reta*PQ)) + np.dot(PoTST, \
+            (eta*C) + (reta*SPoQ)))) + (alpha*Q), eps))
 
-        Q = Q * ((result[0]) / \
-            np.maximum((reta*(result[1] + result[2])) + (alpha*Q), eps))
+        QTPoT = np.dot(Q.T, Po.T)
+        SPoQ = np.dot(SPo, Q)
 
-        result = matrix_trans_map_async([Q, Po])
-        new_result = matrix_dots_map_async([(result[0], result[1]), (SPo, Q)])
-
-        QTPoT = new_result[0]
-        SPoQ = new_result[1]
-
-        result = matrix_dots_map_async([(R, QTPoT), (((reta*SPoQ)+(eta*C)), QTPoT)])
-
-        S = S * ( ((reta*(result[0])) + (lambd*nI)) / \
-            np.maximum( (reta*(result[1])) + ((lambd + alpha)*S), eps ) )
+        S = S * ( ((reta*(np.dot(R, QTPoT))) + (lambd*nI)) / \
+            np.maximum( (reta*(np.dot(((reta*SPoQ)+(eta*C)), QTPoT))) \
+            + ((lambd + alpha)*S),eps) )
 
         prev_obj = obj
         obj = computeLoss_with_topic(R, P, Q, S, Po, C, eta, alpha, lambd, trRR, nI)
