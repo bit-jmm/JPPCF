@@ -1,6 +1,7 @@
 # encoding: utf-8
 import os
 import logging
+import numpy as np
 
 from utility import util
 from utility import evaluate
@@ -131,7 +132,7 @@ class TimeSVDpp:
         result_dir = \
             os.path.join(
                 time_filter_dir,
-                str.format('fold_{0}_k_{1}', self.fold_num, self.k))
+                str.format('fold_{0}_k_{1}_5', self.fold_num, self.k))
         fileutil.mkdir(result_dir)
 
         recall_result_dir = os.path.join(result_dir, 'recall')
@@ -196,16 +197,17 @@ class TimeSVDpp:
 
                 logging.info('\n\n begin training\n')
 
-                timesvdpp_exe_path = './timesvdpp'
+                timesvdpp_exe_path = os.path.realpath(os.path.join(__file__,
+								   '../../../graphchi-cpp/toolkits/collaborative_filtering/timesvdpp'))
                 train_file_path = os.path.join(current_data_path, 'timesvdpp_train')
                 test_file_path = os.path.join(current_data_path, 'timesvdpp_test')
-                params = '--minval=0 --maxval=1 --max_iter=50 --quiet=1 --D=200'
-
-                out = os.popen('{} --training={} --test={} {}'.
-                        format(timesvdpp_exe_path,
-                               train_file_path,
-                               test_file_path,
-                               params))
+                params = '--minval=0 --maxval=1 --max_iter=30 --quiet=1 --D=20'
+		command = '{} --training={} --test={} {}'.format(timesvdpp_exe_path,
+							         train_file_path,
+							         test_file_path,
+							         params)
+		print command
+                out = os.popen(command)
                 str1 = out.read()
                 while str1 != '':
                     print str1

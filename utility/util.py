@@ -1,3 +1,4 @@
+import os
 import math
 import numpy as np
 from nmf.nmf import NMF
@@ -133,7 +134,12 @@ def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
     all_data_path = fileutil.parent_dir_of(fileutil.parent_dir_of(data_path))
     before_ratings = np.loadtxt(os.path.join(all_data_path, 'rating_file.dat.txt'))
     current_ratings = np.loadtxt(os.path.join(data_path, 'train.dat.txt'))
-    train_rating_num = before_ratings.shape[0] + current_ratings.shape[0]
+    i = 0
+    for (user_id, doc_id, rating, timestep) in before_ratings:
+	if int(timestep) >= end_time:
+	    break
+	i += 1
+    train_rating_num = i + current_ratings.shape[0]
     train_file = open(data_path + '/timesvdpp_train', 'w')
     train_file.write('%%MatrixMarket matrix coordinate real general\n')
     train_file.write(
@@ -145,12 +151,12 @@ def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
             if int(timestep) >= end_time:
                 break
             train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
-                                                    int(doc_id)+1),
-                                                    timestep, rating)
+                                                    int(doc_id)+1,
+                                                    timestep, rating))
         for (user_id, doc_id, rating, timestep) in current_ratings:
             train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
-                                                    int(doc_id)+1),
-                                                    timestep, rating)
+                                                    int(doc_id)+1,
+                                                    timestep, rating))
     train_file.close()
 
     test_file = open(data_path + '/timesvdpp_test', 'w')
@@ -173,7 +179,7 @@ def create_predict_matrix(user_num, doc_num, data_path):
                          skiprows=1)
     m, n = predict.shape
     for i in range(1, m):
-        R[predict[i, 0] - 1, predict[i, 1] - 1] = predict[i, 2]
+        R[int(predict[i, 0]) - 1, int(predict[i, 1]) - 1] = predict[i, 2]
     return R
 
 

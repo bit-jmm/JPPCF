@@ -3,6 +3,7 @@ import time
 from utility.data_preprocess import PrepareData
 from model.ttarm import Ttarm
 from model.trm import Trm
+from model.timesvdpp import TimeSVDpp
 
 
 def prepare_data(time_step):
@@ -36,5 +37,6 @@ if __name__ == '__main__':
         os.mkdir(log_path)
 
     #model = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step)
-    model = Trm(k=20, lambd=10, time_interval=time_step)
+    #model = Trm(k=20, lambd=10, time_interval=time_step)
+    model = TimeSVDpp(k=20, time_interval=time_step)
     model.run()
