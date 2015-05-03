@@ -3,6 +3,7 @@ import numpy as np
 from nmf.nmf import NMF
 import copy
 import random
+from utility import fileutil
 
 
 def add_list_value_for_dict(d, key, value):
@@ -126,46 +127,30 @@ def generate_matrice_between_time(rating, m, n, start_time, end_time,
     return matrix
 
 
-def generate_rating_list_between_time3(rating, start_time, end_time,
-                                       train_data_path):
-    r_list = {}
-    (row, col) = rating.shape
-
-    if start_time <= end_time:
-        for i in range(row):
-            if rating[i, 2] < start_time:
-                continue
-            if rating[i, 2] > end_time:
-                break
-            r_list[(rating[i, 0], rating[i, 1])] = (rating[i, 2], 1)
-    if train_data_path != '':
-        train_data = np.loadtxt(train_data_path, dtype=int)
-        (row, col) = train_data.shape
-        for i in range(row):
-            r_list[(train_data[i, 0], train_data[i, 1])] = (end_time + 1, 1)
-
-    return r_list
-
-
-def generate_train_and_test_file_for_timesvdpp(rating, user_num, doc_num,
+def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
                                                data_path,
-                                               user_id_dict, doc_id_dict,
                                                start_time, end_time):
-    r_list = generate_rating_list_between_time3(rating, start_time, end_time,
-                                                data_path + '/train.dat.txt',
-                                                user_id_dict, doc_id_dict)
-    train_rating_num = len(r_list)
+    all_data_path = fileutil.parent_dir_of(fileutil.parent_dir_of(data_path))
+    before_ratings = np.loadtxt(os.path.join(all_data_path, 'rating_file.dat.txt'))
+    current_ratings = np.loadtxt(os.path.join(data_path, 'train.dat.txt'))
+    train_rating_num = before_ratings.shape[0] + current_ratings.shape[0]
     train_file = open(data_path + '/timesvdpp_train', 'w')
     train_file.write('%%MatrixMarket matrix coordinate real general\n')
     train_file.write(
         str(user_num) + ' ' + str(doc_num) + ' ' + str(train_rating_num) + '\n')
-    for i in range(user_num):
-        for j in range(doc_num):
-            train_file.write(
-                str(i + 1) + ' ' + str(j + 1) + ' ' + str(
-                    r_list.get((i + 1, j + 1), (end_time + 1, 0))[
-                        0]) + ' ' + str(
-                    r_list.get((i + 1, j + 1), (end_time + 1, 0))[1]) + '\n')
+    if start_time < end_time:
+        for (user_id, doc_id, rating, timestep) in before_ratings:
+            if int(timestep) < start_time:
+                continue
+            if int(timestep) >= end_time:
+                break
+            train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
+                                                    int(doc_id)+1),
+                                                    timestep, rating)
+        for (user_id, doc_id, rating, timestep) in current_ratings:
+            train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
+                                                    int(doc_id)+1),
+                                                    timestep, rating)
     train_file.close()
 
     test_file = open(data_path + '/timesvdpp_test', 'w')
@@ -177,8 +162,8 @@ def generate_train_and_test_file_for_timesvdpp(rating, user_num, doc_num,
 
     for i in range(user_num):
         for j in range(doc_num):
-            test_file.write(str(i + 1) + ' ' + str(j + 1) + ' ' + str(
-                end_time + 1) + ' 1\n')
+            test_file.write(str(i + 1) + ' ' + str(j + 1) + ' ' +
+                    str(end_time) + ' 1\n')
     test_file.close()
 
 
