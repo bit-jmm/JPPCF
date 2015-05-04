@@ -200,15 +200,25 @@ def generate_train_and_test_file(user_num, doc_num,
                 continue
             if int(timestep) >= end_time:
                 break
-            train_file.write('{0} {1} {2} {3}\n'.format(int(user_id)+1,
+            if model_name == 'pmf':
+                train_file.write('{0} {1} {2}\n'.format(int(user_id)+1,
                                                         int(doc_id)+1,
-                                                        int(timestep),
-                                                        int(rating)))
+                                                        rating))
+            else:
+                train_file.write('{0} {1} {2} {3}\n'.format(int(user_id)+1,
+                                                            int(doc_id)+1,
+                                                            int(timestep),
+                                                            rating))
         for (user_id, doc_id, rating, timestep) in current_ratings:
-            train_file.write('{0} {1} {2} {3}\n'.format(int(user_id)+1,
+            if model_name == 'pmf':
+                train_file.write('{0} {1} {2}\n'.format(int(user_id)+1,
                                                         int(doc_id)+1,
-                                                        int(timestep),
-                                                        int(rating)))
+                                                        rating))
+            else:
+                train_file.write('{0} {1} {2} {3}\n'.format(int(user_id)+1,
+                                                            int(doc_id)+1,
+                                                            int(timestep),
+                                                            int(rating)))
     train_file.close()
 
     test_file = open(data_path + '/' + model_name + '_test' + str(times), 'w')
@@ -220,7 +230,7 @@ def generate_train_and_test_file(user_num, doc_num,
 
     for i in range(user_num):
         for j in range(doc_num):
-            if model_name == 'weighted-als':
+            if model_name == 'weighted-als' or model_name == 'pmf':
                 test_file.write(str(i + 1) + ' ' + str(j + 1) + ' 1\n')
             else:
                 test_file.write(str(i + 1) + ' ' + str(j + 1) + ' ' +

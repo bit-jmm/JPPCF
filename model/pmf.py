@@ -7,10 +7,10 @@ from utility import util
 from utility import evaluate
 from utility import fileutil
 
-class Wals:
+class Pmf:
     filter_threshold = 10
     fold_num = 5
-    model_name = 'weighted-als'
+    model_name = 'pmf'
 
     def __init__(self, k=20, time_interval=360, times=0, dataset=''):
         self.k = k
@@ -205,13 +205,13 @@ class Wals:
 
                 logging.info('\n\n begin training\n')
 
-                tensor_exe_path = '../../../graphchi-cpp/toolkits/collaborative_filtering/wals'
-                tensor_exe_fullpath = os.path.realpath(os.path.join(__file__,
-                                                                    tensor_exe_path))
+                model_exe_path = '../../../graphchi-cpp/toolkits/collaborative_filtering/pmf'
+                model_exe_fullpath = os.path.realpath(os.path.join(__file__,
+                                                                   model_exe_path))
                 train_file_path = os.path.join(current_data_path, self.model_name + '_train' + str(self.times))
                 test_file_path = os.path.join(current_data_path, self.model_name + '_test' + str(self.times))
-                params = '--lambda=0.05 --minval=0 --maxval=1 --max_iter=20 --D=20 --quiet=1 --clean_cache=1'
-                command = '{0} --training={1} --test={2} {3}'.format(tensor_exe_fullpath,
+                params = '--minval=0 --maxval=1 --max_iter=20 --pmf_burn_in=15 --D=20 --quiet=1 --clean_cache=1'
+                command = '{0} --training={1} --test={2} {3}'.format(model_exe_fullpath,
                                                                      train_file_path,
                                                                      test_file_path,
                                                                      params)
