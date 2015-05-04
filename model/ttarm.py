@@ -235,10 +235,7 @@ class Ttarm:
             logging.info('time_step number %i:\t' + str(current_time_step))
             logging.info('----------------\n')
 
-            if current_time_step == start + 1:
-                Po2 = P
-            else:
-                Po2 = P2
+            Po = P
 
             recall_dict = {}
             ndcg_dict = {}
@@ -263,6 +260,8 @@ class Ttarm:
                     doc_rating = splits[i].split(':')
                     like_list.append((doc_rating[0], doc_rating[1]))
                 current_user_like_dict[splits[0]] = like_list
+
+            Po = util.reshape_matrix(Po, current_user_num, self.k)
 
             for fold_id in range(self.fold_num):
                 current_data_path = \
@@ -289,12 +288,10 @@ class Ttarm:
                 logging.info('computing ' + self.model_name +
                              ' decomposition...')
 
-                Po2 = util.reshape_matrix(Po2, current_user_num, self.k)
-
-                P2, Q2, S2 = JPPCF_with_topic(Rt, Po2, Ct_train, self.k,
-                                              self.eta,
-                                              self.lambd, self.regl1jpp,
-                                              self.epsilon, self.maxiter, True)
+                P, Q, S = JPPCF_with_topic(Rt, Po, Ct_train, self.k,
+                                           self.eta,
+                                           self.lambd, self.regl1jpp,
+                                           self.epsilon, self.maxiter, True)
 
                 Ct_test = \
                     util.cal_topic_similarity_matrix(W,
@@ -304,47 +301,47 @@ class Ttarm:
                                                      current_user_like_dict,
                                                      False)
 
-                PredictR2 = ((1 - self.eta) * np.dot(P2, Q2)) + \
+                PredictR = ((1 - self.eta) * np.dot(P, Q)) + \
                             (self.eta * Ct_test)
-                NormPR2 = PredictR2 / PredictR2.max()
+                NormPR = PredictR / PredictR.max()
 
                 logging.info('[ok]\n')
 
                 logging.info('\t fold_id:' + str(fold_id) + '\n')
                 for recall_num in [3, 10, 50, 100, 300, 500, 1000]:
                     # recall performance
-                    self.evaluate('recall', recall_dict, NormPR2,
+                    self.evaluate('recall', recall_dict, NormPR,
                                   current_data_path, recall_num,
                                   current_user_like_dict)
                     # recall for cold start performance
-                    self.evaluate('recall', recall_cold_dict, NormPR2,
+                    self.evaluate('recall', recall_cold_dict, NormPR,
                                   current_data_path, recall_num,
                                   current_user_like_dict, cold=True)
 
                     # ndcg performance
-                    self.evaluate('ndcg', ndcg_dict, NormPR2,
+                    self.evaluate('ndcg', ndcg_dict, NormPR,
                                   current_data_path, recall_num,
                                   current_user_like_dict)
                     # ndcg for cold start performance
-                    self.evaluate('ndcg', ndcg_cold_dict, NormPR2,
+                    self.evaluate('ndcg', ndcg_cold_dict, NormPR,
                                   current_data_path, recall_num,
                                   current_user_like_dict, cold=True)
 
                     # map performance
-                    self.evaluate('map', map_dict, NormPR2,
+                    self.evaluate('map', map_dict, NormPR,
                                   current_data_path, recall_num,
                                   current_user_like_dict)
                     # map for cold start performance
-                    self.evaluate('map', map_cold_dict, NormPR2,
+                    self.evaluate('map', map_cold_dict, NormPR,
                                   current_data_path, recall_num,
                                   current_user_like_dict, cold=True)
 
 
                 # rmse performance
-                self.evaluate('rmse', rmse_dict, NormPR2, current_data_path,
+                self.evaluate('rmse', rmse_dict, NormPR, current_data_path,
                               3, current_user_like_dict)
                 # rmse for cold start performance
-                self.evaluate('rmse', rmse_cold_dict, NormPR2,
+                self.evaluate('rmse', rmse_cold_dict, NormPR,
                               current_data_path, 3,
                               current_user_like_dict, cold=True)
 

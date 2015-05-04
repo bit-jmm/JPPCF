@@ -1,1 +1,1 @@
-nohup python demo.py >> log/stdout_lambda_0.001.log 2>&1 &
+nohup python demo.py 5 >> log/stdout_tensor-als_k_20_5.log 2>&1 &

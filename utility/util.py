@@ -1,9 +1,20 @@
+import os
 import math
 import numpy as np
 from nmf.nmf import NMF
 import copy
 import random
 from utility import fileutil
+import scipy.io
+
+
+def exec_mat_command(dir, command):
+    try:
+        matlab = win32com.client.GetActiveObject("Matlab.application")
+    except:
+        matlab = win32com.client.Dispatch("Matlab.application")
+    matlab.execute('cd {}'.format(dir))
+    matlab.execute(command)
 
 
 def add_list_value_for_dict(d, key, value):
@@ -127,14 +138,59 @@ def generate_matrice_between_time(rating, m, n, start_time, end_time,
     return matrix
 
 
-def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
+def generate_train_file_for_btmf(data_path, start_time, end_time):
+    if os.path.exists(data_path + '/btmf_train'):
+        return
+    all_data_path = fileutil.parent_dir_of(fileutil.parent_dir_of(data_path))
+    ratings = np.loadtxt(os.path.join(all_data_path, 'rating_file.dat.txt'))
+    train_file = open(data_path + '/btmf_train', 'w')
+    if start_time < end_time:
+        for (user_id, doc_id, rating, timestep) in ratings:
+            if int(timestep) < start_time:
+                continue
+            if int(timestep) >= end_time:
+                break
+            train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
+                                                    int(doc_id)+1,
+                                                    rating,
+                                                    int(timestep)))
+    ratings = np.loadtxt(os.path.join(data_path, 'train.dat.txt'))
+    for (user_id, doc_id, rating, timestep) in ratings:
+        train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
+                                                int(doc_id)+1,
+                                                rating,
+                                                int(timestep)))
+    train_file.close()
+
+
+def predict_for_btmf(model_file, user_num, doc_num, time_step):
+    m_dict = scipy.io.loadmat(model_file)
+    U = m_dict.get('U')
+    V = m_dict.get('V')
+    B = m_dict.get('B')
+
+    predict = np.zeros((user_num, doc_num))
+    for i in range(user_num):
+        for j in range(doc_num):
+            predict[i, j] = np.dot(V[j, :, time_step-1],
+                                   (U[i, :, time_step-1]*B[:, :, i]).T)[0]
+    return predict
+
+
+def generate_train_and_test_file(user_num, doc_num,
                                                data_path,
-                                               start_time, end_time):
+                                               start_time, end_time,
+                                               times, model_name):
     all_data_path = fileutil.parent_dir_of(fileutil.parent_dir_of(data_path))
     before_ratings = np.loadtxt(os.path.join(all_data_path, 'rating_file.dat.txt'))
     current_ratings = np.loadtxt(os.path.join(data_path, 'train.dat.txt'))
-    train_rating_num = before_ratings.shape[0] + current_ratings.shape[0]
-    train_file = open(data_path + '/timesvdpp_train', 'w')
+    i = 0
+    for (user_id, doc_id, rating, timestep) in before_ratings:
+        if int(timestep) >= end_time:
+            break
+        i += 1
+    train_rating_num = i + current_ratings.shape[0]
+    train_file = open(data_path + '/' + model_name + '_train' + str(times), 'w')
     train_file.write('%%MatrixMarket matrix coordinate real general\n')
     train_file.write(
         str(user_num) + ' ' + str(doc_num) + ' ' + str(train_rating_num) + '\n')
@@ -145,15 +201,17 @@ def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
             if int(timestep) >= end_time:
                 break
             train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
-                                                    int(doc_id)+1),
-                                                    timestep, rating)
+                                                    int(doc_id)+1,
+                                                    int(timestep),
+                                                    int(rating)))
         for (user_id, doc_id, rating, timestep) in current_ratings:
             train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
-                                                    int(doc_id)+1),
-                                                    timestep, rating)
+                                                    int(doc_id)+1,
+                                                    int(timestep),
+                                                    int(rating)))
     train_file.close()
 
-    test_file = open(data_path + '/timesvdpp_test', 'w')
+    test_file = open(data_path + '/' + model_name + '_test' + str(times), 'w')
     test_file.write('%%MatrixMarket matrix coordinate real general\n')
 
     test_rating_num = user_num * doc_num
@@ -167,13 +225,14 @@ def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
     test_file.close()
 
 
-def create_predict_matrix(user_num, doc_num, data_path):
+def create_predict_matrix(user_num, doc_num, data_path, times, model_name):
     R = np.zeros((user_num, doc_num), dtype=float)
-    predict = np.loadtxt(data_path + '/timesvdpp_test.predict', dtype=float,
+    predict = np.loadtxt(data_path + '/' + model_name + '_test' + str(times) + '.predict',
+                         dtype=float,
                          skiprows=1)
     m, n = predict.shape
     for i in range(1, m):
-        R[predict[i, 0] - 1, predict[i, 1] - 1] = predict[i, 2]
+        R[int(predict[i, 0]) - 1, int(predict[i, 1]) - 1] = predict[i, 2]
     return R
 
 
@@ -246,7 +305,6 @@ def norm_by_threshold(matrix, threshold):
             else:
                 matrix[i][j] = 0
     return matrix
-
 
 # return random item in a item list and remove it
 def random_item_from(item_list):
