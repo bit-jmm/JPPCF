@@ -39,33 +39,35 @@ if __name__ == '__main__':
     if not os.path.isdir(log_path):
         os.mkdir(log_path)
 
-    time_step = -1
-    prepare_data(time_step)
+    time_step = 360
+    # prepare_data(time_step)
 
     # model = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step)
 
-    #model_name = str(sys.argv[1])
-    #timeth = int(sys.argv[2])
-    #dataset = 'MovieLens'
-    #data_path = os.path.realpath(os.path.join(__file__,
-                                              #'../data/MovieLens'))
+    model_name = str(sys.argv[1])
+    timeth = int(sys.argv[2])
+    dataset = 'citeulike'
+    data_path = os.path.realpath(os.path.join(__file__,
+                                              '../data/preprocessed_data'))
 
-    #if model_name == 'trm':
-        #model = Trm(k=20, lambd=10, time_interval=time_step,
-                    #times=timeth, dataset=dataset, data_path=data_path)
-    #elif model_name == 'timesvdpp':
-        #model = TimeSVDpp(k=20, time_interval=time_step,
-                          #times=timeth, dataset=dataset, data_path=data_path)
-    #elif model_name == 'tensorals':
-        #model = Tensorals(k=20, time_interval=time_step,
-                          #times=timeth, dataset=dataset, data_path=data_path)
-    #elif model_name == 'wals':
-        #model = Wals(k=20, time_interval=time_step,
-                     #times=timeth, dataset=dataset, data_path=data_path)
-    #elif model_name == 'pmf':
-        #model = Pmf(k=20, time_interval=time_step,
-                    #times=timeth, dataset=dataset, data_path=data_path)
-    #else:
-        #print 'no support model yet!'
+    if model_name == 'trm':
+       	model = Trm(k=20, lambd=10, time_interval=time_step,
+                    times=timeth, dataset=dataset, data_path=data_path)
+    elif model_name == 'timesvdpp':
+       	model = TimeSVDpp(k=20, time_interval=time_step,
+                          times=timeth, dataset=dataset, data_path=data_path)
+    elif model_name == 'tensorals':
+       	model = Tensorals(k=20, time_interval=time_step,
+                          times=timeth, dataset=dataset, data_path=data_path)
+    elif model_name == 'wals':
+       	model = Wals(k=20, time_interval=time_step,
+                     times=timeth, dataset=dataset, data_path=data_path)
+    elif model_name == 'pmf':
+       	model = Pmf(k=20, time_interval=time_step,
+                    times=timeth, dataset=dataset, data_path=data_path)
+    else:
+        print 'no support model yet!'
+        exit(0)
 
+    model.run()
     print 'end'
