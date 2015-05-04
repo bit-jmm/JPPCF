@@ -42,8 +42,8 @@ if __name__ == '__main__':
     # model = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step)
     # model = Trm(k=20, lambd=10, time_interval=time_step)
     # model = TimeSVDpp(k=20, time_interval=time_step, times=int(sys.argv[1]))
-    model = TimeSVDpp(k=20, time_interval=time_step, times=int(sys.argv[1]),
-                      'citeulike')
+    model = Tensorals(k=20, time_interval=time_step, times=int(sys.argv[1]),
+                      dataset='citeulike')
     model.run()
     #for i in range(2, 6):
     #    model = Btmf(k=20, time_interval=time_step, times=i)

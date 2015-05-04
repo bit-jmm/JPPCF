@@ -5,7 +5,7 @@ from nmf.nmf import NMF
 import copy
 import random
 from utility import fileutil
-import scipy.io
+#import scipy.io
 
 
 def exec_mat_command(dir, command):
@@ -150,16 +150,16 @@ def generate_train_file_for_btmf(data_path, start_time, end_time):
                 continue
             if int(timestep) >= end_time:
                 break
-            train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
-                                                    int(doc_id)+1,
-                                                    rating,
-                                                    int(timestep)))
+            train_file.write('{0} {1} {2} {3}\n'.format(int(user_id)+1,
+                                            	        int(doc_id)+1,
+                                                	rating,
+                                                    	int(timestep)))
     ratings = np.loadtxt(os.path.join(data_path, 'train.dat.txt'))
     for (user_id, doc_id, rating, timestep) in ratings:
-        train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
-                                                int(doc_id)+1,
-                                                rating,
-                                                int(timestep)))
+        train_file.write('{0} {1} {2} {3}\n'.format(int(user_id)+1,
+                                        	    int(doc_id)+1,
+                                                    rating,
+                                                    int(timestep)))
     train_file.close()
 
 
@@ -178,9 +178,9 @@ def predict_for_btmf(model_file, user_num, doc_num, time_step):
 
 
 def generate_train_and_test_file(user_num, doc_num,
-                                               data_path,
-                                               start_time, end_time,
-                                               times, model_name):
+                                 data_path,
+                                 start_time, end_time,
+                                 times, model_name):
     all_data_path = fileutil.parent_dir_of(fileutil.parent_dir_of(data_path))
     before_ratings = np.loadtxt(os.path.join(all_data_path, 'rating_file.dat.txt'))
     current_ratings = np.loadtxt(os.path.join(data_path, 'train.dat.txt'))
@@ -200,15 +200,15 @@ def generate_train_and_test_file(user_num, doc_num,
                 continue
             if int(timestep) >= end_time:
                 break
-            train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
-                                                    int(doc_id)+1,
-                                                    int(timestep),
-                                                    int(rating)))
+            train_file.write('{0} {1} {2} {3}\n'.format(int(user_id)+1,
+                                                        int(doc_id)+1,
+                                                        int(timestep),
+                                                        int(rating)))
         for (user_id, doc_id, rating, timestep) in current_ratings:
-            train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
-                                                    int(doc_id)+1,
-                                                    int(timestep),
-                                                    int(rating)))
+            train_file.write('{0} {1} {2} {3}\n'.format(int(user_id)+1,
+                                                    	int(doc_id)+1,
+                                                    	int(timestep),
+                                                    	int(rating)))
     train_file.close()
 
     test_file = open(data_path + '/' + model_name + '_test' + str(times), 'w')

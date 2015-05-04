@@ -192,14 +192,14 @@ class TimeSVDpp:
                                             current_time_step, fold_id))
 
                 logging.info('begin to generate train and test file for timeSVD++...\n')
-                util.generate_train_and_test_file_for_timesvdpp(
-                                                        current_user_num,
-                                                        current_doc_num,
-                                                        current_data_path,
-                                                        1,
-                                                        current_time_step,
-                                                        self.times,
-                                                        'timesvdpp')
+                util.generate_train_and_test_file(
+                                                  current_user_num,
+                                                  current_doc_num,
+                                                  current_data_path,
+                                                  1,
+                                                  current_time_step,
+                                                  self.times,
+                                                  'timesvdpp')
 
                 logging.info('\n\n begin training\n')
 

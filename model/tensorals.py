@@ -192,14 +192,14 @@ class Tensorals:
                                             current_time_step, fold_id))
 
                 logging.info('begin to generate train and test file for tensor-als...\n')
-                util.generate_train_and_test_file_for_tensorals(
-                                                        current_user_num,
-                                                        current_doc_num,
-                                                        current_data_path,
-                                                        1,
-                                                        current_time_step,
-                                                        self.times,
-                                                        'tensor-als')
+                util.generate_train_and_test_file(
+                                                  current_user_num,
+                                                  current_doc_num,
+                                                  current_data_path,
+                                                  1,
+                                                  current_time_step,
+                                                  self.times,
+                                                  'tensor-als')
 
                 logging.info('\n\n begin training\n')
 
@@ -209,10 +209,10 @@ class Tensorals:
                 train_file_path = os.path.join(current_data_path, 'tensor-als_train' + str(self.times))
                 test_file_path = os.path.join(current_data_path, 'tensor-als_test' + str(self.times))
                 params = '--lambda=0.05 --minval=0 --maxval=1 --max_iter=30 --D=20 --quiet=1'
-                command = '{} --training={} --test={} {}'.format(timesvdpp_exe_path,
-                                                                 train_file_path,
-                                                                 test_file_path,
-                                                                 params)
+                command = '{0} --training={1} --test={2} {3}'.format(tensor_exe_fullpath,
+                                                                     train_file_path,
+                                                                     test_file_path,
+                                                                     params)
                 print command
                 out = os.popen(command)
                 str1 = out.read()
