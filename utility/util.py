@@ -3,6 +3,19 @@ import numpy as np
 from nmf.nmf import NMF
 import copy
 import random
+from utility import fileutil
+import os
+import win32com.client
+import scipy.io
+
+
+def exec_mat_command(dir, command):
+    try:
+        matlab = win32com.client.GetActiveObject("Matlab.application")
+    except:
+        matlab = win32com.client.Dispatch("Matlab.application")
+    matlab.execute('cd {}'.format(dir))
+    matlab.execute(command)
 
 
 def add_list_value_for_dict(d, key, value):
@@ -126,25 +139,39 @@ def generate_matrice_between_time(rating, m, n, start_time, end_time,
     return matrix
 
 
-def generate_rating_list_between_time3(rating, start_time, end_time,
-                                       train_data_path):
-    r_list = {}
-    (row, col) = rating.shape
-
-    if start_time <= end_time:
-        for i in range(row):
-            if rating[i, 2] < start_time:
+def generate_train_file_for_btmf(data_path, start_time, end_time):
+    all_data_path = fileutil.parent_dir_of(fileutil.parent_dir_of(data_path))
+    ratings = np.loadtxt(os.path.join(all_data_path, 'rating_file.dat.txt'))
+    train_file = open(data_path + '/btmf_train', 'w')
+    if start_time < end_time:
+        for (user_id, doc_id, rating, timestep) in ratings:
+            if int(timestep) < start_time:
                 continue
-            if rating[i, 2] > end_time:
+            if int(timestep) >= end_time:
                 break
-            r_list[(rating[i, 0], rating[i, 1])] = (rating[i, 2], 1)
-    if train_data_path != '':
-        train_data = np.loadtxt(train_data_path, dtype=int)
-        (row, col) = train_data.shape
-        for i in range(row):
-            r_list[(train_data[i, 0], train_data[i, 1])] = (end_time + 1, 1)
+            train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
+                                                    int(doc_id)+1,
+                                                    rating, timestep))
+    ratings = np.loadtxt(os.path.join(data_path, 'train.dat.txt'))
+    for (user_id, doc_id, rating, timestep) in ratings:
+        train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
+                                                int(doc_id)+1,
+                                                rating, timestep))
+    train_file.close()
 
-    return r_list
+
+def predict_for_btmf(model_file, user_num, doc_num, time_step):
+    m_dict = scipy.io.loadmat(model_file)
+    U = m_dict.get('U')
+    V = m_dict.get('V')
+    B = m_dict.get('B')
+
+    predict = np.zeros((user_num, doc_num))
+    for i in range(user_num):
+        for j in range(doc_num):
+            predict[i, j] = np.dot(V[j, :, time_step-1],
+                                   (U[i, :, time_step-1]*B[:, :, i]).T)[0]
+    return predict
 
 
 def generate_train_and_test_file_for_timesvdpp(rating, user_num, doc_num,
