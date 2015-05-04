@@ -12,8 +12,9 @@ class TimeSVDpp:
     fold_num = 5
     model_name = 'timeSVD++'
 
-    def __init__(self, k=20, time_interval=360):
+    def __init__(self, k=20, time_interval=360, times=0):
         self.k = k
+        self.times = times
         self.time_interval = time_interval
         self.data_path = \
             os.path.normpath(os.path.join(__file__,
@@ -28,7 +29,8 @@ class TimeSVDpp:
                             datefmt='%a, %d %b %Y %H:%M:%S',
                             filename='./log/timeSVD++_k_' +
                                      str(k) + '_timestep_' +
-                                     str(time_interval) + '.log',
+                                     str(time_interval) + '_' +
+                                     str(self.times)  + '.log',
                             filemode='w')
 
         ##################################################################
@@ -132,7 +134,7 @@ class TimeSVDpp:
         result_dir = \
             os.path.join(
                 time_filter_dir,
-                str.format('fold_{0}_k_{1}_5', self.fold_num, self.k))
+                str.format('fold_{0}_k_{1}_{2}', self.fold_num, self.k, self.times))
         fileutil.mkdir(result_dir)
 
         recall_result_dir = os.path.join(result_dir, 'recall')
@@ -193,14 +195,15 @@ class TimeSVDpp:
                                                         current_doc_num,
                                                         current_data_path,
                                                         1,
-                                                        current_time_step)
+                                                        current_time_step,
+                                                        self.times)
 
                 logging.info('\n\n begin training\n')
 
                 timesvdpp_exe_path = os.path.realpath(os.path.join(__file__,
 								   '../../../graphchi-cpp/toolkits/collaborative_filtering/timesvdpp'))
-                train_file_path = os.path.join(current_data_path, 'timesvdpp_train')
-                test_file_path = os.path.join(current_data_path, 'timesvdpp_test')
+                train_file_path = os.path.join(current_data_path, 'timesvdpp_train' + str(self.times))
+                test_file_path = os.path.join(current_data_path, 'timesvdpp_test' + str(self.times))
                 params = '--minval=0 --maxval=1 --max_iter=30 --quiet=1 --D=20'
 		command = '{} --training={} --test={} {}'.format(timesvdpp_exe_path,
 							         train_file_path,
@@ -216,7 +219,8 @@ class TimeSVDpp:
                 logging.info('predict ratings\n')
                 PredictR = util.create_predict_matrix(current_user_num,
                                                       current_doc_num,
-                                                      current_data_path)
+                                                      current_data_path,
+                                                      self.times)
 
                 NormPR = PredictR / PredictR.max()
 

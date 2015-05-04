@@ -5,7 +5,6 @@ from nmf.nmf import NMF
 import copy
 import random
 from utility import fileutil
-import win32com.client
 import scipy.io
 
 
@@ -140,6 +139,8 @@ def generate_matrice_between_time(rating, m, n, start_time, end_time,
 
 
 def generate_train_file_for_btmf(data_path, start_time, end_time):
+    if os.path.exists(data_path + '/btmf_train'):
+        return
     all_data_path = fileutil.parent_dir_of(fileutil.parent_dir_of(data_path))
     ratings = np.loadtxt(os.path.join(all_data_path, 'rating_file.dat.txt'))
     train_file = open(data_path + '/btmf_train', 'w')
@@ -178,7 +179,8 @@ def predict_for_btmf(model_file, user_num, doc_num, time_step):
 
 def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
                                                data_path,
-                                               start_time, end_time):
+                                               start_time, end_time,
+                                               times):
     all_data_path = fileutil.parent_dir_of(fileutil.parent_dir_of(data_path))
     before_ratings = np.loadtxt(os.path.join(all_data_path, 'rating_file.dat.txt'))
     current_ratings = np.loadtxt(os.path.join(data_path, 'train.dat.txt'))
@@ -188,7 +190,7 @@ def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
             break
         i += 1
     train_rating_num = i + current_ratings.shape[0]
-    train_file = open(data_path + '/timesvdpp_train', 'w')
+    train_file = open(data_path + '/timesvdpp_train' + str(times), 'w')
     train_file.write('%%MatrixMarket matrix coordinate real general\n')
     train_file.write(
         str(user_num) + ' ' + str(doc_num) + ' ' + str(train_rating_num) + '\n')
@@ -201,15 +203,15 @@ def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
             train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
                                                     int(doc_id)+1,
                                                     int(timestep),
-                                                    rating))
+                                                    int(rating)))
         for (user_id, doc_id, rating, timestep) in current_ratings:
             train_file.write('{} {} {} {}\n'.format(int(user_id)+1,
                                                     int(doc_id)+1,
                                                     int(timestep),
-                                                    rating))
+                                                    int(rating)))
     train_file.close()
 
-    test_file = open(data_path + '/timesvdpp_test', 'w')
+    test_file = open(data_path + '/timesvdpp_test' + str(times), 'w')
     test_file.write('%%MatrixMarket matrix coordinate real general\n')
 
     test_rating_num = user_num * doc_num
@@ -223,9 +225,10 @@ def generate_train_and_test_file_for_timesvdpp(user_num, doc_num,
     test_file.close()
 
 
-def create_predict_matrix(user_num, doc_num, data_path):
+def create_predict_matrix(user_num, doc_num, data_path, times):
     R = np.zeros((user_num, doc_num), dtype=float)
-    predict = np.loadtxt(data_path + '/timesvdpp_test.predict', dtype=float,
+    predict = np.loadtxt(data_path + '/timesvdpp_test' + str(times) + '.predict',
+                         dtype=float,
                          skiprows=1)
     m, n = predict.shape
     for i in range(1, m):
