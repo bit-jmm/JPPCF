@@ -7,7 +7,7 @@ from model.trm import Trm
 from model.btmf import Btmf
 from model.timesvdpp import TimeSVDpp
 from model.tensorals import Tensorals
-from model.libfm import Libfm
+from model.wals import Wals
 
 
 def prepare_data(time_step):
@@ -45,8 +45,8 @@ if __name__ == '__main__':
     # model = TimeSVDpp(k=20, time_interval=time_step, times=int(sys.argv[1]))
     #model = Tensorals(k=20, time_interval=time_step, times=int(sys.argv[1]),
                       #dataset='citeulike')
-    model = Libfm(k=20, time_interval=time_step, times=int(sys.argv[1]),
-                  dataset='citeulike')
+    model = Wals(k=20, time_interval=time_step, times=int(sys.argv[1]),
+                 dataset='citeulike')
     model.run()
     #for i in range(2, 6):
     #    model = Btmf(k=20, time_interval=time_step, times=i)

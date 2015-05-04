@@ -220,16 +220,19 @@ def generate_train_and_test_file(user_num, doc_num,
 
     for i in range(user_num):
         for j in range(doc_num):
-            test_file.write(str(i + 1) + ' ' + str(j + 1) + ' ' +
-                    str(end_time) + ' 1\n')
+            if model_name == 'weighted-als':
+                test_file.write(str(i + 1) + ' ' + str(j + 1) + ' 1\n')
+            else:
+                test_file.write(str(i + 1) + ' ' + str(j + 1) + ' ' +
+                                str(end_time) + ' 1\n')
     test_file.close()
 
 
-def create_predict_matrix(user_num, doc_num, data_path, times, model_name):
+def create_predict_matrix(user_num, doc_num, data_path, times, model_name, skip_rows=1):
     R = np.zeros((user_num, doc_num), dtype=float)
     predict = np.loadtxt(data_path + '/' + model_name + '_test' + str(times) + '.predict',
                          dtype=float,
-                         skiprows=1)
+                         skiprows=skip_rows)
     m, n = predict.shape
     for i in range(1, m):
         R[int(predict[i, 0]) - 1, int(predict[i, 1]) - 1] = predict[i, 2]
