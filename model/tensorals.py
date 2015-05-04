@@ -9,28 +9,35 @@ from utility import fileutil
 
 class Tensorals:
     filter_threshold = 10
-    fold_num = 5
+    fold_num = 1
     model_name = 'tensor-als'
 
-    def __init__(self, k=20, time_interval=360, times=0, dataset=''):
+    def __init__(self, k=20, time_interval=360, times=0, dataset='', data_path=''):
         self.k = k
         self.times = times
         self.time_interval = time_interval
         self.dataset = dataset
-        self.data_path = \
-            os.path.realpath(os.path.join(__file__,
-                                          '../../data/preprocessed_data',
-                                          'data_divided_by_' + str(time_interval) + '_days',
-                                          'filtered_by_user_doc_like_list_len_' +\
-                                          str(self.filter_threshold)))
+        self.data_path = data_path
+        if time_interval > 0:
+            self.data_path = \
+                os.path.realpath(os.path.join(self.data_path,
+                                              'data_divided_by_' + str(time_interval) + '_days',
+                                              'filtered_by_user_doc_like_list_len_' +\
+                                              str(self.filter_threshold)))
+        else:
+            self.data_path = \
+                os.path.realpath(os.path.join(self.data_path,
+                                              'filtered_by_user_doc_like_list_len_' +\
+                                              str(self.filter_threshold)))
 
         logging.basicConfig(level=logging.DEBUG,
                             format='%(asctime)s %(filename)s[line:%(lineno)d]\
                                     %(levelname)s %(message)s',
                             datefmt='%a, %d %b %Y %H:%M:%S',
-                            filename='./log/tensor-als_k_' +
+                            filename='./log/' + self.model_name + '_k_' +
                                      str(k) + '_timestep_' +
                                      str(time_interval) + '_' +
+                                     self.dataset + '_' +
                                      str(self.times)  + '.log',
                             filemode='w')
 
@@ -126,7 +133,8 @@ class Tensorals:
 
         time_filter_dir = \
             os.path.realpath(os.path.join(__file__,
-                                          '../../result/tensor-als_time_step_' +
+                                          '../../result/' + self.model_name +
+                                          '_time_step_' +
                                           str(self.time_interval) +
                                           '_filter_by_' +
                                           str(self.filter_threshold)))
@@ -191,7 +199,8 @@ class Tensorals:
                                  str.format('time_step_{0}/data_{1}',
                                             current_time_step, fold_id))
 
-                logging.info('begin to generate train and test file for tensor-als...\n')
+                logging.info('begin to generate train and test file for ' +
+                                self.model_name + '...\n')
                 util.generate_train_and_test_file(
                                                   current_user_num,
                                                   current_doc_num,
@@ -208,7 +217,7 @@ class Tensorals:
                                                                     tensor_exe_path))
                 train_file_path = os.path.join(current_data_path, 'tensor-als_train' + str(self.times))
                 test_file_path = os.path.join(current_data_path, 'tensor-als_test' + str(self.times))
-                params = '--lambda=0.05 --minval=0 --maxval=1 --max_iter=30 --D=20 --quiet=1'
+                params = '--lambda=0.05 --minval=1 --maxval=5 --max_iter=20 --D=20 --quiet=1 --clean_cache=1'
                 command = '{0} --training={1} --test={2} {3}'.format(tensor_exe_fullpath,
                                                                      train_file_path,
                                                                      test_file_path,
@@ -227,7 +236,7 @@ class Tensorals:
                                                       self.times,
                                                       'tensor-als')
 
-                NormPR = PredictR / PredictR.max()
+                NormPR = PredictR
 
                 logging.info('[ok]\n')
 

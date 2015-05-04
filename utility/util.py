@@ -218,7 +218,7 @@ def generate_train_and_test_file(user_num, doc_num,
                 train_file.write('{0} {1} {2} {3}\n'.format(int(user_id)+1,
                                                             int(doc_id)+1,
                                                             int(timestep),
-                                                            int(rating)))
+                                                            rating))
     train_file.close()
 
     test_file = open(data_path + '/' + model_name + '_test' + str(times), 'w')
