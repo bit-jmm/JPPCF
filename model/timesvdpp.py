@@ -12,9 +12,10 @@ class TimeSVDpp:
     fold_num = 5
     model_name = 'timeSVD++'
 
-    def __init__(self, k=20, time_interval=360, times=0):
+    def __init__(self, k=20, time_interval=360, times=0, dataset=''):
         self.k = k
         self.times = times
+        self.dataset = dataset
         self.time_interval = time_interval
         self.data_path = \
             os.path.normpath(os.path.join(__file__,
@@ -134,7 +135,8 @@ class TimeSVDpp:
         result_dir = \
             os.path.join(
                 time_filter_dir,
-                str.format('fold_{0}_k_{1}_{2}', self.fold_num, self.k, self.times))
+                str.format('fold_{0}_k_{1}_{2}_{3}', self.fold_num, self.k,
+                           self.dataset, self.times))
         fileutil.mkdir(result_dir)
 
         recall_result_dir = os.path.join(result_dir, 'recall')
@@ -190,26 +192,27 @@ class TimeSVDpp:
                                             current_time_step, fold_id))
 
                 logging.info('begin to generate train and test file for timeSVD++...\n')
-                util.generate_train_and_test_file_for_timesvdpp(
-                                                        current_user_num,
-                                                        current_doc_num,
-                                                        current_data_path,
-                                                        1,
-                                                        current_time_step,
-                                                        self.times)
+                util.generate_train_and_test_file(
+                                                  current_user_num,
+                                                  current_doc_num,
+                                                  current_data_path,
+                                                  1,
+                                                  current_time_step,
+                                                  self.times,
+                                                  'timesvdpp')
 
                 logging.info('\n\n begin training\n')
 
                 timesvdpp_exe_path = os.path.realpath(os.path.join(__file__,
-								   '../../../graphchi-cpp/toolkits/collaborative_filtering/timesvdpp'))
+                                                                   '../../../graphchi-cpp/toolkits/collaborative_filtering/timesvdpp'))
                 train_file_path = os.path.join(current_data_path, 'timesvdpp_train' + str(self.times))
                 test_file_path = os.path.join(current_data_path, 'timesvdpp_test' + str(self.times))
                 params = '--minval=0 --maxval=1 --max_iter=30 --quiet=1 --D=20'
-		command = '{} --training={} --test={} {}'.format(timesvdpp_exe_path,
-							         train_file_path,
-							         test_file_path,
-							         params)
-		print command
+                command = '{} --training={} --test={} {}'.format(timesvdpp_exe_path,
+                                                                 train_file_path,
+                                                                 test_file_path,
+                                                                 params)
+                print command
                 out = os.popen(command)
                 str1 = out.read()
                 while str1 != '':
@@ -220,7 +223,8 @@ class TimeSVDpp:
                 PredictR = util.create_predict_matrix(current_user_num,
                                                       current_doc_num,
                                                       current_data_path,
-                                                      self.times)
+                                                      self.times,
+                                                      'timesvdpp')
 
                 NormPR = PredictR / PredictR.max()
 
