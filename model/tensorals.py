@@ -7,18 +7,18 @@ from utility import util
 from utility import evaluate
 from utility import fileutil
 
-class TimeSVDpp:
+class Tensorals:
     filter_threshold = 10
     fold_num = 5
-    model_name = 'timeSVD++'
+    model_name = 'tensor-als'
 
     def __init__(self, k=20, time_interval=360, times=0, dataset=''):
         self.k = k
         self.times = times
-        self.dataset = dataset
         self.time_interval = time_interval
+        self.dataset = dataset
         self.data_path = \
-            os.path.normpath(os.path.join(__file__,
+            os.path.realpath(os.path.join(__file__,
                                           '../../data/preprocessed_data',
                                           'data_divided_by_' + str(time_interval) + '_days',
                                           'filtered_by_user_doc_like_list_len_' +\
@@ -28,7 +28,7 @@ class TimeSVDpp:
                             format='%(asctime)s %(filename)s[line:%(lineno)d]\
                                     %(levelname)s %(message)s',
                             datefmt='%a, %d %b %Y %H:%M:%S',
-                            filename='./log/timeSVD++_k_' +
+                            filename='./log/tensor-als_k_' +
                                      str(k) + '_timestep_' +
                                      str(time_interval) + '_' +
                                      str(self.times)  + '.log',
@@ -126,7 +126,7 @@ class TimeSVDpp:
 
         time_filter_dir = \
             os.path.realpath(os.path.join(__file__,
-                                          '../../result/timeSVD++_time_step_' +
+                                          '../../result/tensor-als_time_step_' +
                                           str(self.time_interval) +
                                           '_filter_by_' +
                                           str(self.filter_threshold)))
@@ -191,23 +191,24 @@ class TimeSVDpp:
                                  str.format('time_step_{0}/data_{1}',
                                             current_time_step, fold_id))
 
-                logging.info('begin to generate train and test file for timeSVD++...\n')
-                util.generate_train_and_test_file_for_timesvdpp(
+                logging.info('begin to generate train and test file for tensor-als...\n')
+                util.generate_train_and_test_file_for_tensorals(
                                                         current_user_num,
                                                         current_doc_num,
                                                         current_data_path,
                                                         1,
                                                         current_time_step,
                                                         self.times,
-                                                        'timesvdpp')
+                                                        'tensor-als')
 
                 logging.info('\n\n begin training\n')
 
-                timesvdpp_exe_path = os.path.realpath(os.path.join(__file__,
-                                                                   '../../../graphchi-cpp/toolkits/collaborative_filtering/timesvdpp'))
-                train_file_path = os.path.join(current_data_path, 'timesvdpp_train' + str(self.times))
-                test_file_path = os.path.join(current_data_path, 'timesvdpp_test' + str(self.times))
-                params = '--minval=0 --maxval=1 --max_iter=30 --quiet=1 --D=20'
+                tensor_exe_path = '../../../graphchi-cpp/toolkits/collaborative_filtering/als_tensor'
+                tensor_exe_fullpath = os.path.realpath(os.path.join(__file__,
+                                                                    tensor_exe_path))
+                train_file_path = os.path.join(current_data_path, 'tensor-als_train' + str(self.times))
+                test_file_path = os.path.join(current_data_path, 'tensor-als_test' + str(self.times))
+                params = '--lambda=0.05 --minval=0 --maxval=1 --max_iter=30 --D=20 --quiet=1'
                 command = '{} --training={} --test={} {}'.format(timesvdpp_exe_path,
                                                                  train_file_path,
                                                                  test_file_path,
@@ -224,7 +225,7 @@ class TimeSVDpp:
                                                       current_doc_num,
                                                       current_data_path,
                                                       self.times,
-                                                      'timesvdpp')
+                                                      'tensor-als')
 
                 NormPR = PredictR / PredictR.max()
 
