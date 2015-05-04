@@ -6,7 +6,7 @@ log/
 .*
 # C extensions
 *.so
-
+*.mat
 # Distribution / packaging
 .Python
 env/

@@ -3,6 +3,7 @@ import time
 from utility.data_preprocess import PrepareData
 from model.ttarm import Ttarm
 from model.trm import Trm
+from model.btmf import Btmf
 from model.timesvdpp import TimeSVDpp
 
 
@@ -36,7 +37,10 @@ if __name__ == '__main__':
     if not os.path.isdir(log_path):
         os.mkdir(log_path)
 
-    #model = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step)
-    #model = Trm(k=20, lambd=10, time_interval=time_step)
-    model = TimeSVDpp(k=20, time_interval=time_step)
-    model.run()
+    # model = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step)
+    # model = Trm(k=20, lambd=10, time_interval=time_step)
+    # model = TimeSVDpp(k=20, time_interval=time_step)
+    for i in range(2, 6):
+        model = Btmf(k=20, time_interval=time_step, times=i)
+        model.run()
+    print 'end'

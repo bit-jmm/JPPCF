@@ -8,42 +8,29 @@ from utility import fileutil
 from model.JPPCF import *
 
 
-class Ttarm:
-    topic_num = 50
+class Btmf:
     filter_threshold = 10
-    regl1nmf = 0.05
-    regl1jpp = 0.05
-    epsilon = 1
-    maxiter = 30
     fold_num = 5
-    model_name = 'TTARM'
+    model_name = 'BTMF'
 
-    def __init__(self, k=20, lambd=10, eta=0.3, time_interval=360):
+    def __init__(self, k=20, time_interval=360, times=0):
+        self.times = times
         self.k = k
-        self.lambd = lambd
-        self.eta = eta
         self.time_interval = time_interval
-        self.origin_data_path = \
+        self.data_path = \
             os.path.normpath(os.path.join(__file__,
-                                          '../../data/preprocessed_data'))
-
-        self.data_path = os.path.join(self.origin_data_path,
-                                      'data_divided_by_' +
-                                      str(self.time_interval) + '_days')
-        self.filter_data_path = \
-            os.path.join(self.data_path,
-                         'filtered_by_user_doc_like_list_len_' +
-                         str(self.filter_threshold))
+                                          '../../data/preprocessed_data',
+                                          'data_divided_by_' + str(time_interval) + '_days',
+                                          'filtered_by_user_doc_like_list_len_' +\
+                                          str(self.filter_threshold)))
 
         logging.basicConfig(level=logging.DEBUG,
                             format='%(asctime)s %(filename)s[line:%(lineno)d]\
                                     %(levelname)s %(message)s',
                             datefmt='%a, %d %b %Y %H:%M:%S',
-                            filename='./log/new_ttarm_k_' +
-                                     str(k) + '_lambda_' +
-                                     str(lambd) + '_alpha_' +
-                                     str(self.regl1jpp) + '_eta_' +
-                                     str(eta) + '.log',
+                            filename='./log/BTMF_k_' +
+                                     str(k) + '_timestep_' +
+                                     str(time_interval) + '.log',
                             filemode='w')
 
         ##################################################################
@@ -59,77 +46,26 @@ class Ttarm:
 
     def prepare_data(self):
 
-        user_id_map = np.loadtxt(os.path.join(self.filter_data_path,
+        user_id_map = np.loadtxt(os.path.join(self.data_path,
                                               'user_id_map.dat.txt'), int)
-        doc_id_map = np.loadtxt(os.path.join(self.filter_data_path,
+        doc_id_map = np.loadtxt(os.path.join(self.data_path,
                                              'doc_id_map.dat.txt'), int)
 
         user_time_dist = np.loadtxt(
-            os.path.join(self.filter_data_path, 'user_time_distribute.dat.txt'),
+            os.path.join(self.data_path, 'user_time_distribute.dat.txt'),
             int)
         doc_time_dist = np.loadtxt(
-            os.path.join(self.filter_data_path, 'doc_time_distribute.dat.txt'),
+            os.path.join(self.data_path, 'doc_time_distribute.dat.txt'),
             int)
 
         user_time_dict = dict(zip(user_time_dist[:, 0], user_time_dist[:, 1]))
         doc_time_dict = dict(zip(doc_time_dist[:, 0], doc_time_dist[:, 1]))
 
         R = np.loadtxt(
-            os.path.join(self.filter_data_path, 'rating_file.dat.txt'),
+            os.path.join(self.data_path, 'rating_file.dat.txt'),
             float)
         return (user_time_dict, doc_time_dict,
                 user_id_map, doc_id_map, R)
-
-    def topic_distribute(self, doc_id_map, doc_time_dict):
-        doc_id_map_after_filter = \
-            np.loadtxt(
-                os.path.join(self.filter_data_path,
-                             'doc_id_citeulike_id_map_after_filter.dat.txt'),
-                int)
-
-        doc_id_citeulike_id_map = open(self.origin_data_path +
-                                       '/doc_id_citeulike_id_map.csv',
-                                       'r').readlines()
-        del doc_id_citeulike_id_map[0]
-
-        citeulike_id_doc_id_dict = {}
-        for row in doc_id_citeulike_id_map:
-            splits = row.strip().split(',')
-            citeulike_id_doc_id_dict[int(splits[1])] = int(splits[0])
-
-        doc_id_citeulike_id_map_after_filter_dict = dict(
-            zip(doc_id_map_after_filter[:, 0], doc_id_map_after_filter[:, 1]))
-
-        X = np.zeros((doc_id_map.shape[0], 8000))
-
-        doc_words = open(os.path.join(self.origin_data_path, 'mult.dat.txt'),
-                         'r').readlines()
-
-        # get doc_id citeulike_id dict and doc word matrix
-        for i in xrange(doc_id_map.shape[0]):
-            citeulike_id = doc_id_citeulike_id_map_after_filter_dict[
-                doc_id_map[i, 1]]
-
-            doc_id_in_total = citeulike_id_doc_id_dict[citeulike_id]
-            words = doc_words[doc_id_in_total - 1].strip().split()
-            del words[0]
-            for w in words:
-                splits = w.split(':')
-                X[doc_id_map[i, 1], int(splits[0])] = int(splits[1])
-
-        # init W and H with nmf
-        Xt = X[range(doc_time_dict[1]), :]
-        (W1, H1) = util.nmf(Xt, self.topic_num, self.maxiter,
-                            self.regl1nmf, self.epsilon)
-
-        # learning topic distribution by jpp
-        logging.info('start learning topic distribution by jpp ......')
-
-        (W, H, M) = JPPTopic(X, H1, self.topic_num, self.lambd,
-                             self.regl1jpp, self.epsilon, 50, True)
-
-        logging.info('end')
-        return W
 
     def evaluate(self, metric, metric_dict, predict_matrix, current_data_path,
                  recall_num, current_user_like_dict, cold = False):
@@ -177,19 +113,17 @@ class Ttarm:
         result_file.close()
 
     def run(self):
-        print 'k: %d\tlambda:%d \teta: %.2f\n' % (self.k, self.lambd, self.eta)
-        (user_time_dict, doc_time_dict,
-         user_id_map, doc_id_map, R) = self.prepare_data()
+        print 'k: %d\n' % self.k
+        (user_time_dict, doc_time_dict, user_id_map,
+         doc_id_map, R) = self.prepare_data()
         time_step_num = int(R[-1, 3])
 
         user_num = user_id_map.shape[0]
         doc_num = doc_id_map.shape[0]
 
-        W = self.topic_distribute(doc_id_map, doc_time_dict)
-
         time_filter_dir = \
             os.path.normpath(os.path.join(__file__,
-                                          '../../result/new_ttarm_time_step_' +
+                                          '../../result/btmf_time_step_' +
                                           str(self.time_interval) +
                                           '_filter_by_' +
                                           str(self.filter_threshold)))
@@ -198,9 +132,7 @@ class Ttarm:
         result_dir = \
             os.path.join(
                 time_filter_dir,
-                str.format('eta_{0}_fold_{1}_k_{2}_lambda_{3}_alpha_{4}',
-                           self.eta, self.fold_num,
-                           self.k, self.lambd, self.regl1jpp))
+                str.format('fold_{0}_k_{1}_{2}', self.fold_num, self.k, self.times))
         fileutil.mkdir(result_dir)
 
         recall_result_dir = os.path.join(result_dir, 'recall')
@@ -216,17 +148,7 @@ class Ttarm:
         logging.info('doc num: ' + str(doc_num) + '\n')
         logging.info('time step num: ' + str(time_step_num) + '\n')
 
-        # the start time period used for init of W(1) and H(1), using normal NMF
         start = 1
-        Rt = util.generate_matrice_between_time(R, user_time_dict[start],
-                                                doc_time_dict[start], start,
-                                                start)
-
-        logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
-        logging.info('start nmf:\n')
-
-        (P, Q) = util.nmf(Rt, self.k, self.maxiter, self.regl1nmf, self.epsilon)
-        logging.info('[ok]\n')
 
         # for all the consecutive periods
         for current_time_step in range(start + 1, time_step_num + 1):
@@ -234,8 +156,6 @@ class Ttarm:
             logging.info('\n=========================\n')
             logging.info('time_step number %i:\t' + str(current_time_step))
             logging.info('----------------\n')
-
-            Po = P
 
             recall_dict = {}
             ndcg_dict = {}
@@ -250,7 +170,7 @@ class Ttarm:
             current_doc_num = doc_time_dict[current_time_step]
 
             current_user_like_dict = {}
-            like_file = open(os.path.join(self.filter_data_path,
+            like_file = open(os.path.join(self.data_path,
                                           'user_like_list_at_time_step' +
                                           str(current_time_step) + '.dat.txt'))
             for line in like_file.readlines():
@@ -261,48 +181,27 @@ class Ttarm:
                     like_list.append((doc_rating[0], doc_rating[1]))
                 current_user_like_dict[splits[0]] = like_list
 
-            Po = util.reshape_matrix(Po, current_user_num, self.k)
-
             for fold_id in range(self.fold_num):
                 current_data_path = \
-                    os.path.join(self.filter_data_path,
+                    os.path.join(self.data_path,
                                  str.format('time_step_{0}/data_{1}',
                                             current_time_step, fold_id))
 
-                train_data_path = os.path.join(current_data_path,
-                                               'train.dat.txt')
+                util.generate_train_file_for_btmf(current_data_path,
+                                                  1, current_time_step)
+                logging.info('Training ' + self.model_name)
 
-                Rt = util.generate_matrice_for_file(train_data_path,
-                                                    current_user_num,
-                                                    current_doc_num)
-                logging.info('non zero cell num: ' + str(len(np.nonzero(Rt)[0])))
-
-                # calculate user item topic similarity matrix
-                Ct_train = \
-                    util.cal_topic_similarity_matrix(W,
-                                                     current_data_path,
-                                                     current_user_num,
-                                                     current_doc_num,
-                                                     current_user_like_dict,
-                                                     True)
-                logging.info('computing ' + self.model_name +
-                             ' decomposition...')
-
-                P, Q, S = JPPCF_with_topic(Rt, Po, Ct_train, self.k,
-                                           self.eta,
-                                           self.lambd, self.regl1jpp,
-                                           self.epsilon, self.maxiter, True)
-
-                Ct_test = \
-                    util.cal_topic_similarity_matrix(W,
-                                                     current_data_path,
-                                                     current_user_num,
-                                                     current_doc_num,
-                                                     current_user_like_dict,
-                                                     False)
-
-                PredictR = ((1 - self.eta) * np.dot(P, Q)) + \
-                            (self.eta * Ct_test)
+                train_data_path = os.path.join(current_data_path, 'btmf_train')
+                util.exec_mat_command('D:/workspace/ttarm/model/baseline',
+                            "dimension_stbpmf({},{},{},{},\'{}\', 1, 0)".
+                            format(current_time_step,
+                                   current_doc_num,
+                                   current_user_num,
+                                   self.k, train_data_path))
+                logging.info('Predicting ratings')
+                PredictR = util.predict_for_btmf(
+                    'D:/workspace/ttarm/model/baseline/model.mat',
+                    current_user_num, current_doc_num, current_time_step)
                 NormPR = PredictR / PredictR.max()
 
                 logging.info('[ok]\n')
@@ -310,7 +209,7 @@ class Ttarm:
                 logging.info('\t fold_id:' + str(fold_id) + '\n')
                 for recall_num in [3, 10, 50, 100, 300, 500, 1000]:
                     # recall performance
-                    self.evaluate('recall', recall_dict, NormPR,
+                    self.evaluate('recall', recall_dict, PredictR,
                                   current_data_path, recall_num,
                                   current_user_like_dict)
                     # recall for cold start performance
@@ -336,12 +235,11 @@ class Ttarm:
                                   current_data_path, recall_num,
                                   current_user_like_dict, cold=True)
 
-
                 # rmse performance
                 self.evaluate('rmse', rmse_dict, NormPR, current_data_path,
                               3, current_user_like_dict)
                 # rmse for cold start performance
-                self.evaluate('rmse', rmse_cold_dict, NormPR,
+                self.evaluate('rmse', rmse_cold_dict, PredictR,
                               current_data_path, 3,
                               current_user_like_dict, cold=True)
 
