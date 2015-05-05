@@ -39,16 +39,16 @@ if __name__ == '__main__':
     if not os.path.isdir(log_path):
         os.mkdir(log_path)
 
-    time_step = 360
+    time_step = -1
     # prepare_data(time_step)
 
     # model = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step)
 
     model_name = str(sys.argv[1])
     timeth = int(sys.argv[2])
-    dataset = 'citeulike'
+    dataset = 'MovieLens'
     data_path = os.path.realpath(os.path.join(__file__,
-                                              '../data/preprocessed_data'))
+                                              '../data/MovieLens'))
 
     if model_name == 'trm':
        	model = Trm(k=20, lambd=10, time_interval=time_step,

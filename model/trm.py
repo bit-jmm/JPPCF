@@ -14,7 +14,7 @@ class Trm:
     regl1jpp = 0.05
     epsilon = 1
     maxiter = 30
-    fold_num = 1
+    fold_num = 5
     model_name = 'TRM'
 
     def __init__(self, k=20, lambd=10, time_interval=360, times=1, dataset='', data_path=''):

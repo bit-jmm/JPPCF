@@ -9,7 +9,7 @@ from utility import fileutil
 
 class TimeSVDpp:
     filter_threshold = 10
-    fold_num = 1
+    fold_num = 5
     model_name = 'timeSVD++'
 
     def __init__(self, k=20, time_interval=360, times=0, dataset='', data_path=''):
