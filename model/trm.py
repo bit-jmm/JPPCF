@@ -17,25 +17,36 @@ class Trm:
     fold_num = 5
     model_name = 'TRM'
 
-    def __init__(self, k=20, lambd=10, time_interval=360):
+    def __init__(self, k=20, lambd=10, time_interval=360, times=1, dataset='', data_path=''):
         self.k = k
         self.lambd = lambd
         self.time_interval = time_interval
-        self.data_path = \
-            os.path.normpath(os.path.join(__file__,
-                                          '../../data/preprocessed_data',
-                                          'data_divided_by_' + str(time_interval) + '_days',
-                                          'filtered_by_user_doc_like_list_len_' +\
-                                          str(self.filter_threshold)))
+        self.times = times
+        self.dataset = dataset
+        self.data_path = data_path
+
+        if time_interval > 0:
+            self.data_path = \
+                os.path.realpath(os.path.join(self.data_path,
+                                              'data_divided_by_' + str(time_interval) + '_days',
+                                              'filtered_by_user_doc_like_list_len_' +\
+                                              str(self.filter_threshold)))
+        else:
+            self.data_path = \
+                os.path.realpath(os.path.join(self.data_path,
+                                              'filtered_by_user_doc_like_list_len_' +\
+                                              str(self.filter_threshold)))
 
         logging.basicConfig(level=logging.DEBUG,
                             format='%(asctime)s %(filename)s[line:%(lineno)d]\
                                     %(levelname)s %(message)s',
                             datefmt='%a, %d %b %Y %H:%M:%S',
-                            filename='./log/new_trm_k_' +
+                            filename='./log/new_' + self.model_name + '_k_' +
                                      str(k) + '_lambda_' +
                                      str(lambd) + '_timestep_' +
-                                     str(time_interval) + '.log',
+                                     str(time_interval) + '_' +
+                                     self.dataset + '_' +
+                                     str(self.times) + '.log',
                             filemode='w')
 
         ##################################################################
@@ -139,8 +150,9 @@ class Trm:
         result_dir = \
             os.path.join(
                 time_filter_dir,
-                str.format('fold_{0}_k_{1}_lambda_{2}',
-                           self.fold_num, self.k, self.lambd))
+                str.format('fold_{0}_k_{1}_lambda_{2}_{3}_{4}',
+                           self.fold_num, self.k, self.lambd,
+                           self.dataset, self.times))
         fileutil.mkdir(result_dir)
 
         recall_result_dir = os.path.join(result_dir, 'recall')
@@ -223,7 +235,7 @@ class Trm:
                                               self.epsilon, self.maxiter, True)
 
                 PredictR = np.dot(P, Q)
-                NormPR = PredictR / PredictR.max()
+                NormPR = (PredictR / PredictR.max())*5
 
                 logging.info('[ok]\n')
 

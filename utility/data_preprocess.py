@@ -10,7 +10,7 @@ class PrepareData:
 
     def __init__(self, data_path, filter_threshold,
                  fold_num=5, time_interval_days=-1):
-        self.__data_path = data_path
+        self.__data_path = data_path + '/'
         self.__filter_threshold = filter_threshold
         self.__time_interval_days = time_interval_days
         self.__fold_num = fold_num
@@ -444,8 +444,12 @@ class PrepareData:
             user_like_list_cold_file.close()
 
     def generate_cross_validate_data(self):
-        data_path = self.__data_path + 'data_divided_by_' + str(
-            self.__time_interval_days) + '_days/'
+        if self.__time_interval_days > 0:
+            data_path = self.__data_path + 'data_divided_by_' +\
+                                           str(self.__time_interval_days) +\
+                                           '_days/'
+        else:
+            data_path = self.__data_path
         result_path = data_path + 'filtered_by_user_doc_like_list_len_' + str(
             self.__filter_threshold)
         rating_data = np.loadtxt(result_path + '/rating_file.dat.txt',
