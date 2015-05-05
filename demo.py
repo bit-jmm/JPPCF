@@ -70,4 +70,4 @@ if __name__ == '__main__':
         exit(0)
 
     model.run()
-    urint 'end'
+    print 'end'
