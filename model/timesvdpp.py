@@ -216,7 +216,7 @@ class TimeSVDpp:
                                                                    '../../../graphchi-cpp/toolkits/collaborative_filtering/timesvdpp'))
                 train_file_path = os.path.join(current_data_path, 'timesvdpp_train' + str(self.times))
                 test_file_path = os.path.join(current_data_path, 'timesvdpp_test' + str(self.times))
-                params = '--minval=1 --maxval=5 --max_iter=20 --quiet=1 --D=20 --clean_cache=1'
+                params = '--minval=0 --maxval=5 --max_iter=20 --quiet=1 --D=20 --clean_cache=1'
                 command = '{0} --training={1} --test={2} {3}'.format(timesvdpp_exe_path,
                                                                      train_file_path,
                                                                      test_file_path,

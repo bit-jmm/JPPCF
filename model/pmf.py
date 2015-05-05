@@ -216,7 +216,7 @@ class Pmf:
                                                                    model_exe_path))
                 train_file_path = os.path.join(current_data_path, self.model_name + '_train' + str(self.times))
                 test_file_path = os.path.join(current_data_path, self.model_name + '_test' + str(self.times))
-                params = '--minval=1 --maxval=5 --max_iter=20 --pmf_burn_in=15 --D=20 --quiet=1 --clean_cache=1'
+                params = '--minval=0 --maxval=5 --max_iter=20 --pmf_burn_in=15 --D=20 --quiet=1 --clean_cache=1'
                 command = '{0} --training={1} --test={2} {3}'.format(model_exe_fullpath,
                                                                      train_file_path,
                                                                      test_file_path,

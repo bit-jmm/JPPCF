@@ -217,7 +217,7 @@ class Tensorals:
                                                                     tensor_exe_path))
                 train_file_path = os.path.join(current_data_path, 'tensor-als_train' + str(self.times))
                 test_file_path = os.path.join(current_data_path, 'tensor-als_test' + str(self.times))
-                params = '--lambda=0.05 --minval=1 --maxval=5 --max_iter=20 --D=20 --quiet=1 --clean_cache=1'
+                params = '--lambda=0.05 --minval=0 --maxval=5 --max_iter=20 --D=20 --quiet=1 --clean_cache=1'
                 command = '{0} --training={1} --test={2} {3}'.format(tensor_exe_fullpath,
                                                                      train_file_path,
                                                                      test_file_path,
