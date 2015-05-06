@@ -1,4 +1,4 @@
-for i in 2 3 4 5
+for i in 2 3
 do
   #for model in trm timesvdpp wals tensorals pmf
   for model in trm
