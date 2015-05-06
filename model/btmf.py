@@ -10,27 +10,36 @@ from model.JPPCF import *
 
 class Btmf:
     filter_threshold = 10
-    fold_num = 5
+    fold_num = 3
     model_name = 'BTMF'
 
-    def __init__(self, k=20, time_interval=360, times=0):
+    def __init__(self, k=20, time_interval=360, times=0, dataset='', data_path=''):
         self.times = times
         self.k = k
         self.time_interval = time_interval
-        self.data_path = \
-            os.path.normpath(os.path.join(__file__,
-                                          '../../data/preprocessed_data',
-                                          'data_divided_by_' + str(time_interval) + '_days',
-                                          'filtered_by_user_doc_like_list_len_' +\
-                                          str(self.filter_threshold)))
+        self.dataset = dataset
+        self.data_path = data_path
+        if time_interval > 0:
+            self.data_path = \
+                os.path.realpath(os.path.join(self.data_path,
+                                              'data_divided_by_' + str(time_interval) + '_days',
+                                              'filtered_by_user_doc_like_list_len_' +\
+                                              str(self.filter_threshold)))
+        else:
+            self.data_path = \
+                os.path.realpath(os.path.join(self.data_path,
+                                              'filtered_by_user_doc_like_list_len_' +\
+                                              str(self.filter_threshold)))
 
         logging.basicConfig(level=logging.DEBUG,
                             format='%(asctime)s %(filename)s[line:%(lineno)d]\
                                     %(levelname)s %(message)s',
                             datefmt='%a, %d %b %Y %H:%M:%S',
-                            filename='./log/BTMF_k_' +
+                            filename='./log/' + self.model_name + '_k_' +
                                      str(k) + '_timestep_' +
-                                     str(time_interval) + '.log',
+                                     str(time_interval) +
+                                     self.dataset + '_' +
+                                     str(self.times) + '.log',
                             filemode='w')
 
         ##################################################################
@@ -123,7 +132,8 @@ class Btmf:
 
         time_filter_dir = \
             os.path.normpath(os.path.join(__file__,
-                                          '../../result/btmf_time_step_' +
+                                          '../../result/' + self.model_name +
+                                          '_time_step_' +
                                           str(self.time_interval) +
                                           '_filter_by_' +
                                           str(self.filter_threshold)))
@@ -132,7 +142,8 @@ class Btmf:
         result_dir = \
             os.path.join(
                 time_filter_dir,
-                str.format('fold_{0}_k_{1}_{2}', self.fold_num, self.k, self.times))
+                str.format('fold_{0}_k_{1}_{2}_{3}', self.fold_num, self.k,
+                           self.dataset, self.times))
         fileutil.mkdir(result_dir)
 
         recall_result_dir = os.path.join(result_dir, 'recall')
@@ -202,7 +213,7 @@ class Btmf:
                 PredictR = util.predict_for_btmf(
                     'D:/workspace/ttarm/model/baseline/model.mat',
                     current_user_num, current_doc_num, current_time_step)
-                NormPR = PredictR / PredictR.max()
+                NormPR = PredictR
 
                 logging.info('[ok]\n')
 

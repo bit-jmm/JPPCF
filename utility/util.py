@@ -5,7 +5,8 @@ from nmf.nmf import NMF
 import copy
 import random
 from utility import fileutil
-#import scipy.io
+import scipy.io
+import win32com.client
 
 
 def exec_mat_command(dir, command):
@@ -168,6 +169,9 @@ def predict_for_btmf(model_file, user_num, doc_num, time_step):
     U = m_dict.get('U')
     V = m_dict.get('V')
     B = m_dict.get('B')
+    print "U: ", U.shape
+    print "V: ", V.shape
+    print "B: ", B.shape
 
     predict = np.zeros((user_num, doc_num))
     for i in range(user_num):
