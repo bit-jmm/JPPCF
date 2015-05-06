@@ -46,9 +46,9 @@ if __name__ == '__main__':
 
     model_name = str(sys.argv[1])
     timeth = int(sys.argv[2])
-    dataset = 'CiteUlike2'
+    dataset = 'MovieLens2'
     data_path = os.path.realpath(os.path.join(__file__,
-                                              '../data/CiteUlike2'))
+                                              '../data/MovieLens2'))
 
     if model_name == 'trm':
        	model = Trm(k=20, lambd=10, time_interval=time_step,
