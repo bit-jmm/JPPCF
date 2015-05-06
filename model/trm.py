@@ -134,6 +134,8 @@ class Trm:
         (user_time_dict, doc_time_dict,
          user_id_map, doc_id_map, R) = self.prepare_data()
         time_step_num = int(R[-1, 3])
+	max_score = R[:, 2].max()
+        logging.info('max store: ' + str(max_score) + '\n')
 
         user_num = user_id_map.shape[0]
         doc_num = doc_id_map.shape[0]
@@ -235,7 +237,7 @@ class Trm:
                                               self.epsilon, self.maxiter, True)
 
                 PredictR = np.dot(P, Q)
-                NormPR = (PredictR / PredictR.max())*5
+                NormPR = (PredictR / PredictR.max()) * max_score
 
                 logging.info('[ok]\n')
 
