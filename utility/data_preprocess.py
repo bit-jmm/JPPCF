@@ -443,6 +443,77 @@ class PrepareData:
             user_like_list_file.close()
             user_like_list_cold_file.close()
 
+    def cross_validate_on_dict_no_cold(self, doc_liked_list, time_result_path,
+                                       current_time):
+        fold_num = self.__fold_num
+        folds_dict_list = []
+        # the last dict store the like list for docs whose like list len lower than fold_num
+        for i in range(fold_num+1):
+            folds_dict_list.append({})
+        for doc_id in doc_liked_list.keys():
+            user_ratings = doc_liked_list[doc_id]
+            list_len = len(user_ratings)
+            if list_len < fold_num:
+                folds_dict_list[fold_num][doc_id] = user_ratings
+                doc_liked_list.pop(doc_id)
+            else:
+                step_len = list_len / fold_num
+                remainder = list_len % fold_num
+                for i in range(fold_num):
+                    for j in range(i*step_len,(i+1)*step_len):
+                        if folds_dict_list[i].has_key(doc_id):
+                            folds_dict_list[i][doc_id].append(user_ratings[j])
+                        else:
+                            folds_dict_list[i][doc_id] = [user_ratings[j]]
+                    for j in range(list_len-remainder, list_len):
+                        if folds_dict_list[i].has_key(doc_id):
+                            folds_dict_list[i][doc_id].append(user_ratings[j])
+                        else:
+                            folds_dict_list[i][doc_id] = [user_ratings[j]]
+        # end evenly split user-doc pair to folds
+        # start generate train_data and test_data
+        for i in range(fold_num):
+            data_path = time_result_path + '/data_' + str(i)
+            if (not os.path.isdir(data_path)):
+                os.mkdir(data_path)
+            train_file = open(data_path + '/train.dat.txt', 'w+')
+            test_file = open(data_path + '/test.dat.txt', 'w+')
+            cold_test_file = open(data_path + '/cold_test.dat.txt', 'w+')
+            user_like_list_file = open(data_path + '/user_like_list_in_test.dat.txt', 'w+')
+            user_like_list_cold_file = open(data_path + '/user_like_list_in_cold_test.dat.txt', 'w+')
+
+            user_like_list_dict_in_test = {}
+
+            doc_dict = folds_dict_list[i]
+            for doc_id in doc_dict.keys():
+                for (user_id, rating) in doc_dict[doc_id]:
+                    if user_like_list_dict_in_test.has_key(user_id):
+                        user_like_list_dict_in_test[user_id].append((doc_id, rating))
+                    else:
+                        user_like_list_dict_in_test[user_id]= [(doc_id, rating)]
+                    test_file.write('{0} {1} {2} {3}\n'.format(user_id, doc_id,
+                                                        rating, current_time))
+            for fold_id in range(fold_num+1):
+                if fold_id == i:
+                    continue
+                doc_dict = folds_dict_list[fold_id]
+                for doc_id in doc_dict.keys():
+                    for (user_id, rating) in doc_dict[doc_id]:
+                        train_file.write('{0} {1} {2} {3}\n'.format(user_id, doc_id,
+                                                        rating, current_time))
+
+            for user_id in user_like_list_dict_in_test:
+                dr_list = user_like_list_dict_in_test[user_id]
+                doc_ratings = ' '.join('{0}:{1}'.format(doc_id, rating) for (doc_id, rating) in dr_list)
+                temp = str(user_id) + ' ' + str(len(dr_list)) + ' ' + doc_ratings + '\n'
+                user_like_list_file.write(temp)
+
+            train_file.close()
+            test_file.close()
+            user_like_list_file.close()
+            cold_test_file.close()
+            user_like_list_cold_file.close()
+
     def generate_cross_validate_data(self):
         if self.__time_interval_days > 0:
             data_path = self.__data_path + 'data_divided_by_' +\
@@ -475,3 +546,46 @@ class PrepareData:
                     rating = user_rating[1]
                     ratings.append((user_id, doc_id, rating))
             self.cross_validate_on_ratings(ratings, time_path, current_time_step)
+
+    def generate_cross_validate_data_no_cold(self):
+        if self.__time_interval_days > 0:
+            data_path = self.__data_path + 'data_divided_by_' +\
+                                           str(self.__time_interval_days) +\
+                                           '_days/'
+        else:
+            data_path = self.__data_path
+        result_path = data_path + 'filtered_by_user_doc_like_list_len_' + str(
+            self.__filter_threshold)
+        rating_data = np.loadtxt(result_path + '/rating_file.dat.txt',
+                                 dtype=float)
+        start_time = int(rating_data[0][3])
+        end_time = int(rating_data[-1][3])
+
+        doc_liked_dict = {}
+        i = 0
+        (row, col) = rating_data.shape
+        # generate data at every time step
+        for current_time in xrange(start_time, end_time+1):
+            time_path = result_path + '/time_step_' + str(current_time)
+            if (not os.path.isdir(time_path)):
+                os.mkdir(time_path)
+            for j in range(i, row):
+                user_id = int(rating_data[j][0])
+                doc_id = int(rating_data[j][1])
+                rating = rating_data[j][2]
+                time_step = int(rating_data[j][3])
+                if time_step != current_time:
+                    i = j
+                    self.cross_validate_on_dict_no_cold(doc_liked_dict,
+                                                        time_path, current_time)
+                    doc_liked_dict = {}
+                    break
+                if doc_liked_dict.has_key(doc_id):
+                    doc_liked_dict[doc_id].append((user_id, rating))
+                else:
+                    doc_liked_dict[doc_id] = [(user_id, rating)]
+                if j == row - 1:
+                    self.cross_validate_on_dict_no_cold(doc_liked_dict,
+                                                        time_path, current_time)
+                    i = row
+                    break
