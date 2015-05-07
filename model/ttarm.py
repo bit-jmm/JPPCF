@@ -9,7 +9,7 @@ from model.JPPCF import *
 
 
 class Ttarm:
-    topic_num = 50
+    topic_num = 30
     filter_threshold = 10
     regl1nmf = 0.05
     regl1jpp = 0.05
@@ -26,6 +26,7 @@ class Ttarm:
         self.time_interval = time_interval
         self.times = times
         self.dataset = dataset
+	self.origin_data_path = data_path
 
         self.data_path = os.path.join(data_path,
                                       'data_divided_by_' +
