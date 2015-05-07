@@ -43,13 +43,19 @@ if __name__ == '__main__':
     #prepare_data(time_step)
 
 
+    #model = Btmf(k=20, time_interval=time_step, times=2,
+                 #dataset=dataset, data_path=data_path)
+
     model_name = str(sys.argv[1])
     timeth = int(sys.argv[2])
     dataset = 'CiteUlike2'
     data_path = os.path.realpath(os.path.join(__file__,
                                               '../data/preprocessed_data2'))
+    #dataset = 'MovieLens2'
+    #data_path = os.path.realpath(os.path.join(__file__,
+    #                                          '../data/MovieLens2'))
 
-    if model_name == 'Ttarm':
+    if model_name == 'ttarm':
         model = Ttarm(k=20, lambd=10, eta=0.3, time_interval=time_step,
                       times=timeth, dataset=dataset, data_path=data_path)
     elif model_name == 'trm':
