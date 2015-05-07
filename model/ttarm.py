@@ -14,7 +14,7 @@ class Ttarm:
     regl1nmf = 0.05
     regl1jpp = 0.05
     epsilon = 1
-    maxiter = 30
+    maxiter = 20
     fold_num = 5
     model_name = 'TTARM'
 
