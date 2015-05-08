@@ -10,7 +10,7 @@ from model.JPPCF import *
 
 class Btmf:
     filter_threshold = 10
-    fold_num = 3
+    fold_num = 1
     model_name = 'BTMF'
 
     def __init__(self, k=20, time_interval=360, times=0, dataset='', data_path=''):
@@ -159,7 +159,7 @@ class Btmf:
         logging.info('doc num: ' + str(doc_num) + '\n')
         logging.info('time step num: ' + str(time_step_num) + '\n')
 
-        start = 1
+        start = 6
 
         # for all the consecutive periods
         for current_time_step in range(start + 1, time_step_num + 1):
