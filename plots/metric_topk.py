@@ -12,7 +12,7 @@ for timestep in range(2, 11):
             timeSVDpp = get_result_at_time('timeSVD++', dataset, metric, timestep=timestep, timeth=5)
             WALS = get_result_at_time('weighted-als', dataset, metric, timestep=timestep, timeth=5)
             TensorALS = get_result_at_time('tensor-als', dataset, metric, timestep=timestep, timeth=5)
-            #BTMF = get_result_at_time('BTMF', dataset, metric, timestep=timestep, timeth=5)
+            BTMF = get_result_at_time('BTMF', dataset, metric, timestep=timestep, timeth=3)
             TRM = get_result_at_time('trm', dataset, metric, timestep=timestep, timeth=5)
             if dataset == 'CiteUlike2':
                 TTARM = get_result_at_time('ttarm', dataset, metric, timestep=timestep,
@@ -22,9 +22,9 @@ for timestep in range(2, 11):
 
             plt.plot(x, bpmf, "b*--", label="$BPMF$")
             plt.plot(x, timeSVDpp, "d--", label="$timeSVD++$", color='seagreen')
-            plt.plot(x, WALS, "y^--", label="$WALS$")
-            plt.plot(x, TensorALS, "kh--", label="$TensorALS$")
-        #    plt.plot(x, BTMF, "cp--", label="$BTMF$")
+            plt.plot(x, WALS, "^-.", label="$WALS$", color='purple')
+            plt.plot(x, TensorALS, "kh:", label="$TensorALS$")
+            plt.plot(x, BTMF, "p--", label="$BTMF$", color='gold')
             plt.plot(x, TRM, "rs-", label="$TRM$")
             if dataset == 'CiteUlike2':
                 plt.plot(x, TTARM, "m8-", label="$TTARM$")
@@ -46,3 +46,4 @@ for timestep in range(2, 11):
                 plt.legend(loc='upper left', numpoints=1)
             filename = metric + '@k' + '_timestep_' + str(timestep) + '_' + dataset +'.png'
             plt.savefig('/Users/jiangming/Dropbox/Research/Latex/papers/TTARM/figures/' + filename)
+            plt.plot(x, BTMF, "p--", label="$BTMF$", color='')

@@ -6,7 +6,7 @@ import copy
 import random
 from utility import fileutil
 import scipy.io
-import win32com.client
+#import win32com.client
 
 
 def exec_mat_command(dir, command):

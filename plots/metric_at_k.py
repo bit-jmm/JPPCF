@@ -13,7 +13,7 @@ for metric in ['recall', 'ndcg']:
             timeSVDpp = get_avg_result('timeSVD++', dataset, metric, topk=topk, timeth=5)
             WALS = get_avg_result('weighted-als', dataset, metric, topk=topk, timeth=5)
             TensorALS = get_avg_result('tensor-als', dataset, metric, topk=topk, timeth=5)
-            #BTMF = get_avg_result('tensor-als', dataset, metric, topk=topk, timeth=5)
+            BTMF = get_avg_result('BTMF', dataset, metric, topk=topk, timeth=3)
             TRM = get_avg_result('trm', dataset, metric, topk=topk, timeth=5)
             if dataset == 'CiteUlike2':
                 TTARM = get_avg_result('ttarm', dataset, metric, topk=topk, timeth=5)
@@ -22,9 +22,9 @@ for metric in ['recall', 'ndcg']:
 
             plt.plot(x, bpmf, "b*--", label="$BPMF$")
             plt.plot(x, timeSVDpp, "d--", label="$timeSVD++$", color='seagreen')
-            plt.plot(x, WALS, "y^--", label="$WALS$")
-            plt.plot(x, TensorALS, "kh--", label="$TensorALS$")
-            #plt.plot(x, BTMF, "cp--", label="$BTMF$")
+            plt.plot(x, WALS, "^-.", label="$WALS$", color='purple')
+            plt.plot(x, TensorALS, "kh:", label="$TensorALS$")
+            plt.plot(x, BTMF, "p--", label="$BTMF$", color='gold')
             plt.plot(x, TRM, "rs-", label="$TRM$")
             if dataset == 'CiteUlike2':
                 plt.plot(x, TTARM, "m8-", label="$TTARM$")
