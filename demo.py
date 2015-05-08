@@ -43,8 +43,6 @@ if __name__ == '__main__':
     #prepare_data(time_step)
 
 
-    #model = Btmf(k=20, time_interval=time_step, times=2,
-                 #dataset=dataset, data_path=data_path)
 
     model_name = str(sys.argv[1])
     timeth = int(sys.argv[2])
