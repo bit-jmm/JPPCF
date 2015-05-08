@@ -13,7 +13,7 @@ def get_avg_result(model, dataset, metric, topk=3, fold=5, time_step=-1,
         if model=='ttarm':
             result_file = os.path.join(result_path,
                             'new_{0}_time_step_{1}_filter_by_{2}'.format(model,
-                                time_step, filter_num),
+                                360, filter_num),
                             'eta_{0}_fold_{1}_k_{2}_lambda_{3}_alpha_{4}'.format(eta,
                                 fold, k, lambd, alpha),
                             metric, '{0}_at_{1}.txt'.format(metric, topk))
@@ -38,12 +38,21 @@ def get_avg_result(model, dataset, metric, topk=3, fold=5, time_step=-1,
     avg_result = [value/timeth for value in total_result]
     return avg_result
 
-def get_result_at_time(model, dataset, metric, timestep, timeth):
+def get_result_at_time(model, dataset, metric, timestep, timeth,
+                       lambd=10, eta=0.3):
     result = []
     for i in [3, 10, 50, 100, 300, 500, 1000]:
-        r = get_avg_result(model, dataset, metric, i, timeth)
+        r = get_avg_result(model, dataset, metric, i, timeth,
+                           lambd=lambd, eta=eta)
         result.append(r[timestep-2])
     return result
+
+def get_rating_dist(dataset):
+    file_path = os.path.join(fileutil.parent_dir_of(__file__), 'data',
+                             dataset, 'filtered_by_user_doc_like_list_len_10',
+                             'rating_file.dat.txt')
+    data = np.loadtxt(file_path)[:, 3]
+    return data
 
 if __name__ == '__main__':
     get_avg_result('pmf', 'MovieLens2', 'rmse', topk=3, timeth=5)
