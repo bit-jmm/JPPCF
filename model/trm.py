@@ -14,7 +14,7 @@ class Trm:
     regl1jpp = 0.05
     epsilon = 1
     maxiter = 20
-    fold_num = 5
+    fold_num = 1
     model_name = 'TRM'
 
     def __init__(self, k=20, lambd=10, time_interval=360, times=1, dataset='', data_path=''):
@@ -134,7 +134,7 @@ class Trm:
         (user_time_dict, doc_time_dict,
          user_id_map, doc_id_map, R) = self.prepare_data()
         time_step_num = int(R[-1, 3])
-	max_score = R[:, 2].max()
+        max_score = R[:, 2].max()
         logging.info('max store: ' + str(max_score) + '\n')
 
         user_num = user_id_map.shape[0]
@@ -237,7 +237,7 @@ class Trm:
                                               self.epsilon, self.maxiter, True)
 
                 PredictR = np.dot(P, Q)
-                NormPR = (PredictR / PredictR.max()) * max_score
+                NormPR = PredictR
 
                 logging.info('[ok]\n')
 
