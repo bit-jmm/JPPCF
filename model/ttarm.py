@@ -9,25 +9,26 @@ from model.JPPCF import *
 
 
 class Ttarm:
-    topic_num = 50
+    topic_num = 30
     filter_threshold = 10
     regl1nmf = 0.05
     regl1jpp = 0.05
     epsilon = 1
-    maxiter = 30
+    maxiter = 15
     fold_num = 5
     model_name = 'TTARM'
 
-    def __init__(self, k=20, lambd=10, eta=0.3, time_interval=360):
+    def __init__(self, k=20, lambd=10, eta=0.3, time_interval=360,
+                 times=1, dataset='', data_path=''):
         self.k = k
         self.lambd = lambd
         self.eta = eta
         self.time_interval = time_interval
-        self.origin_data_path = \
-            os.path.normpath(os.path.join(__file__,
-                                          '../../data/preprocessed_data'))
+        self.times = times
+        self.dataset = dataset
+	self.origin_data_path = data_path
 
-        self.data_path = os.path.join(self.origin_data_path,
+        self.data_path = os.path.join(data_path,
                                       'data_divided_by_' +
                                       str(self.time_interval) + '_days')
         self.filter_data_path = \
@@ -39,11 +40,13 @@ class Ttarm:
                             format='%(asctime)s %(filename)s[line:%(lineno)d]\
                                     %(levelname)s %(message)s',
                             datefmt='%a, %d %b %Y %H:%M:%S',
-                            filename='./log/new_ttarm_k_' +
-                                     str(k) + '_lambda_' +
-                                     str(lambd) + '_alpha_' +
-                                     str(self.regl1jpp) + '_eta_' +
-                                     str(eta) + '.log',
+                            filename='./log/new_' + self.model_name + '_k_' +
+                                     str(k) + '_lambda_' + str(lambd) +
+                                     '_alpha_' + str(self.regl1jpp) +
+                                     '_eta_' + str(eta) + '_timestep_' +
+                                     str(time_interval) + '_' +
+                                     self.dataset + '_' +
+                                     str(self.times) + '.log',
                             filemode='w')
 
         ##################################################################
@@ -198,9 +201,9 @@ class Ttarm:
         result_dir = \
             os.path.join(
                 time_filter_dir,
-                str.format('eta_{0}_fold_{1}_k_{2}_lambda_{3}_alpha_{4}',
-                           self.eta, self.fold_num,
-                           self.k, self.lambd, self.regl1jpp))
+                str.format('eta_{0}_fold_{1}_k_{2}_lambda_{3}_{4}_{5}',
+                           self.eta, self.fold_num, self.k,
+                           self.lambd, self.dataset, self.times))
         fileutil.mkdir(result_dir)
 
         recall_result_dir = os.path.join(result_dir, 'recall')
