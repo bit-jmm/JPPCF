@@ -21,11 +21,12 @@ for metric in ['recall', 'ndcg']:
 
     plt.plot(x, TTARM, "m8-", label="$TTARM$")
 
-    #plt.xlabel("Timestep")
-    #plt.ylabel("Recall@300")
+    plt.xlabel("Parameter lambda")
     if metric == 'recall':
+        plt.ylabel("Recall@3")
         plt.yticks(np.arange(0.725, 0.8, 0.0125))
     else:
+        plt.ylabel("NDCG@3")
         plt.yticks(np.arange(0.675, 0.775, 0.0125))
     plt.xticks(np.arange(0, 5, 1), [0.001, 0.1, 10, 100, 10000])
     # plt.title("models performance on Recall@300")
@@ -46,11 +47,12 @@ for metric in ['recall', 'ndcg']:
 
     plt.plot(x, TTARM, "m8-", label="$TTARM$")
 
-    #plt.xlabel("Timestep")
-    #plt.ylabel("Recall@300")
+    plt.xlabel("Parameter eta")
     if metric == 'recall':
+        plt.ylabel("Recall@3")
         plt.yticks(np.arange(0.3, 0.7, 0.05))
     else:
+        plt.ylabel("NDCG@3")
         plt.yticks(np.arange(0.5, 0.8, 0.03))
 
     plt.xticks(np.arange(0, 5, 1), [0.1, 0.3, 0.5, 0.7, 0.9])
@@ -72,11 +74,12 @@ for metric in ['recall', 'ndcg']:
 
     plt.plot(x, TTARM, "m8-", label="$TTARM$")
 
-    #plt.xlabel("Timestep")
-    #plt.ylabel("Recall@300")
+    plt.xlabel("Number of latent factors")
     if metric == 'recall':
+        plt.ylabel("Recall@3")
         plt.yticks(np.arange(0.3, 0.7, 0.05))
     else:
+        plt.ylabel("NDCG@3")
         plt.yticks(np.arange(0.55, 0.85, 0.05))
 
     plt.xticks(np.arange(0, 5, 1), [20, 50, 100, 200, 500])

@@ -29,8 +29,11 @@ for timestep in range(2, 11):
             if dataset == 'CiteUlike2':
                 plt.plot(x, TTARM, "m8-", label="$TTARM$")
 
-            #plt.xlabel("Timestep")
-            #plt.ylabel("Recall@300")
+            plt.xlabel("Top k")
+            if metric == 'ndcg':
+                plt.ylabel("NDCG")
+            else:
+                plt.ylabel("Recall")
             plt.xlim(0, 6)
             #plt.ylim(0, 1)
             if metric == 'ndcg' and dataset == 'MovieLens2':

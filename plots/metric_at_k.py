@@ -28,9 +28,11 @@ for metric in ['recall', 'ndcg']:
             plt.plot(x, TRM, "rs-", label="$TRM$")
             if dataset == 'CiteUlike2':
                 plt.plot(x, TTARM, "m8-", label="$TTARM$")
-
-            #plt.xlabel("Timestep")
-            #plt.ylabel("Recall@300")
+            plt.xlabel("Timestep t")
+            if metric == 'recall':
+                plt.ylabel("Recall@"+str(topk))
+            else:
+                plt.ylabel("NDCG@"+str(topk))
             plt.xlim(2, 10)
             if metric == 'ndcg' and dataset == 'MovieLens2':
                 plt.ylim(0, 0.5)
